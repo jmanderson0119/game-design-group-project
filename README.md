@@ -12,7 +12,7 @@ Before you clone the team repo, follow these instructions:
 Not everyone on your team may have the same path to UnityYAMLMerge (i.e. different operating systems or install locations). Because of this, we suggest you modify your local config to define the "unityyamlmerge" merge tool that this repository points to. To do this:
 
 1. Reveal hidden files on your operating system
-Windows 10: Open the File Explorer application and select View > Options > Change folder and search options and then select the View tab and, in Advanced settings, select Show hidden files, folders, and drives and OK
+Windows 10: Open the File Explorer application and select View > Options > Change folder and search options and then select the View tab and, in Advanced settings, select Show hidden files, folders, and drives and OK
 
 Windows 11: Open the File Explorer application and select View > Show > Hidden Items
 
@@ -50,4 +50,3 @@ This project was created using `2021.3.0f1`. When you open this project in Unity
 5. delete left over files from plastic or collab like x.meta.private or y.meta.private.meta (some files may be hidden so enable see hidden files)
 6. Commit and push.
 7. If you are having issues with .meta files check and modify your gitignore or make sure there are no empty folders. 
-
