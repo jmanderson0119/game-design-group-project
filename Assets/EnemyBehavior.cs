@@ -83,7 +83,7 @@ public class EnemyBehavior : MonoBehaviour
             }
         }
 
-        Debug.Log(hit.collider.gameObject.name);
+        //Debug.Log(hit.collider.gameObject.name);
         return distance;
     }
 
@@ -399,7 +399,7 @@ public class EnemyBehavior : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
-        Debug.Log(susLevel);
+        //Debug.Log(susLevel);
         if (susLevel <= 0.155)
         {
             if (questionMarkClone != null)
@@ -564,6 +564,17 @@ public class EnemyBehavior : MonoBehaviour
                 {
                     animator.SetBool("attack", true);
                     chargingTime = chargingTime + Time.deltaTime;
+                    Debug.Log(LayerPlayer);
+                    Collider2D[] hitTargets = Physics2D.OverlapCircleAll(transform.position, maxAttackRange);
+
+                    foreach (Collider2D target in hitTargets)
+                    {
+                        // Change name if name is not mainPlayer
+                        if (target.name == "mainPlayer")
+                        {
+                            target.gameObject.GetComponent<Player>().health -= 1;
+                        }
+                    }
                 }
                 else if (chargingTime > 0 && chargingTime <= intervalBetweenAttacks * 0.5f)
                 {
