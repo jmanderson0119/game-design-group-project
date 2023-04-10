@@ -15,6 +15,15 @@ public class EnemyBehavior : MonoBehaviour
     public float k_val = 5f;
     public float w_val = 0.25f;
     private int LayerPlayer;
+    public int health = 10;
+    public float intervalBetweenAttacks = 1f;
+    private float chargingTime = 0f;
+    [SerializeField] GameObject questionMark;
+    private GameObject questionMarkClone;
+    [SerializeField] GameObject smallAlert;
+    private GameObject smallAlertClone;
+    [SerializeField] GameObject bigAlert;
+    private GameObject bigAlertClone;
 
     Rigidbody2D enemy;
     Animator animator;
@@ -78,7 +87,8 @@ public class EnemyBehavior : MonoBehaviour
         return distance;
     }
 
-    // Not finished
+    // Not finish yet
+    // Enemy should spot player after receiving damage from player
     bool spotPlayer()
     {
         RaycastHit2D hit = Physics2D.Raycast(transform.position + Vector3.down * 1f, Vector2.down); ;
@@ -385,9 +395,50 @@ public class EnemyBehavior : MonoBehaviour
         //Debug.Log(currentAction[1]);
         //Debug.Log(actionTimePlaned);
         // Use susLevel to separate behaviors
-        Debug.Log(susLevel);
-        if (susLevel < 0.2)
+        if (health <= 0)
         {
+            Destroy(this.gameObject);
+        }
+        Debug.Log(susLevel);
+        if (susLevel <= 0.155)
+        {
+            if (questionMarkClone != null)
+            {
+                Destroy(questionMarkClone);
+            }
+            if (smallAlertClone != null)
+            {
+                Destroy(smallAlertClone);
+            }
+            if (bigAlertClone != null)
+            {
+                Destroy(bigAlertClone);
+            }
+            if (actionTimePlaned > 0)
+            {
+                move();
+            }
+            else
+            {
+                randomAction(0);
+                move();
+            }
+        }
+        else if (0.155 < susLevel && susLevel < 0.2)
+        {
+            if (smallAlertClone != null)
+            {
+                Destroy(smallAlertClone);
+            }
+            if (bigAlertClone != null)
+            {
+                Destroy(bigAlertClone);
+            }
+            // This checks if questionMark is in the scene or not
+            if (questionMarkClone == null)
+            {
+                questionMarkClone = Instantiate(questionMark, transform.position + new Vector3(0.5f, 0.5f, 0f), transform.rotation, transform);
+            }
             // If from last frame to current frame, the actionTimePlaned becomes 0 or negative, the enemy will not perform the last action, which prevents hitting the wall.
             if (actionTimePlaned > 0)
             {
@@ -401,6 +452,18 @@ public class EnemyBehavior : MonoBehaviour
         }
         else if (susLevel >= 0.2 && susLevel < 0.7)
         {
+            if (questionMarkClone != null)
+            {
+                Destroy(questionMarkClone);
+            }
+            if (bigAlertClone != null)
+            {
+                Destroy(bigAlertClone);
+            }
+            if (smallAlertClone == null)
+            {
+                smallAlertClone = Instantiate(smallAlert, transform.position + new Vector3(0.5f, 0.5f, 0f), transform.rotation, transform);
+            }
             // Deterministic move
             if (seePlayer)
             {
@@ -451,6 +514,18 @@ public class EnemyBehavior : MonoBehaviour
         }
         else if (susLevel >= 0.7)
         {
+            if (questionMarkClone != null)
+            {
+                Destroy(questionMarkClone);
+            }
+            if (smallAlertClone != null)
+            {
+                Destroy(smallAlertClone);
+            }
+            if (bigAlertClone == null)
+            {
+                bigAlertClone = Instantiate(bigAlert, transform.position + new Vector3(0.5f, 0.5f, 0f), transform.rotation, transform);
+            }
             if (seePlayer)
             {
                 actionTimePlaned = 0;
@@ -483,6 +558,29 @@ public class EnemyBehavior : MonoBehaviour
                             transform.Translate(Vector3.up * Time.deltaTime * movingSpeed * 3f);
                         }
                     }
+                }
+
+                if (Mathf.Max(Mathf.Abs(xDiff), Mathf.Abs(yDiff)) <= maxAttackRange && chargingTime == 0f)
+                {
+                    animator.SetBool("attack", true);
+                    chargingTime = chargingTime + Time.deltaTime;
+                }
+                else if (chargingTime > 0 && chargingTime <= intervalBetweenAttacks * 0.5f)
+                {
+                    animator.SetBool("attack", false);
+                    chargingTime = chargingTime + Time.deltaTime;
+                }
+                else if (chargingTime > intervalBetweenAttacks * 0.5f && chargingTime < intervalBetweenAttacks)
+                {
+                    chargingTime = chargingTime + Time.deltaTime;
+                }
+                else if (chargingTime > intervalBetweenAttacks)
+                {
+                    chargingTime = 0f;
+                }
+                else
+                {
+                    animator.SetBool("attack", false);
                 }
             }
             else
