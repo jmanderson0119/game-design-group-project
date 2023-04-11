@@ -24,6 +24,7 @@ public class BulletTravel : MonoBehaviour
         if (collision.gameObject.transform.parent == null)
         {
             behavior.health -= 2;
+            collision.gameObject.transform.localScale += new Vector3(-0.05f, -0.05f, -0.05f);
             Debug.Log("Enemy Health: " + behavior.health);
         }
     }
