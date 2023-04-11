@@ -14,7 +14,7 @@ public class ScaleCamera : MonoBehaviour
         float cameraWidth = cameraHeight * Screen.width / Screen.height;
 
         gameObject.transform.localScale = Vector3.one * cameraHeight / 0.45f;
-        gameObject.transform.localPosition = new Vector3(Screen.width / 2.45f, Screen.height / 4f, 0);
+        gameObject.transform.localPosition = new Vector3(Screen.width / 2.65f, Screen.height / 5.4f, 0);
     }
 
     // Update is called once per frame
