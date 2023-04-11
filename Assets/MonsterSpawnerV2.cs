@@ -15,16 +15,22 @@ public class MonsterSpawnerV2 : MonoBehaviour
     public GameObject[] spawnPoints;
     public GameObject enemyPrefab;
 
-    void Start() {
-        StartCoroutine(SpawnEnemies());
+    void Start() { 
+        StartCoroutine(SpawnEnemies()); 
     }
 
     IEnumerator SpawnEnemies()
     {
-        int r = Random.Range(0, n);
+        
         for(int i = 0; i < hunting; i++){
+            Debug.Log("Loop ran");
+            int r = Random.Range(0, n);
+            Debug.Log("Random Number : " + r);
             Instantiate(enemyPrefab, spawnPoints[r].transform.position, Quaternion.identity);
+            Debug.Log("Enemy spawned");
             yield return new WaitForSeconds(spawnRate);
+            Debug.Log("Waited");
         }
+        StopCoroutine(SpawnEnemies());
     }
 }
