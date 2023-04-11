@@ -10,12 +10,12 @@ public class EnemyBehavior : MonoBehaviour
     private float actionTimePlaned;
     private string[] currentAction;
     private float idleMaxTime = 1f;
-    private float movingSpeed = 2.5f;
+    private float movingSpeed = 1.5f;
     public float maxAttackRange = 1.5f;
     public float k_val = 5f;
     public float w_val = 0.25f;
     private int LayerPlayer;
-    public int health = 10;
+    public int health = 6;
     public float intervalBetweenAttacks = 1f;
     private float chargingTime = 0f;
     [SerializeField] GameObject questionMark;
@@ -84,7 +84,7 @@ public class EnemyBehavior : MonoBehaviour
         }
 
         //Debug.Log(hit.collider.gameObject.name);
-        return distance;
+        return (distance / 2f);
     }
 
     // Not finish yet
@@ -398,6 +398,7 @@ public class EnemyBehavior : MonoBehaviour
         if (health <= 0)
         {
             Destroy(this.gameObject);
+            Application.Quit();
         }
         //Debug.Log(susLevel);
         if (susLevel <= 0.155)
@@ -572,7 +573,7 @@ public class EnemyBehavior : MonoBehaviour
                         // Change name if name is not mainPlayer
                         if (target.name == "mainPlayer")
                         {
-                            target.gameObject.GetComponent<Player>().health -= 1;
+                            target.gameObject.GetComponent<PlayerStats>().IncHealth(-1.0f);
                         }
                     }
                 }
