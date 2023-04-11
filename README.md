@@ -24,7 +24,7 @@ MacOS: Click on Finder and press the keyboard combination Shift + Cmd + . (perio
 ```bash
 [mergetool "unityyamlmerge"]
     trustExitCode = false
-    #Replace <path to UnityYAMLMerge> in the next line with the following default locations (may be different depending on your Unity installation location)
+    #Replace <path to UnityYAMLMerge> in the next  line with the following default locations (may be different depending on your Unity installation location)
     # Installs using the Unity Hub (Default):
     # Win: C:\\Program Files\\Unity\\Hub\\Editor\\VERSION\\Editor\\Data\\Tools\\UnityYAMLMerge.exe
     # MacOS: /Applications/Unity/Hub/Editor/VERSION/Unity.app/Contents/Tools/UnityYAMLMerge
