@@ -11,7 +11,7 @@ public class EnemyBehavior : MonoBehaviour
     private string[] currentAction;
     private float idleMaxTime = 1f;
     private float movingSpeed = 2.5f;
-    public float maxAttackRange = 0.5f;
+    public float maxAttackRange = 1.5f;
     public float k_val = 5f;
     public float w_val = 0.25f;
     private int LayerPlayer;
