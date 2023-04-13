@@ -398,7 +398,6 @@ public class EnemyBehavior : MonoBehaviour
         if (health <= 0)
         {
             Destroy(this.gameObject);
-            Application.Quit();
         }
         //Debug.Log(susLevel);
         if (susLevel <= 0.155)
