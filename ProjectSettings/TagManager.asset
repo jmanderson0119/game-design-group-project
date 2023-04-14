@@ -4,7 +4,7 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Damageable
+  - Spawn
   layers:
   - Default
   - TransparentFX
