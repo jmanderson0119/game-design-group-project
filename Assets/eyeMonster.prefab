@@ -133,7 +133,7 @@ MonoBehaviour:
   smallAlert: {fileID: 6028945541380220502, guid: e53e1eabff4a3c649b6b430b4369c770, type: 3}
   bigAlert: {fileID: 3168041598092535264, guid: bda039d515419cd49b7698b0d4d034c3, type: 3}
   levelMark: {fileID: 0}
-  bone: {fileID: 0}
+  bone: {fileID: 8368988349675041870, guid: 3b2dce0c79d0cdf41a6195676e7216a2, type: 3}
   pChar: {fileID: 5855480552603275026, guid: 233d3d3fb8673274fa96116517bb4771, type: 3}
   level1: {fileID: 0}
   level2: {fileID: 0}

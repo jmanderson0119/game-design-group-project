@@ -534,6 +534,13 @@ public class EnemyBehavior : MonoBehaviour
         oldIntervalBetweenAttacks = intervalBetweenAttacks;
         oldMovingSpeed = movingSpeed;
         oldHealth = health;
+
+        // Higher level skull attacks faster
+        if (isSkull)
+        {
+            intervalBetweenAttacks = intervalBetweenAttacks / enemyLevel;
+        }
+
         // Check if this enemy is petable
         player = GameObject.Find("mainPlayer");
         if (player != null && !isEye)
