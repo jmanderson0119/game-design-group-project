@@ -7,6 +7,7 @@ public class EnemyBehavior : MonoBehaviour
     private float susLevel = 0.15f;
     public float maxVision = 5f;
     public Vector3 playerLastPosition;
+    public Vector3 targetEnemyLastPosition;
     private float actionTimePlaned;
     private string[] currentAction;
     private float idleMaxTime = 1f;
@@ -15,6 +16,7 @@ public class EnemyBehavior : MonoBehaviour
     public float k_val = 5f;
     public float w_val = 0.25f;
     private int LayerPlayer;
+    private int LayerEnemy;
     public int health = 6;
     public float intervalBetweenAttacks = 1f;
     private float chargingTime = 0f;
@@ -23,7 +25,25 @@ public class EnemyBehavior : MonoBehaviour
     [SerializeField] GameObject smallAlert;
     private GameObject smallAlertClone;
     [SerializeField] GameObject bigAlert;
+    private GameObject levelMarkClone;
+    [SerializeField] GameObject levelMark;
+    private GameObject boneClone;
+    [SerializeField] GameObject bone;
+    [SerializeField] GameObject pChar;
+    private GameObject pCharClone;
+    private GameObject levelClone;
+    [SerializeField] GameObject level1;
+    [SerializeField] GameObject level2;
+    [SerializeField] GameObject level3;
+    private GameObject player;
     private GameObject bigAlertClone;
+    public bool ally = false;
+    private bool move2Player = false;
+    public int enemyLevel = 1;
+    public float allyStayRadius = 2f;
+
+    // This indicates whether this enemy can be pet or not
+    private bool petable = false;
 
     Rigidbody2D enemy;
     Animator animator;
@@ -84,12 +104,12 @@ public class EnemyBehavior : MonoBehaviour
         }
 
         //Debug.Log(hit.collider.gameObject.name);
-        return (distance / 2f);
+        return (distance);
     }
 
     // Not finish yet
     // Enemy should spot player after receiving damage from player
-    bool spotPlayer()
+    bool spotTarget()
     {
         RaycastHit2D hit = Physics2D.Raycast(transform.position + Vector3.down * 1f, Vector2.down); ;
         if (currentAction[1] == "left")
@@ -121,13 +141,57 @@ public class EnemyBehavior : MonoBehaviour
                 distance = Mathf.Abs(hit.point.y - transform.position.y);
             }
 
-            if (hit.transform.gameObject.layer == LayerPlayer)
+            if (hit.transform.gameObject.layer == LayerPlayer && !ally)
             {
                 if (distance <= maxVision)
                 {
                     playerLastPosition = hit.transform.position;
+                    if (petable)
+                    {
+                        move2Player = true;
+                    }
+                    else
+                    { 
+                        move2Player = false;
+                    }
                     return true;
                 }
+            }
+            else if (hit.transform.gameObject.layer == LayerEnemy && ally) // an ally spots a non-ally
+            {
+                if (distance <= maxVision)
+                {
+                    if (!hit.transform.gameObject.GetComponent<EnemyBehavior>().ally)
+                    {
+                        targetEnemyLastPosition = hit.transform.position;
+                        move2Player = false;
+                        return true;
+                    }
+                }
+            }
+            else if (hit.transform.gameObject.layer == LayerEnemy && !ally) // a non-ally spots an ally
+            {
+                if (distance <= maxVision)
+                {
+                    if (hit.transform.gameObject.GetComponent<EnemyBehavior>().ally)
+                    {
+                        targetEnemyLastPosition = hit.transform.position;
+                        move2Player = false;
+                        return true;
+                    }
+                }
+            }
+            else if (hit.transform.gameObject.layer != LayerEnemy && hit.transform.gameObject.layer != LayerPlayer && ally)
+            {
+                playerLastPosition = player.transform.position;
+                move2Player = true;
+                return false;
+            }
+            else if (hit.transform.gameObject.layer == LayerPlayer && ally)
+            {
+                playerLastPosition = player.transform.position;
+                move2Player = true;
+                return true;
             }
         }
         return false;
@@ -141,117 +205,176 @@ public class EnemyBehavior : MonoBehaviour
         float probUp = 0f;
         float probDown = 0f;
         float distToPlayer = Mathf.Infinity;
+        Vector3 lastPosition = ally && !move2Player ? targetEnemyLastPosition : playerLastPosition;
+        Debug.Log(ally && !move2Player);
+        Debug.Log(lastPosition);
         // state = 0, small sus 
         // state = 1, medium sus
         // state = 2, high sus
-        if (state == 0)
+        float distance2Player = 0f;
+        if (ally && move2Player)
         {
-            probIdle = 0.5f;
-            probLeft = 0.25f;
-            probRight = 0.25f;
-            probUp = 0.25f;
-            probDown = 0.25f;
+            float xDiff = transform.position.x - lastPosition.x;
+            float yDiff = transform.position.y - lastPosition.y;
+            distance2Player = Mathf.Sqrt(Mathf.Pow(xDiff, 2f) + Mathf.Pow(yDiff, 2f));
         }
-        else if (state == 1)
+
+
+        if (ally && move2Player && distance2Player > allyStayRadius)
         {
-            probIdle = 0.2f;
-            if (playerLastPosition != null)
+            probIdle = 0f;
+            float xDiff = transform.position.x - lastPosition.x;
+            float yDiff = transform.position.y - lastPosition.y;
+            distToPlayer = (Mathf.Abs(yDiff) / (Mathf.Abs(xDiff) + Mathf.Abs(yDiff))) * Mathf.Abs(yDiff) + (Mathf.Abs(xDiff) / (Mathf.Abs(xDiff) + Mathf.Abs(yDiff))) * Mathf.Abs(xDiff);
+            //distToPlayer = Mathf.Min(Mathf.Abs(xDiff), Mathf.Abs(yDiff));
+            if (xDiff >= 0)
             {
-                float xDiff = transform.position.x - playerLastPosition.x;
-                float yDiff = transform.position.y - playerLastPosition.y;
-                distToPlayer = (yDiff / (xDiff + yDiff)) * yDiff + (xDiff / (xDiff + yDiff));
-                if (xDiff >= 0)
+                if (yDiff >= 0)
                 {
-                    if (yDiff >= 0)
-                    {
-                        probUp = 0.15f;
-                        probRight = 0.15f;
-                        probDown = yDiff / (xDiff + yDiff) * 0.7f;
-                        probLeft = xDiff / (xDiff + yDiff) * 0.7f;
-                    }
-                    else
-                    {
-                        probDown = 0.15f;
-                        probRight = 0.15f;
-                        probUp = yDiff / (xDiff + yDiff) * 0.7f;
-                        probLeft = xDiff / (xDiff + yDiff) * 0.7f;
-                    }
+                    probUp = 0.15f;
+                    probRight = 0.15f;
+                    probDown = Mathf.Abs(yDiff) / (Mathf.Abs(xDiff) + Mathf.Abs(yDiff)) * 0.7f;
+                    probLeft = Mathf.Abs(xDiff) / (Mathf.Abs(xDiff) + Mathf.Abs(yDiff)) * 0.7f;
                 }
                 else
                 {
-                    if (yDiff >= 0)
-                    {
-                        probUp = 0.15f;
-                        probLeft = 0.15f;
-                        probDown = yDiff / (xDiff + yDiff) * 0.7f;
-                        probRight = xDiff / (xDiff + yDiff) * 0.7f;
-                    }
-                    else
-                    {
-                        probDown = 0.15f;
-                        probLeft = 0.15f;
-                        probUp = yDiff / (xDiff + yDiff) * 0.7f;
-                        probRight = xDiff / (xDiff + yDiff) * 0.7f;
-                    }
+                    probDown = 0.15f;
+                    probRight = 0.15f;
+                    probUp = Mathf.Abs(yDiff) / (Mathf.Abs(xDiff) + Mathf.Abs(yDiff)) * 0.7f;
+                    probLeft = Mathf.Abs(xDiff) / (Mathf.Abs(xDiff) + Mathf.Abs(yDiff)) * 0.7f;
                 }
             }
             else
             {
+                if (yDiff >= 0)
+                {
+                    probUp = 0.15f;
+                    probLeft = 0.15f;
+                    probDown = Mathf.Abs(yDiff) / (Mathf.Abs(xDiff) + Mathf.Abs(yDiff)) * 0.7f;
+                    probRight = Mathf.Abs(xDiff) / (Mathf.Abs(xDiff) + Mathf.Abs(yDiff)) * 0.7f;
+                }
+                else
+                {
+                    probDown = 0.15f;
+                    probLeft = 0.15f;
+                    probUp = Mathf.Abs(yDiff) / (Mathf.Abs(xDiff) + Mathf.Abs(yDiff)) * 0.7f;
+                    probRight = Mathf.Abs(xDiff) / (Mathf.Abs(xDiff) + Mathf.Abs(yDiff)) * 0.7f;
+                }
+            }
+        }
+        else
+        {
+            if (state == 0)
+            {
+                probIdle = 0.5f;
                 probLeft = 0.25f;
                 probRight = 0.25f;
                 probUp = 0.25f;
                 probDown = 0.25f;
             }
-        }
-        else if (state == 2)
-        {
-            probIdle = 0.1f;
-            if (playerLastPosition != null)
+            else if (state == 1)
             {
-                float xDiff = transform.position.x - playerLastPosition.x;
-                float yDiff = transform.position.y - playerLastPosition.y;
-                distToPlayer = (yDiff / (xDiff + yDiff)) * yDiff + (xDiff / (xDiff + yDiff));
-                if (xDiff >= 0)
+                probIdle = 0.2f;
+                if (lastPosition != null)
                 {
-                    if (yDiff >= 0)
+                    float xDiff = transform.position.x - lastPosition.x;
+                    float yDiff = transform.position.y - lastPosition.y;
+                    distToPlayer = (Mathf.Abs(yDiff) / (Mathf.Abs(xDiff) + Mathf.Abs(yDiff))) * Mathf.Abs(yDiff) + (Mathf.Abs(xDiff) / (Mathf.Abs(xDiff) + Mathf.Abs(yDiff))) * Mathf.Abs(xDiff);
+                    //distToPlayer = Mathf.Min(Mathf.Abs(xDiff), Mathf.Abs(yDiff));
+                    if (xDiff >= 0)
                     {
-                        probUp = 0.05f;
-                        probRight = 0.05f;
-                        probDown = yDiff / (xDiff + yDiff) * 0.9f;
-                        probLeft = xDiff / (xDiff + yDiff) * 0.9f;
+                        if (yDiff >= 0)
+                        {
+                            probUp = 0.15f;
+                            probRight = 0.15f;
+                            probDown = Mathf.Abs(yDiff) / (Mathf.Abs(xDiff) + Mathf.Abs(yDiff)) * 0.7f;
+                            probLeft = Mathf.Abs(xDiff) / (Mathf.Abs(xDiff) + Mathf.Abs(yDiff)) * 0.7f;
+                        }
+                        else
+                        {
+                            probDown = 0.15f;
+                            probRight = 0.15f;
+                            probUp = Mathf.Abs(yDiff) / (Mathf.Abs(xDiff) + Mathf.Abs(yDiff)) * 0.7f;
+                            probLeft = Mathf.Abs(xDiff) / (Mathf.Abs(xDiff) + Mathf.Abs(yDiff)) * 0.7f;
+                        }
                     }
                     else
                     {
-                        probDown = 0.05f;
-                        probRight = 0.05f;
-                        probUp = yDiff / (xDiff + yDiff) * 0.9f;
-                        probLeft = xDiff / (xDiff + yDiff) * 0.9f;
+                        if (yDiff >= 0)
+                        {
+                            probUp = 0.15f;
+                            probLeft = 0.15f;
+                            probDown = Mathf.Abs(yDiff) / (Mathf.Abs(xDiff) + Mathf.Abs(yDiff)) * 0.7f;
+                            probRight = Mathf.Abs(xDiff) / (Mathf.Abs(xDiff) + Mathf.Abs(yDiff)) * 0.7f;
+                        }
+                        else
+                        {
+                            probDown = 0.15f;
+                            probLeft = 0.15f;
+                            probUp = Mathf.Abs(yDiff) / (Mathf.Abs(xDiff) + Mathf.Abs(yDiff)) * 0.7f;
+                            probRight = Mathf.Abs(xDiff) / (Mathf.Abs(xDiff) + Mathf.Abs(yDiff)) * 0.7f;
+                        }
                     }
                 }
                 else
                 {
-                    if (yDiff >= 0)
+                    probLeft = 0.25f;
+                    probRight = 0.25f;
+                    probUp = 0.25f;
+                    probDown = 0.25f;
+                }
+            }
+            else if (state == 2)
+            {
+                probIdle = 0.1f;
+                if (lastPosition != null)
+                {
+                    float xDiff = transform.position.x - lastPosition.x;
+                    float yDiff = transform.position.y - lastPosition.y;
+                    distToPlayer = (Mathf.Abs(yDiff) / (Mathf.Abs(xDiff) + Mathf.Abs(yDiff))) * Mathf.Abs(yDiff) + (Mathf.Abs(xDiff) / (Mathf.Abs(xDiff) + Mathf.Abs(yDiff))) * Mathf.Abs(xDiff);
+                    //distToPlayer = Mathf.Min(Mathf.Abs(xDiff), Mathf.Abs(yDiff));
+                    if (xDiff >= 0)
                     {
-                        probUp = 0.05f;
-                        probLeft = 0.05f;
-                        probDown = yDiff / (xDiff + yDiff) * 0.9f;
-                        probRight = xDiff / (xDiff + yDiff) * 0.9f;
+                        if (yDiff >= 0)
+                        {
+                            probUp = 0.05f;
+                            probRight = 0.05f;
+                            probDown = Mathf.Abs(yDiff) / (Mathf.Abs(xDiff) + Mathf.Abs(yDiff)) * 0.9f;
+                            probLeft = Mathf.Abs(xDiff) / (Mathf.Abs(xDiff) + Mathf.Abs(yDiff)) * 0.9f;
+                        }
+                        else
+                        {
+                            probDown = 0.05f;
+                            probRight = 0.05f;
+                            probUp = Mathf.Abs(yDiff) / (Mathf.Abs(xDiff) + Mathf.Abs(yDiff)) * 0.9f;
+                            probLeft = Mathf.Abs(xDiff) / (Mathf.Abs(xDiff) + Mathf.Abs(yDiff)) * 0.9f;
+                        }
                     }
                     else
                     {
-                        probDown = 0.05f;
-                        probLeft = 0.05f;
-                        probUp = yDiff / (xDiff + yDiff) * 0.9f;
-                        probRight = xDiff / (xDiff + yDiff) * 0.9f;
+                        if (yDiff >= 0)
+                        {
+                            probUp = 0.05f;
+                            probLeft = 0.05f;
+                            probDown = Mathf.Abs(yDiff) / (Mathf.Abs(xDiff) + Mathf.Abs(yDiff)) * 0.9f;
+                            probRight = Mathf.Abs(xDiff) / (Mathf.Abs(xDiff) + Mathf.Abs(yDiff)) * 0.9f;
+                        }
+                        else
+                        {
+                            probDown = 0.05f;
+                            probLeft = 0.05f;
+                            probUp = Mathf.Abs(yDiff) / (Mathf.Abs(xDiff) + Mathf.Abs(yDiff)) * 0.9f;
+                            probRight = Mathf.Abs(xDiff) / (Mathf.Abs(xDiff) + Mathf.Abs(yDiff)) * 0.9f;
+                        }
                     }
                 }
-            }
-            else
-            {
-                probLeft = 0.25f;
-                probRight = 0.25f;
-                probUp = 0.25f;
-                probDown = 0.25f;
+                else
+                {
+                    probLeft = 0.25f;
+                    probRight = 0.25f;
+                    probUp = 0.25f;
+                    probDown = 0.25f;
+                }
             }
         }
 
@@ -288,7 +411,9 @@ public class EnemyBehavior : MonoBehaviour
             currentAction[0] = "move";
             // May adjust this to prevent hitting into wall 
             // use min here to prevent overshooting
-            float maxTimeTravel = Mathf.Min(distanceToObstacle(), distToPlayer) / movingSpeed * 1f;
+            //Debug.Log(distToPlayer);
+            //Debug.Log(distanceToObstacle());
+            float maxTimeTravel = Mathf.Min(distanceToObstacle(), distToPlayer) / movingSpeed;
             actionTimePlaned = Random.Range(0f, maxTimeTravel);
         }
     }
@@ -377,8 +502,46 @@ public class EnemyBehavior : MonoBehaviour
         currentAction = new string[] { "idle", "down" };
         actionTimePlaned = Random.Range(0f, idleMaxTime);
         LayerPlayer = LayerMask.NameToLayer("Player");
+        LayerEnemy = LayerMask.NameToLayer("Enemy");
         enemy = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+
+        // Check if this enemy is petable
+        player = GameObject.Find("mainPlayer");
+        if (player != null)
+        {
+            // Modify this if there is another way to extract reputation
+            // Here, I assume that reputation ranges from 0 to 1
+            float playerReputation = player.GetComponent<PlayerStats>().Reputation();
+            // May consider add petting as a skill
+            // Allow player to pet only if he acquires the skill
+            if (playerReputation < 0.5f)
+            {
+                if (enemyLevel == 1)
+                { 
+                    petable = true;
+                }
+            }
+            else if (playerReputation >= 0.5f && playerReputation < 0.75f)
+            {
+                if (enemyLevel <= 2)
+                {
+                    petable = true;
+                }
+            }
+            else if (playerReputation >= 0.75f)
+            {
+                if (enemyLevel <= 3)
+                {
+                    petable = true;
+                }
+            }
+
+            if (petable)
+            {
+                boneClone = Instantiate(bone, transform.position + new Vector3(0f, 0.8f, 0f), transform.rotation, transform);
+            }
+        }
     }
 
     // Update is called once per frame
@@ -386,19 +549,58 @@ public class EnemyBehavior : MonoBehaviour
     void FixedUpdate()
     {
         actionTimePlaned = actionTimePlaned - Time.deltaTime;
-        bool seePlayer = spotPlayer();
+        // If enemy is ally, bone stops rotate
+        if (ally)
+        {
+            boneClone.GetComponent<Animator>().SetBool("recruited", true);
+            playerLastPosition = player.transform.position;
+        }
+
+        bool seeTarget = spotTarget();
         // Update the sus level
         // Make system dynamic slower
-        susUpdate(distanceToObstacle(), k_val, w_val, Time.deltaTime, seePlayer);
+        susUpdate(distanceToObstacle(), k_val, w_val, Time.deltaTime, seeTarget);
+
+        if (!seeTarget)
+        {
+            animator.SetBool("attack", false);
+        }
         //Debug.Log(Time.deltaTime);
         //Debug.Log(distanceToObstacle());
         //Debug.Log(currentAction[1]);
         //Debug.Log(actionTimePlaned);
         // Use susLevel to separate behaviors
+
+        if (petable)
+        { 
+            Vector3 playerPosition = player.transform.position;
+            float xDiff = transform.position.x - playerPosition.x;
+            float yDiff = transform.position.y - playerPosition.y;
+            float distance2Player = Mathf.Sqrt(Mathf.Pow(xDiff, 2f) + Mathf.Pow(yDiff, 2f));
+            if (distance2Player <= allyStayRadius && !ally)
+            {
+                if (pCharClone == null)
+                {
+                    pCharClone = Instantiate(pChar, transform.position + new Vector3(0f, -1f, 0f), transform.rotation, transform);
+                }
+
+                if (Input.GetKeyDown("p"))
+                {
+                    ally = true;
+                }
+            }
+            else
+            {
+                if (pCharClone != null)
+                {
+                    Destroy(pCharClone);
+                }
+            }
+        }
+
         if (health <= 0)
         {
             Destroy(this.gameObject);
-            Application.Quit();
         }
         //Debug.Log(susLevel);
         if (susLevel <= 0.155)
@@ -415,14 +617,50 @@ public class EnemyBehavior : MonoBehaviour
             {
                 Destroy(bigAlertClone);
             }
-            if (actionTimePlaned > 0)
+            if (seeTarget && move2Player)
             {
-                move();
+                Vector3 lastPosition = ally && !move2Player ? targetEnemyLastPosition : playerLastPosition;
+                actionTimePlaned = 0;
+                float xDiff = transform.position.x - lastPosition.x;
+                float yDiff = transform.position.y - lastPosition.y;
+                float distance2Player = Mathf.Sqrt(Mathf.Pow(xDiff, 2f) + Mathf.Pow(yDiff, 2f));
+                if (distance2Player > allyStayRadius)
+                {
+                    if (Mathf.Abs(xDiff) >= Mathf.Abs(yDiff))
+                    {
+                        if (xDiff >= 0)
+                        {
+                            transform.Translate(Vector3.left * Time.deltaTime * movingSpeed * 1.5f);
+                        }
+                        else
+                        {
+                            transform.Translate(Vector3.right * Time.deltaTime * movingSpeed * 1.5f);
+                        }
+                    }
+                    else
+                    {
+                        if (yDiff >= 0)
+                        {
+                            transform.Translate(Vector3.down * Time.deltaTime * movingSpeed * 1.5f);
+                        }
+                        else
+                        {
+                            transform.Translate(Vector3.up * Time.deltaTime * movingSpeed * 1.5f);
+                        }
+                    }
+                }
             }
             else
             {
-                randomAction(0);
-                move();
+                if (actionTimePlaned > 0)
+                {
+                    move();
+                }
+                else
+                {
+                    randomAction(0);
+                    move();
+                }
             }
         }
         else if (0.155 < susLevel && susLevel < 0.2)
@@ -441,14 +679,50 @@ public class EnemyBehavior : MonoBehaviour
                 questionMarkClone = Instantiate(questionMark, transform.position + new Vector3(0.5f, 0.5f, 0f), transform.rotation, transform);
             }
             // If from last frame to current frame, the actionTimePlaned becomes 0 or negative, the enemy will not perform the last action, which prevents hitting the wall.
-            if (actionTimePlaned > 0)
+            if (seeTarget && move2Player)
             {
-                move();
+                Vector3 lastPosition = ally && !move2Player ? targetEnemyLastPosition : playerLastPosition;
+                actionTimePlaned = 0;
+                float xDiff = transform.position.x - lastPosition.x;
+                float yDiff = transform.position.y - lastPosition.y;
+                float distance2Player = Mathf.Sqrt(Mathf.Pow(xDiff, 2f) + Mathf.Pow(yDiff, 2f));
+                if (distance2Player > allyStayRadius)
+                {
+                    if (Mathf.Abs(xDiff) >= Mathf.Abs(yDiff))
+                    {
+                        if (xDiff >= 0)
+                        {
+                            transform.Translate(Vector3.left * Time.deltaTime * movingSpeed * 1.5f);
+                        }
+                        else
+                        {
+                            transform.Translate(Vector3.right * Time.deltaTime * movingSpeed * 1.5f);
+                        }
+                    }
+                    else
+                    {
+                        if (yDiff >= 0)
+                        {
+                            transform.Translate(Vector3.down * Time.deltaTime * movingSpeed * 1.5f);
+                        }
+                        else
+                        {
+                            transform.Translate(Vector3.up * Time.deltaTime * movingSpeed * 1.5f);
+                        }
+                    }
+                }
             }
             else
             {
-                randomAction(0);
-                move();
+                if (actionTimePlaned > 0)
+                {
+                    move();
+                }
+                else
+                {
+                    randomAction(0);
+                    move();
+                }
             }
         }
         else if (susLevel >= 0.2 && susLevel < 0.7)
@@ -466,36 +740,70 @@ public class EnemyBehavior : MonoBehaviour
                 smallAlertClone = Instantiate(smallAlert, transform.position + new Vector3(0.5f, 0.5f, 0f), transform.rotation, transform);
             }
             // Deterministic move
-            if (seePlayer)
+            if (seeTarget)
             {
+                Vector3 lastPosition = ally && !move2Player ? targetEnemyLastPosition : playerLastPosition;
                 actionTimePlaned = 0;
-                float xDiff = transform.position.x - playerLastPosition.x;
-                float yDiff = transform.position.y - playerLastPosition.y;
-                if (Mathf.Abs(xDiff) >= Mathf.Abs(yDiff))
+                float xDiff = transform.position.x - lastPosition.x;
+                float yDiff = transform.position.y - lastPosition.y;
+
+                float distance2Player = Mathf.Sqrt(Mathf.Pow(xDiff, 2f) + Mathf.Pow(yDiff, 2f));
+                if (move2Player)
                 {
-                    if (Mathf.Abs(xDiff) > maxAttackRange)
+                    if (distance2Player > allyStayRadius)
                     {
-                        if (xDiff >= 0)
+                        if (Mathf.Abs(xDiff) >= Mathf.Abs(yDiff))
                         {
-                            transform.Translate(Vector3.left * Time.deltaTime * movingSpeed * 1.5f);
+                            if (xDiff >= 0)
+                            {
+                                transform.Translate(Vector3.left * Time.deltaTime * movingSpeed * 1.5f);
+                            }
+                            else
+                            {
+                                transform.Translate(Vector3.right * Time.deltaTime * movingSpeed * 1.5f);
+                            }
                         }
                         else
                         {
-                            transform.Translate(Vector3.right * Time.deltaTime * movingSpeed * 1.5f);
+                            if (yDiff >= 0)
+                            {
+                                transform.Translate(Vector3.down * Time.deltaTime * movingSpeed * 1.5f);
+                            }
+                            else
+                            {
+                                transform.Translate(Vector3.up * Time.deltaTime * movingSpeed * 1.5f);
+                            }
                         }
                     }
                 }
                 else
                 {
-                    if (Mathf.Abs(yDiff) > maxAttackRange)
+                    if (Mathf.Abs(xDiff) >= Mathf.Abs(yDiff))
                     {
-                        if (yDiff >= 0)
+                        if (Mathf.Abs(xDiff) > maxAttackRange)
                         {
-                            transform.Translate(Vector3.down * Time.deltaTime * movingSpeed * 1.5f);
+                            if (xDiff >= 0)
+                            {
+                                transform.Translate(Vector3.left * Time.deltaTime * movingSpeed * 1.5f);
+                            }
+                            else
+                            {
+                                transform.Translate(Vector3.right * Time.deltaTime * movingSpeed * 1.5f);
+                            }
                         }
-                        else
+                    }
+                    else
+                    {
+                        if (Mathf.Abs(yDiff) > maxAttackRange)
                         {
-                            transform.Translate(Vector3.up * Time.deltaTime * movingSpeed * 1.5f);
+                            if (yDiff >= 0)
+                            {
+                                transform.Translate(Vector3.down * Time.deltaTime * movingSpeed * 1.5f);
+                            }
+                            else
+                            {
+                                transform.Translate(Vector3.up * Time.deltaTime * movingSpeed * 1.5f);
+                            }
                         }
                     }
                 }
@@ -527,73 +835,122 @@ public class EnemyBehavior : MonoBehaviour
             {
                 bigAlertClone = Instantiate(bigAlert, transform.position + new Vector3(0.5f, 0.5f, 0f), transform.rotation, transform);
             }
-            if (seePlayer)
+            if (seeTarget)
             {
+                Vector3 lastPosition = ally && !move2Player ? targetEnemyLastPosition : playerLastPosition;
                 actionTimePlaned = 0;
-                float xDiff = transform.position.x - playerLastPosition.x;
-                float yDiff = transform.position.y - playerLastPosition.y;
-                if (Mathf.Abs(xDiff) >= Mathf.Abs(yDiff))
+                float xDiff = transform.position.x - lastPosition.x;
+                float yDiff = transform.position.y - lastPosition.y;
+
+                float xDiffAbs = transform.position.x - lastPosition.x;
+                float yDiffAbs = transform.position.y - lastPosition.y;
+                float distance2Player = Mathf.Sqrt(Mathf.Pow(xDiffAbs, 2f) + Mathf.Pow(yDiffAbs, 2f));
+
+                if (move2Player)
                 {
-                    if (Mathf.Abs(xDiff) > maxAttackRange)
+                    if (distance2Player > allyStayRadius)
                     {
-                        if (xDiff >= 0)
+                        if (Mathf.Abs(xDiff) >= Mathf.Abs(yDiff))
                         {
-                            transform.Translate(Vector3.left * Time.deltaTime * movingSpeed * 3f);
+                            if (xDiff >= 0)
+                            {
+                                transform.Translate(Vector3.left * Time.deltaTime * movingSpeed * 1.5f);
+                            }
+                            else
+                            {
+                                transform.Translate(Vector3.right * Time.deltaTime * movingSpeed * 1.5f);
+                            }
                         }
                         else
                         {
-                            transform.Translate(Vector3.right * Time.deltaTime * movingSpeed * 3f);
+                            if (yDiff >= 0)
+                            {
+                                transform.Translate(Vector3.down * Time.deltaTime * movingSpeed * 1.5f);
+                            }
+                            else
+                            {
+                                transform.Translate(Vector3.up * Time.deltaTime * movingSpeed * 1.5f);
+                            }
                         }
                     }
                 }
                 else
                 {
-                    if (Mathf.Abs(yDiff) > maxAttackRange)
+                    if (Mathf.Abs(xDiff) >= Mathf.Abs(yDiff))
                     {
-                        if (yDiff >= 0)
+                        if (Mathf.Abs(xDiff) > maxAttackRange)
                         {
-                            transform.Translate(Vector3.down * Time.deltaTime * movingSpeed * 3f);
+                            if (xDiff >= 0)
+                            {
+                                transform.Translate(Vector3.left * Time.deltaTime * movingSpeed * 3f);
+                            }
+                            else
+                            {
+                                transform.Translate(Vector3.right * Time.deltaTime * movingSpeed * 3f);
+                            }
                         }
-                        else
+                    }
+                    else
+                    {
+                        if (Mathf.Abs(yDiff) > maxAttackRange)
                         {
-                            transform.Translate(Vector3.up * Time.deltaTime * movingSpeed * 3f);
+                            if (yDiff >= 0)
+                            {
+                                transform.Translate(Vector3.down * Time.deltaTime * movingSpeed * 3f);
+                            }
+                            else
+                            {
+                                transform.Translate(Vector3.up * Time.deltaTime * movingSpeed * 3f);
+                            }
                         }
+                    }
+                    
+                    if (Mathf.Max(Mathf.Abs(xDiff), Mathf.Abs(yDiff)) <= maxAttackRange && chargingTime == 0f)
+                    {
+                        animator.SetBool("attack", true);
+                        //Debug.Log(LayerPlayer);
+                        chargingTime = chargingTime + Time.deltaTime;
+                        Collider2D[] hitTargets = Physics2D.OverlapCircleAll(transform.position, maxAttackRange);
+
+                        foreach (Collider2D target in hitTargets)
+                        {
+                            // Change name if name is not mainPlayer
+                            // attack non ally enemy
+                            if (target.name == "mainPlayer")
+                            {
+                                target.gameObject.GetComponent<PlayerStats>().IncHealth(-1.0f * enemyLevel);
+                            }
+                            else if (target.gameObject.GetComponent<EnemyBehavior>() != null && !target.gameObject.GetComponent<EnemyBehavior>().ally && ally)
+                            {
+                                target.gameObject.GetComponent<EnemyBehavior>().health -= 1 * enemyLevel;
+                            }
+                            else if (target.gameObject.GetComponent<EnemyBehavior>() != null && target.gameObject.GetComponent<EnemyBehavior>().ally && !ally)
+                            {
+                                target.gameObject.GetComponent<EnemyBehavior>().health -= 1 * enemyLevel;
+                            }
+                        }
+                    }
+                    else if (chargingTime > 0 && chargingTime <= intervalBetweenAttacks * 0.5f)
+                    {
+                        animator.SetBool("attack", false);
+                        chargingTime = chargingTime + Time.deltaTime;
+                    }
+                    else if (chargingTime > intervalBetweenAttacks * 0.5f && chargingTime < intervalBetweenAttacks)
+                    {
+                        animator.SetBool("attack", false);
+                        chargingTime = chargingTime + Time.deltaTime;
+                    }
+                    else if (chargingTime > intervalBetweenAttacks)
+                    {
+                        animator.SetBool("attack", false);
+                        chargingTime = 0f;
+                    }
+                    else
+                    {
+                        animator.SetBool("attack", false);
                     }
                 }
 
-                if (Mathf.Max(Mathf.Abs(xDiff), Mathf.Abs(yDiff)) <= maxAttackRange && chargingTime == 0f)
-                {
-                    animator.SetBool("attack", true);
-                    chargingTime = chargingTime + Time.deltaTime;
-                    Debug.Log(LayerPlayer);
-                    Collider2D[] hitTargets = Physics2D.OverlapCircleAll(transform.position, maxAttackRange);
-
-                    foreach (Collider2D target in hitTargets)
-                    {
-                        // Change name if name is not mainPlayer
-                        if (target.name == "mainPlayer")
-                        {
-                            target.gameObject.GetComponent<PlayerStats>().IncHealth(-1.0f);
-                        }
-                    }
-                }
-                else if (chargingTime > 0 && chargingTime <= intervalBetweenAttacks * 0.5f)
-                {
-                    animator.SetBool("attack", false);
-                    chargingTime = chargingTime + Time.deltaTime;
-                }
-                else if (chargingTime > intervalBetweenAttacks * 0.5f && chargingTime < intervalBetweenAttacks)
-                {
-                    chargingTime = chargingTime + Time.deltaTime;
-                }
-                else if (chargingTime > intervalBetweenAttacks)
-                {
-                    chargingTime = 0f;
-                }
-                else
-                {
-                    animator.SetBool("attack", false);
-                }
             }
             else
             {
@@ -603,7 +960,7 @@ public class EnemyBehavior : MonoBehaviour
                 }
                 else
                 {
-                    randomAction(1);
+                    randomAction(2);
                     move();
                 }
             }

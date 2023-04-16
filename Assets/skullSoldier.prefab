@@ -74,8 +74,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -492839153
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300552, guid: 872dba149c5addb49ac3649c5b9247d6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -122,6 +122,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxVision: 5
   playerLastPosition: {x: 0, y: 0, z: 0}
+  targetEnemyLastPosition: {x: 0, y: 0, z: 0}
   maxAttackRange: 1.5
   k_val: 5
   w_val: 0.25
@@ -130,6 +131,15 @@ MonoBehaviour:
   questionMark: {fileID: 1605708980996933940, guid: b1304e6877ba2f3428e6eae7be265aaf, type: 3}
   smallAlert: {fileID: 6028945541380220502, guid: e53e1eabff4a3c649b6b430b4369c770, type: 3}
   bigAlert: {fileID: 3168041598092535264, guid: bda039d515419cd49b7698b0d4d034c3, type: 3}
+  levelMark: {fileID: 0}
+  bone: {fileID: 8368988349675041870, guid: 3b2dce0c79d0cdf41a6195676e7216a2, type: 3}
+  pChar: {fileID: 5855480552603275026, guid: 233d3d3fb8673274fa96116517bb4771, type: 3}
+  level1: {fileID: 0}
+  level2: {fileID: 0}
+  level3: {fileID: 0}
+  ally: 0
+  enemyLevel: 1
+  allyStayRadius: 2
 --- !u!50 &7742881254633448161
 Rigidbody2D:
   serializedVersion: 4
