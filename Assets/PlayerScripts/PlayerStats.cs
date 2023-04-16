@@ -54,7 +54,11 @@ public class PlayerStats : MonoBehaviour
         // quit the game when the player dies
         if (health <= 0.0f)
         {
-            //Application.Quit();
+            Die();
         }
+    }
+    void Die()
+    {
+        Application.Quit();
     }
 }
