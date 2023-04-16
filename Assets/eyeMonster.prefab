@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &7742881254633448171
+--- !u!1 &5317078926686568938
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,41 +8,41 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7742881254633448166}
-  - component: {fileID: 7742881254633448165}
-  - component: {fileID: 7742881254633448164}
-  - component: {fileID: 7742881254633448167}
-  - component: {fileID: 7742881254633448161}
-  - component: {fileID: 7742881254633448160}
+  - component: {fileID: 5317078926686568940}
+  - component: {fileID: 5317078926686568941}
+  - component: {fileID: 5317078926686568943}
+  - component: {fileID: 5317078926686568928}
+  - component: {fileID: 5317078926686568929}
+  - component: {fileID: 5317078926686568942}
   m_Layer: 6
-  m_Name: skullSoldier
+  m_Name: eyeMonster
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7742881254633448166
+--- !u!4 &5317078926686568940
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7742881254633448171}
+  m_GameObject: {fileID: 5317078926686568938}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -1}
+  m_LocalPosition: {x: 12.77, y: 1.53, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &7742881254633448165
+--- !u!212 &5317078926686568941
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7742881254633448171}
+  m_GameObject: {fileID: 5317078926686568938}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -74,10 +74,10 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -492839153
-  m_SortingLayer: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300552, guid: 872dba149c5addb49ac3649c5b9247d6, type: 3}
+  m_Sprite: {fileID: 21300344, guid: 872dba149c5addb49ac3649c5b9247d6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -88,17 +88,17 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!95 &7742881254633448164
+--- !u!95 &5317078926686568943
 Animator:
   serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7742881254633448171}
+  m_GameObject: {fileID: 5317078926686568938}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 8c59afbd4d9070941a134bb4f3578969, type: 2}
+  m_Controller: {fileID: 9100000, guid: 064845a004a3a4847ad19f64185986e3, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -108,76 +108,55 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
---- !u!114 &7742881254633448167
+--- !u!114 &5317078926686568928
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7742881254633448171}
+  m_GameObject: {fileID: 5317078926686568938}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5534c38696b87f64e963a1cb0da611fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxVision: 5
+  maxVision: 6
   playerLastPosition: {x: 0, y: 0, z: 0}
   targetEnemyLastPosition: {x: 0, y: 0, z: 0}
-  maxAttackRange: 1.5
+  maxAttackRange: 3
   oldMaxAttackRange: 1.5
   k_val: 5
   w_val: 0.25
-  health: 10
+  health: 6
   intervalBetweenAttacks: 1
   questionMark: {fileID: 1605708980996933940, guid: b1304e6877ba2f3428e6eae7be265aaf, type: 3}
   smallAlert: {fileID: 6028945541380220502, guid: e53e1eabff4a3c649b6b430b4369c770, type: 3}
   bigAlert: {fileID: 3168041598092535264, guid: bda039d515419cd49b7698b0d4d034c3, type: 3}
   levelMark: {fileID: 0}
-  bone: {fileID: 8368988349675041870, guid: 3b2dce0c79d0cdf41a6195676e7216a2, type: 3}
+  bone: {fileID: 0}
   pChar: {fileID: 5855480552603275026, guid: 233d3d3fb8673274fa96116517bb4771, type: 3}
   level1: {fileID: 0}
   level2: {fileID: 0}
   level3: {fileID: 0}
   ally: 0
-  enemyLevel: 2
+  enemyLevel: 3
   allyStayRadius: 2
   isLargePumpkin: 0
   isSmallPumpkin: 0
-  isEye: 0
+  isEye: 1
   isSkull: 0
   isBoss: 0
-  isSkullSoldier: 1
+  isSkullSoldier: 0
   pumpkinSeed: {fileID: 0}
   skullHeadBullet: {fileID: 0}
   smallPumpkin: {fileID: 0}
---- !u!50 &7742881254633448161
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7742881254633448171}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 100000
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 1
-  m_Constraints: 4
---- !u!61 &7742881254633448160
+--- !u!61 &5317078926686568929
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7742881254633448171}
+  m_GameObject: {fileID: 5317078926686568938}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
@@ -197,3 +176,24 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.0062894, y: 1.0062894}
   m_EdgeRadius: 0
+--- !u!50 &5317078926686568942
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5317078926686568938}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 100000
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 1
+  m_Constraints: 4

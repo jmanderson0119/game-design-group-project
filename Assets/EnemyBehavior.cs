@@ -13,6 +13,7 @@ public class EnemyBehavior : MonoBehaviour
     private float idleMaxTime = 1f;
     private float movingSpeed = 1.5f;
     public float maxAttackRange = 1.5f;
+    public float oldMaxAttackRange = 1.5f;
     public float k_val = 5f;
     public float w_val = 0.25f;
     private int LayerPlayer;
@@ -25,6 +26,7 @@ public class EnemyBehavior : MonoBehaviour
     [SerializeField] GameObject smallAlert;
     private GameObject smallAlertClone;
     [SerializeField] GameObject bigAlert;
+    private GameObject bigAlertClone;
     private GameObject levelMarkClone;
     [SerializeField] GameObject levelMark;
     private GameObject boneClone;
@@ -36,13 +38,35 @@ public class EnemyBehavior : MonoBehaviour
     [SerializeField] GameObject level2;
     [SerializeField] GameObject level3;
     private GameObject player;
-    private GameObject bigAlertClone;
     public bool ally = false;
     private bool move2Player = false;
     public int enemyLevel = 1;
     public float allyStayRadius = 2f;
 
+    public bool isLargePumpkin = false;
+    public bool isSmallPumpkin = false;
+    public bool isEye = false;
+    public bool isSkull = false;
+    public bool isBoss = false;
+    public bool isSkullSoldier = false;
+
+    private Queue<GameObject> pumpkinSeeds = new Queue<GameObject>();
+    private Queue<GameObject> skullHeadBullets = new Queue<GameObject>();
+
+    private bool DestroySeed_running = false;
+    private bool DestroySkullHeadBullet_running = false;
+    private bool isTransformed = false;
+    private Vector3 oldScale;
+    float oldIntervalBetweenAttacks = 1f;
+    float oldMovingSpeed = 1.5f;
+    int oldHealth = 6;
+
+    [SerializeField] GameObject pumpkinSeed;
+    [SerializeField] GameObject skullHeadBullet;
+    [SerializeField] GameObject smallPumpkin;
+
     // This indicates whether this enemy can be pet or not
+    // eye is not petable
     private bool petable = false;
 
     Rigidbody2D enemy;
@@ -206,8 +230,8 @@ public class EnemyBehavior : MonoBehaviour
         float probDown = 0f;
         float distToPlayer = Mathf.Infinity;
         Vector3 lastPosition = ally && !move2Player ? targetEnemyLastPosition : playerLastPosition;
-        Debug.Log(ally && !move2Player);
-        Debug.Log(lastPosition);
+        //Debug.Log(ally && !move2Player);
+        //Debug.Log(lastPosition);
         // state = 0, small sus 
         // state = 1, medium sus
         // state = 2, high sus
@@ -505,31 +529,35 @@ public class EnemyBehavior : MonoBehaviour
         LayerEnemy = LayerMask.NameToLayer("Enemy");
         enemy = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-
+        oldMaxAttackRange = maxAttackRange;
+        oldScale = transform.localScale;
+        oldIntervalBetweenAttacks = intervalBetweenAttacks;
+        oldMovingSpeed = movingSpeed;
+        oldHealth = health;
         // Check if this enemy is petable
         player = GameObject.Find("mainPlayer");
-        if (player != null)
+        if (player != null && !isEye)
         {
             // Modify this if there is another way to extract reputation
             // Here, I assume that reputation ranges from 0 to 1
             float playerReputation = player.GetComponent<PlayerStats>().Reputation();
             // May consider add petting as a skill
             // Allow player to pet only if he acquires the skill
-            if (playerReputation < 0.5f)
+            if (playerReputation < 50f)
             {
                 if (enemyLevel == 1)
                 { 
                     petable = true;
                 }
             }
-            else if (playerReputation >= 0.5f && playerReputation < 0.75f)
+            else if (playerReputation >= 50f && playerReputation < 75f)
             {
                 if (enemyLevel <= 2)
                 {
                     petable = true;
                 }
             }
-            else if (playerReputation >= 0.75f)
+            else if (playerReputation >= 75f)
             {
                 if (enemyLevel <= 3)
                 {
@@ -544,10 +572,39 @@ public class EnemyBehavior : MonoBehaviour
         }
     }
 
+    IEnumerator DestroySeed()
+    {
+        DestroySeed_running = true;
+        yield return new WaitForSeconds(3f);
+        if (pumpkinSeeds.Count > 0)
+        {
+            Destroy(pumpkinSeeds.Dequeue());
+        }
+        DestroySeed_running = false;
+    }
+
+    IEnumerator DestroySkullHeadBullet()
+    {
+        DestroySkullHeadBullet_running = true;
+        yield return new WaitForSeconds(1.5f);
+        if (skullHeadBullets.Count > 0)
+        {
+            Destroy(skullHeadBullets.Dequeue());
+        }
+        DestroySkullHeadBullet_running = false;
+    }
+
+    public void CollisionDetected(Bullet BulletScript)
+    {
+        player.GetComponent<PlayerStats>().IncHealth(-1.0f * enemyLevel);
+    }
+
     // Update is called once per frame
     // Make sure that an action can be disrupted if the enemy see player or get damaged during an action.
     void FixedUpdate()
     {
+        //Debug.Log(currentAction[1]);
+        //Debug.Log(currentAction[0]);
         actionTimePlaned = actionTimePlaned - Time.deltaTime;
         // If enemy is ally, bone stops rotate
         if (ally)
@@ -560,16 +617,34 @@ public class EnemyBehavior : MonoBehaviour
         // Update the sus level
         // Make system dynamic slower
         susUpdate(distanceToObstacle(), k_val, w_val, Time.deltaTime, seeTarget);
-
-        if (!seeTarget)
+        if (isSkullSoldier || (isEye && isTransformed) || isSkull)
         {
-            animator.SetBool("attack", false);
+            if (!seeTarget)
+            {
+                animator.SetBool("attack", false);
+            }
         }
         //Debug.Log(Time.deltaTime);
         //Debug.Log(distanceToObstacle());
         //Debug.Log(currentAction[1]);
         //Debug.Log(actionTimePlaned);
         // Use susLevel to separate behaviors
+        if (!DestroySeed_running && pumpkinSeeds.Count > 0)
+        {
+            StartCoroutine(DestroySeed());
+        }
+
+        if (!DestroySkullHeadBullet_running && skullHeadBullets.Count > 0)
+        {
+            StartCoroutine(DestroySkullHeadBullet());
+        }
+
+        // Handle bullet/seed hit
+        //void OnTriggerEnter(Collider other)
+        //{
+        //    Debug.Log("hit player");
+        //}
+
 
         if (petable)
         { 
@@ -600,7 +675,24 @@ public class EnemyBehavior : MonoBehaviour
 
         if (health <= 0)
         {
-            Destroy(this.gameObject);
+            if (isLargePumpkin)
+            {
+                for (int i = 0; i < enemyLevel * 2; i++)
+                {
+                    GameObject smallPumpkinClone = Instantiate(smallPumpkin, transform.position, transform.rotation);
+                    // Small pumpkins are weaker, but their attack speed is faster
+                    smallPumpkinClone.GetComponent<EnemyBehavior>().ally = ally;
+                    smallPumpkinClone.GetComponent<EnemyBehavior>().enemyLevel = enemyLevel;
+                    smallPumpkinClone.GetComponent<EnemyBehavior>().maxAttackRange = maxAttackRange * 0.75f;
+                    smallPumpkinClone.GetComponent<EnemyBehavior>().health = (int)Mathf.Round(oldHealth / 2f);
+                    smallPumpkinClone.GetComponent<EnemyBehavior>().intervalBetweenAttacks = intervalBetweenAttacks / 1.5f;
+                }
+                Destroy(this.gameObject);
+            }
+            else
+            {
+                Destroy(this.gameObject);
+            }
         }
         //Debug.Log(susLevel);
         if (susLevel <= 0.155)
@@ -665,6 +757,17 @@ public class EnemyBehavior : MonoBehaviour
         }
         else if (0.155 < susLevel && susLevel < 0.2)
         {
+            // transform ege back
+            if (isTransformed)
+            {
+                animator.SetBool("transform", false);
+                isTransformed = false;
+                maxAttackRange = oldMaxAttackRange;
+                transform.localScale = oldScale;
+                intervalBetweenAttacks = oldIntervalBetweenAttacks;
+                movingSpeed = oldMovingSpeed;
+            }
+
             if (smallAlertClone != null)
             {
                 Destroy(smallAlertClone);
@@ -907,47 +1010,183 @@ public class EnemyBehavior : MonoBehaviour
                     
                     if (Mathf.Max(Mathf.Abs(xDiff), Mathf.Abs(yDiff)) <= maxAttackRange && chargingTime == 0f)
                     {
-                        animator.SetBool("attack", true);
-                        //Debug.Log(LayerPlayer);
                         chargingTime = chargingTime + Time.deltaTime;
-                        Collider2D[] hitTargets = Physics2D.OverlapCircleAll(transform.position, maxAttackRange);
-
-                        foreach (Collider2D target in hitTargets)
+                        if (isSkullSoldier)
                         {
-                            // Change name if name is not mainPlayer
-                            // attack non ally enemy
-                            if (target.name == "mainPlayer")
+                            animator.SetBool("attack", true);
+                            //Debug.Log(LayerPlayer);
+                            Collider2D[] hitTargets = Physics2D.OverlapCircleAll(transform.position, maxAttackRange);
+
+                            foreach (Collider2D target in hitTargets)
                             {
-                                target.gameObject.GetComponent<PlayerStats>().IncHealth(-1.0f * enemyLevel);
+                                // Change name if name is not mainPlayer
+                                // attack non ally enemy
+                                if (target.name == "mainPlayer")
+                                {
+                                    target.gameObject.GetComponent<PlayerStats>().IncHealth(-1.0f * enemyLevel);
+                                }
+                                else if (target.gameObject.GetComponent<EnemyBehavior>() != null && !target.gameObject.GetComponent<EnemyBehavior>().ally && ally)
+                                {
+                                    target.gameObject.GetComponent<EnemyBehavior>().health -= 1 * enemyLevel;
+                                }
+                                else if (target.gameObject.GetComponent<EnemyBehavior>() != null && target.gameObject.GetComponent<EnemyBehavior>().ally && !ally)
+                                {
+                                    target.gameObject.GetComponent<EnemyBehavior>().health -= 1 * enemyLevel;
+                                }
                             }
-                            else if (target.gameObject.GetComponent<EnemyBehavior>() != null && !target.gameObject.GetComponent<EnemyBehavior>().ally && ally)
+                        }
+                        if (isLargePumpkin || isSmallPumpkin)
+                        {
+                            if (currentAction[1] == "left")
                             {
-                                target.gameObject.GetComponent<EnemyBehavior>().health -= 1 * enemyLevel;
+                                GameObject seed = Instantiate(pumpkinSeed, transform.position + new Vector3(-0.5f, 0f, 0f), transform.rotation, transform);
+                                pumpkinSeeds.Enqueue(seed);
+                                seed.GetComponent<Rigidbody2D>().AddForce(Vector2.left * 5f, ForceMode2D.Impulse);
+                                seed.transform.parent = transform;
                             }
-                            else if (target.gameObject.GetComponent<EnemyBehavior>() != null && target.gameObject.GetComponent<EnemyBehavior>().ally && !ally)
+                            else if (currentAction[1] == "right")
                             {
-                                target.gameObject.GetComponent<EnemyBehavior>().health -= 1 * enemyLevel;
+                                GameObject seed = Instantiate(pumpkinSeed, transform.position + new Vector3(0.5f, 0f, 0f), transform.rotation, transform);
+                                pumpkinSeeds.Enqueue(seed);
+                                seed.GetComponent<Rigidbody2D>().AddForce(Vector2.right * 5f, ForceMode2D.Impulse);
+                                seed.transform.parent = transform;
+                            }
+                            else if (currentAction[1] == "up")
+                            {
+                                GameObject seed = Instantiate(pumpkinSeed, transform.position + new Vector3(0f, 0.5f, 0f), transform.rotation, transform);
+                                pumpkinSeeds.Enqueue(seed);
+                                seed.GetComponent<Rigidbody2D>().AddForce(Vector2.up * 5f, ForceMode2D.Impulse);
+                                seed.transform.parent = transform;
+                            }
+                            else if (currentAction[1] == "down")
+                            {
+                                GameObject seed = Instantiate(pumpkinSeed, transform.position + new Vector3(0f, -0.5f, 0f), transform.rotation, transform);
+                                pumpkinSeeds.Enqueue(seed);
+                                seed.GetComponent<Rigidbody2D>().AddForce(Vector2.down * 5f, ForceMode2D.Impulse);
+                                seed.transform.parent = transform;
+                            }
+                            
+                        }
+                        if (isEye)
+                        {
+                            if (!isTransformed)
+                            {
+                                animator.SetBool("transform", true);
+                                isTransformed = true;
+                                oldMaxAttackRange = maxAttackRange;
+                                maxAttackRange = 1.5f;
+                                transform.localScale += new Vector3(0.5f, 0.5f, 0.5f) * 0.01f * (float)(100 - player.GetComponent<PlayerStats>().Reputation());
+                                float playerReputation = player.GetComponent<PlayerStats>().Reputation();
+                                // The eye will create more powerful enemy if the player's reputation is low
+                                // Adjust the numbers later. Might be too difficult.
+                                if (playerReputation < 50f)
+                                {
+                                    enemyLevel = 3;
+                                    intervalBetweenAttacks = intervalBetweenAttacks * 0.3f;
+                                    movingSpeed = movingSpeed * 1.5f;
+                                }
+                                else if (playerReputation >= 50f && playerReputation < 75f)
+                                {
+                                    enemyLevel = 2;
+                                    intervalBetweenAttacks = intervalBetweenAttacks * 0.5f;
+                                    movingSpeed = movingSpeed * 1.25f;
+                                }
+                                else if (playerReputation >= 75f)
+                                {
+                                    enemyLevel = 1;
+                                }
+                            }
+                            else
+                            {
+                                animator.SetBool("attack", true);
+                                //Debug.Log(LayerPlayer);
+                                Collider2D[] hitTargets = Physics2D.OverlapCircleAll(transform.position, maxAttackRange);
+
+                                foreach (Collider2D target in hitTargets)
+                                {
+                                    // Change name if name is not mainPlayer
+                                    // attack non ally enemy
+                                    if (target.name == "mainPlayer")
+                                    {
+                                        target.gameObject.GetComponent<PlayerStats>().IncHealth(Mathf.Round(-1.0f * (float)enemyLevel * 0.01f * (float)(100 - player.GetComponent<PlayerStats>().Reputation())));
+                                    }
+                                    else if (target.gameObject.GetComponent<EnemyBehavior>() != null && !target.gameObject.GetComponent<EnemyBehavior>().ally && ally)
+                                    {
+                                        target.gameObject.GetComponent<EnemyBehavior>().health -= (int)Mathf.Round(1f * (float)enemyLevel * 0.01f * (float)(100 - player.GetComponent<PlayerStats>().Reputation()));
+                                    }
+                                    else if (target.gameObject.GetComponent<EnemyBehavior>() != null && target.gameObject.GetComponent<EnemyBehavior>().ally && !ally)
+                                    {
+                                        target.gameObject.GetComponent<EnemyBehavior>().health -= (int)Mathf.Round(1f * (float)enemyLevel * 0.01f * (float)(100 - player.GetComponent<PlayerStats>().Reputation()));
+                                    }
+                                }
+                            }
+                        }
+                        if (isSkull)
+                        {
+                            animator.SetBool("attack", true);
+                            if (currentAction[1] == "left")
+                            {
+                                GameObject bullet = Instantiate(skullHeadBullet, transform.position + new Vector3(-0.5f, 0f, 0f), transform.rotation, transform);
+                                bullet.transform.Rotate(0, 0, 180f);
+                                skullHeadBullets.Enqueue(bullet);
+                                bullet.GetComponent<Rigidbody2D>().AddForce(Vector2.left * 5f, ForceMode2D.Impulse);
+                                bullet.transform.parent = transform;
+                            }
+                            else if (currentAction[1] == "right")
+                            {
+                                GameObject bullet = Instantiate(skullHeadBullet, transform.position + new Vector3(0.5f, 0f, 0f), transform.rotation, transform);
+                                skullHeadBullets.Enqueue(bullet);
+                                bullet.GetComponent<Rigidbody2D>().AddForce(Vector2.right * 5f, ForceMode2D.Impulse);
+                                bullet.transform.parent = transform;
+                            }
+                            else if (currentAction[1] == "up")
+                            {
+                                GameObject bullet = Instantiate(skullHeadBullet, transform.position + new Vector3(0f, 0.5f, 0f), transform.rotation, transform);
+                                bullet.transform.Rotate(0, 0, 90f);
+                                skullHeadBullets.Enqueue(bullet);
+                                bullet.GetComponent<Rigidbody2D>().AddForce(Vector2.up * 5f, ForceMode2D.Impulse);
+                                bullet.transform.parent = transform;
+                            }
+                            else if (currentAction[1] == "down")
+                            {
+                                GameObject bullet = Instantiate(skullHeadBullet, transform.position + new Vector3(0f, -0.5f, 0f), transform.rotation, transform);
+                                bullet.transform.Rotate(0, 0, -90f);
+                                skullHeadBullets.Enqueue(bullet);
+                                bullet.GetComponent<Rigidbody2D>().AddForce(Vector2.down * 5f, ForceMode2D.Impulse);
+                                bullet.transform.parent = transform;
                             }
                         }
                     }
                     else if (chargingTime > 0 && chargingTime <= intervalBetweenAttacks * 0.5f)
                     {
-                        animator.SetBool("attack", false);
+                        if (isSkullSoldier || (isEye && isTransformed) || isSkull)
+                        {
+                            animator.SetBool("attack", false);
+                        }
                         chargingTime = chargingTime + Time.deltaTime;
                     }
                     else if (chargingTime > intervalBetweenAttacks * 0.5f && chargingTime < intervalBetweenAttacks)
                     {
-                        animator.SetBool("attack", false);
+                        if (isSkullSoldier || (isEye && isTransformed) || isSkull)
+                        {
+                            animator.SetBool("attack", false);
+                        }
                         chargingTime = chargingTime + Time.deltaTime;
                     }
                     else if (chargingTime > intervalBetweenAttacks)
                     {
-                        animator.SetBool("attack", false);
+                        if (isSkullSoldier || (isEye && isTransformed) || isSkull)
+                        {
+                            animator.SetBool("attack", false);
+                        }
                         chargingTime = 0f;
                     }
                     else
                     {
-                        animator.SetBool("attack", false);
+                        if (isSkullSoldier || (isEye && isTransformed) || isSkull)
+                        {
+                            animator.SetBool("attack", false);
+                        }
                     }
                 }
 
