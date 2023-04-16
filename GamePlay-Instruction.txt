@@ -1,0 +1,29 @@
+# Basic workflow of the game
+
+ - Select a bounty mission from the bounty board
+
+ - Go to the corresponding arena to finish the bounty mission
+
+ - Return to the main spot to upgrade gears or learn new skills to prepare for the final boss
+
+ - Beat the final boss
+
+
+# Basic movement:
+
+ - Use w, a, s, or d to move up, left, down, right.
+
+ - More possible movements can be unlocked after learning new skills (not implemented yet)
+
+
+# Interaction
+
+ - Use left-click to deploy melee attack
+
+ - Use right-click to deploy ranged attack
+
+ - Use e to interact with items in the environment (not implemented yet)
+
+ - Use m to open up the map (not implemented yet)
+
+ - Use l to check the player stats (not implemented yet)
