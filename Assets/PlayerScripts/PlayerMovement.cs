@@ -32,18 +32,21 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame; used for player WASD movement
     void Update()
     {
-        float horizontalMovement = Input.GetAxis("Horizontal"); // figure for horizontal player direction
-        float verticalMovement = Input.GetAxis("Vertical"); // figure for vertical player direction
 
-        Vector3 playerMovement = (new Vector3(horizontalMovement, verticalMovement, 0)).normalized; // vector for direction player is moving in
-
-        if (playerMovement.magnitude > 0) // gives the direction the player is facing in and stores in direction (for use in BulletTravel)
+        if (!playerStats.Dashing())
         {
-            direction = playerMovement; // direction is now a vector of magnitude 1
-        }
+            float horizontalMovement = Input.GetAxis("Horizontal") * Time.deltaTime; // figure for horizontal player direction
+            float verticalMovement = Input.GetAxis("Vertical") * Time.deltaTime; // figure for vertical player direction
 
-        //characterController.Move(playerMovement * Time.deltaTime * speed); // moves player with frame-rate relativity
-        _Rigidbody.velocity = playerMovement * speed;
+            Vector3 playerMovement = (new Vector3(horizontalMovement, verticalMovement, 0)).normalized; // vector for direction player is moving in
+
+            if (playerMovement.magnitude > 0) // gives the direction the player is facing in and stores in direction (for use in BulletTravel)
+            {
+                direction = playerMovement; // direction is now a vector of magnitude 1
+            }
+
+            _Rigidbody.velocity = playerMovement * speed;
+        }
     }
 }
 
