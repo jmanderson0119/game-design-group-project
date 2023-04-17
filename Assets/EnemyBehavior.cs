@@ -1226,6 +1226,7 @@ public class EnemyBehavior : MonoBehaviour
                     smallPumpkinClone.GetComponent<EnemyBehavior>().health = (int)Mathf.Round(oldHealth / 2f);
                     smallPumpkinClone.GetComponent<EnemyBehavior>().intervalBetweenAttacks = intervalBetweenAttacks / 1.5f;
                 }
+                
                 Destroy(this.gameObject);
             }
             else

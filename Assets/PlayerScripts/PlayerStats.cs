@@ -8,8 +8,8 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private float health = 100.0f;
     [SerializeField] private int meleeDamage = 2;
     [SerializeField] private int rangedDamage = 3;
-    [SerializeField] private float reputation = 0.0f;
-    [SerializeField] private int gold = 0;
+    [SerializeField] private static float reputation = 0.0f;
+    [SerializeField] private static int gold = 0;
     [SerializeField] private float meleeTBuffer = 0.5f;
     [SerializeField] private float bulletTBuffer = 0.5f;
     [SerializeField] private float dashTBuffer = 1f;
