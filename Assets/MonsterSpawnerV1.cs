@@ -20,6 +20,7 @@ public class MonsterSpawnerV1 : MonoBehaviour
         //Spawns in the total amount of enemies assigned to the room at once
         for (int i = 0; i < hunting; i++) {
             Instantiate(enemyPrefab, spawnPoints[n].transform.position, Quaternion.identity);
+            n = n + 1;
         }
         
     }
