@@ -5,16 +5,19 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
-  - enabled: 0
-    path: Assets/Scenes/TestEnemyAI.unity
-    guid: 23e7886c2c1d7ef42a4576c791f97752
+  - enabled: 1
+    path: Assets/Scenes/HomeBase.unity
+    guid: 01c641c61742eae4987a3702b6e1ccb7
   - enabled: 1
     path: Assets/Scenes/Board.unity
-    guid: d7b9e28bc92b24393ae5a3b3c6711f9c
+    guid: 0f08b4c93c37dde4c95fff6b917970e6
   - enabled: 1
     path: Assets/Scenes/ForestStage.unity
     guid: 19f59e17daefa3d4395722cee8d9e74b
+  - enabled: 1
+    path: Assets/Scenes/CastleStage.unity
+    guid: 37134ce2d9b28084c81ff4b85735211f
+  - enabled: 1
+    path: Assets/Scenes/SnowStage.unity
+    guid: 3dd19f8d6c50fc641a9a285639cad27e
   m_configObjects: {}

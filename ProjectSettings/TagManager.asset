@@ -39,11 +39,17 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: LowResBackground
+    uniqueID: 2192249835
+    locked: 0
   - name: Background
     uniqueID: 441649875
     locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Filter
+    uniqueID: 1997541401
     locked: 0
   - name: Over
     uniqueID: 3802128143
