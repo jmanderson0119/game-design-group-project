@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 4368892945952053198}
   - component: {fileID: 117632012308578123}
   - component: {fileID: 3970952613432397634}
+  - component: {fileID: 2303761700971813508}
   m_Layer: 3
   m_Name: mainPlayer
   m_TagString: Untagged
@@ -160,6 +161,7 @@ MonoBehaviour:
   dashLength: 0.14
   speed: 3.2
   bulletSpeed: 7
+  shieldTBuffer: 6
   canMelee: 1
   canShoot: 1
   canDash: 1
@@ -215,3 +217,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 934b71f0230fa2a4d8939be137490dcf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2303761700971813508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7846148871284652756}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0540be1945c7634ab77fc74dda25c6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shieldPrefab: {fileID: 4088160261582289385, guid: 402ee65ca9e57e3478dfdc493a54a527, type: 3}

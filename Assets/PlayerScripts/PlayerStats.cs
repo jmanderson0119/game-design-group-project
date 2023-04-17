@@ -12,11 +12,12 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private int gold = 0;
     [SerializeField] private float meleeTBuffer = 0.5f;
     [SerializeField] private float bulletTBuffer = 0.5f;
-    [SerializeField] private float dashTBuffer = 1f;
+    [SerializeField] private float dashTBuffer = 3f;
     [SerializeField] private float dashSpeed = 16f;
     [SerializeField] private float dashLength = 0.14f;
     [SerializeField] private float speed = 3.2f;
     [SerializeField] private float bulletSpeed = 7.0f;
+    [SerializeField] private float shieldTBuffer = 6f;
 
     //booleans used across player ability scripts
     [SerializeField] private bool canMelee = true;
@@ -35,6 +36,8 @@ public class PlayerStats : MonoBehaviour
     public bool CanShield() => canShield;
 
     public float Health() => health;
+    public float ShieldTBuffer() => shieldTBuffer;
+    public float DashTBuffer() => dashTBuffer;
     public Vector3 DashDirection() => dashDirection;
     public bool Dashing() => isDashing;
     public float DashLength() => dashLength;
@@ -58,20 +61,25 @@ public class PlayerStats : MonoBehaviour
     public void IncHealth(float increment) { health += increment; }
     public void IncBulletSpeed(float increment) { bulletSpeed += increment; }
     public void IncGold(int increment) { gold += increment; }
+    public void Melee(bool melee) { canMelee = melee; }
+    public void Shoot(bool shoot) { canShoot = shoot; }
+    public void Dash(bool dash) { canDash = dash; }
+    public void Shield(bool shield) { canShield = shield; }
+
 
 
     // Start is called before the first frame update
     void Start()
     {
- 
     }
 
     // Update is called once per frame
     void Update()
     {
         // start dashing if J is pressed
-        if (Input.GetKeyDown(KeyCode.J) && Time.time >= dashTMarker + dashTBuffer)
+        if (CanDash() && Input.GetKeyDown(KeyCode.J) && ((Time.time >= dashTMarker + dashTBuffer) || (Time.time < 3)))
         {
+
             dashTMarker = Time.time;
 
             float horizontalDash = Input.GetAxis("Horizontal") * Time.deltaTime;
@@ -86,7 +94,13 @@ public class PlayerStats : MonoBehaviour
     IEnumerator DashTimer()
     {
         isDashing = true;
+        Melee(false);
+        Shoot(false);
+        Shield(false);
         yield return new WaitForSeconds(dashLength);
+        Melee(true);
+        Shoot(true);
+        Shield(true);
         isDashing = false;
     }
 }
