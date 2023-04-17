@@ -115,9 +115,9 @@ MonoBehaviour:
   levelMark: {fileID: 3168041598092535264, guid: bda039d515419cd49b7698b0d4d034c3, type: 3}
   bone: {fileID: 8368988349675041870, guid: 3b2dce0c79d0cdf41a6195676e7216a2, type: 3}
   pChar: {fileID: 5855480552603275026, guid: 233d3d3fb8673274fa96116517bb4771, type: 3}
-  level1: {fileID: 0}
-  level2: {fileID: 0}
-  level3: {fileID: 0}
+  level1: {fileID: 649339608469597843, guid: b77f4779a28231144896e0de686365dd, type: 3}
+  level2: {fileID: 6473442211797523633, guid: 3f826edf96d768749a83fa279f5230e2, type: 3}
+  level3: {fileID: 1094350810001254095, guid: 8c9d12d95e06fb0468d56de7c7d90b2f, type: 3}
   ally: 0
   enemyLevel: 2
   allyStayRadius: 2

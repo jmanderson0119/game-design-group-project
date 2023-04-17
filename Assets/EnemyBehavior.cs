@@ -535,6 +535,19 @@ public class EnemyBehavior : MonoBehaviour
         oldMovingSpeed = movingSpeed;
         oldHealth = health;
 
+        if (enemyLevel == 1)
+        {
+            Instantiate(level1, transform.position + new Vector3(-1f, -1f, 0f), transform.rotation, transform);
+        }
+        else if (enemyLevel == 2)
+        {
+            Instantiate(level2, transform.position + new Vector3(-1f, -1f, 0f), transform.rotation, transform);
+        }
+        else if (enemyLevel == 3)
+        {
+            Instantiate(level3, transform.position + new Vector3(-1f, -1f, 0f), transform.rotation, transform);
+        }
+
         // Higher level skull attacks faster
         if (isSkull)
         {
@@ -601,10 +614,15 @@ public class EnemyBehavior : MonoBehaviour
         DestroySkullHeadBullet_running = false;
     }
 
+    /*
     public void CollisionDetected(Bullet BulletScript)
     {
-        player.GetComponent<PlayerStats>().IncHealth(-1.0f * enemyLevel);
+        if (!ally)
+        {
+            player.GetComponent<PlayerStats>().IncHealth(-1.0f * enemyLevel);
+        }
     }
+    */
 
     // Update is called once per frame
     // Make sure that an action can be disrupted if the enemy see player or get damaged during an action.
@@ -1082,7 +1100,7 @@ public class EnemyBehavior : MonoBehaviour
                                 isTransformed = true;
                                 oldMaxAttackRange = maxAttackRange;
                                 maxAttackRange = 1.5f;
-                                transform.localScale += new Vector3(0.5f, 0.5f, 0.5f) * 0.01f * (float)(100 - player.GetComponent<PlayerStats>().Reputation());
+                                transform.localScale += new Vector3(0.8f, 0.8f, 0.8f) * 0.01f * (float)(100 - player.GetComponent<PlayerStats>().Reputation());
                                 float playerReputation = player.GetComponent<PlayerStats>().Reputation();
                                 // The eye will create more powerful enemy if the player's reputation is low
                                 // Adjust the numbers later. Might be too difficult.

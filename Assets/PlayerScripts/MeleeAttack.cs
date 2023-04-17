@@ -6,9 +6,8 @@ using UnityEngine;
 public class MeleeAttack : MonoBehaviour
 {
 
-    [SerializeField] private float meleeRange; // attack range of player's melee
     [SerializeField] private float meleeTBuffer; // delay between player's melee attacks
-    [SerializeField] private float meleeDmg; // player's melee attack damage
+    [SerializeField] private int meleeDmg; // player's melee attack damage
     [SerializeField] GameObject meleeVisual; // visual indicator of what the melee attack actually affects
 
 
@@ -24,18 +23,17 @@ public class MeleeAttack : MonoBehaviour
         playerStats = player.GetComponent<PlayerStats>(); // obtain player stats
         meleeDmg = playerStats.MeleeDamage(); // get the player melee attack damage and save in meleeDmg
         meleeTBuffer = playerStats.MeleeTBuffer(); // get the player melee attack delay and save in meleeTBuffer
-        meleeRange = playerStats.MeleeRange(); // get the player melee attack range and store in meleeRange
     }
 
     // Update is called once per frame; used to track and handle anything within range of a melee attack
     void Update()
     {
 
-        if (Input.GetMouseButtonDown(0) && Time.time >= meleeTMarker + meleeTBuffer) // melee logic runs if spacebar is pressed after the attack delay
+        if (playerStats.CanMelee() && Input.GetKeyDown(KeyCode.K) && Time.time >= meleeTMarker + meleeTBuffer) // melee logic runs if spacebar is pressed after the attack delay
         {
             meleeTMarker = Time.time; // update time of last melee attack
 
-            Collider2D[] meleeTargets = Physics2D.OverlapCircleAll(transform.position, meleeRange); // list of all things hit by the melee
+            Collider2D[] meleeTargets = Physics2D.OverlapCircleAll(transform.position, 0.75f); // list of all things hit by the melee
 
             GameObject meleeAoe = Instantiate(meleeVisual) as GameObject; // visual indicator becomes visual
             meleeAoe.transform.position = transform.position; // visual indicator laid over player
@@ -49,7 +47,7 @@ public class MeleeAttack : MonoBehaviour
                 {
                     EnemyBehavior behavior = target.gameObject.GetComponent<EnemyBehavior>();
 
-                    behavior.health -= 2;
+                    behavior.health -= meleeDmg;
                     target.gameObject.transform.localScale += new Vector3(-0.05f, -0.05f, -0.05f);
                     Debug.Log("Enemy Health: " + behavior.health);
                 }
