@@ -45,7 +45,9 @@ public class PlayerShield : MonoBehaviour
         gameObject.GetComponent<PlayerStats>().Dash(false);
         gameObject.GetComponent<PlayerStats>().Shoot(false);
         gameObject.GetComponent<PlayerStats>().Melee(false);
+        gameObject.GetComponent<PlayerStats>().DamageState(false);
         yield return new WaitForSeconds(3);
+        gameObject.GetComponent<PlayerStats>().DamageState(true);
         gameObject.GetComponent<PlayerStats>().Dash(true);
         gameObject.GetComponent<PlayerStats>().Shoot(true);
         gameObject.GetComponent<PlayerStats>().Melee(true);

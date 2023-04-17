@@ -5,6 +5,21 @@ using UnityEngine;
 public class PlayerStats : MonoBehaviour
 {
     // player stats that can be adjusted in hte shop
+<<<<<<< HEAD
+    [SerializeField] private static float health = 100.0f;
+    [SerializeField] private static int meleeDamage = 2;
+    [SerializeField] private static int rangedDamage = 3;
+    [SerializeField] private static float reputation = 0.0f;
+    [SerializeField] private static int gold = 0;
+    [SerializeField] private static float meleeTBuffer = 0.5f;
+    [SerializeField] private static float bulletTBuffer = 0.5f;
+    [SerializeField] private static float dashTBuffer = 3f;
+    [SerializeField] private static float dashSpeed = 16f;
+    [SerializeField] private static float dashLength = 0.14f;
+    [SerializeField] private static float speed = 3.2f;
+    [SerializeField] private static float bulletSpeed = 7.0f;
+    [SerializeField] private static float shieldTBuffer = 6f;
+=======
     [SerializeField] private float health = 100.0f;
     [SerializeField] private int meleeDamage = 2;
     [SerializeField] private int rangedDamage = 3;
@@ -18,18 +33,21 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private float speed = 3.2f;
     [SerializeField] private float bulletSpeed = 7.0f;
     [SerializeField] private float shieldTBuffer = 6f;
+>>>>>>> 37dbda4f4b31b75269ca66bf549d183279127fbd
 
     //booleans used across player ability scripts
-    [SerializeField] private bool canMelee = true;
-    [SerializeField] private bool canShoot = true;
-    [SerializeField] private bool canDash = true;
-    [SerializeField] private bool isDashing = false;
-    [SerializeField] private Vector3 dashDirection;
-    [SerializeField] private bool canShield = true;
+    [SerializeField] private static bool canMelee = true;
+    [SerializeField] private static bool canShoot = true;
+    [SerializeField] private static bool canDash = true;
+    [SerializeField] private static bool canShield = true;
+    [SerializeField] private static bool damageable = true;
+    [SerializeField] private static bool isDashing = false;
+    [SerializeField] private static Vector3 dashDirection;
 
     private float dashTMarker;
 
     // getters for player stats
+    public bool Damageable() => damageable;
     public bool CanMelee() => canMelee;
     public bool CanShoot() => canShoot;
     public bool CanDash() => canDash;
@@ -65,6 +83,7 @@ public class PlayerStats : MonoBehaviour
     public void Shoot(bool shoot) { canShoot = shoot; }
     public void Dash(bool dash) { canDash = dash; }
     public void Shield(bool shield) { canShield = shield; }
+    public void DamageState(bool damageState) { damageable = damageState; }
 
 
 
