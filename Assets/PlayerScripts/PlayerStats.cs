@@ -1,11 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerStats : MonoBehaviour
 {
     // player stats that can be adjusted in hte shop
-<<<<<<< HEAD
     [SerializeField] private static float health = 100.0f;
     [SerializeField] private static int meleeDamage = 2;
     [SerializeField] private static int rangedDamage = 3;
@@ -19,21 +19,6 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private static float speed = 3.2f;
     [SerializeField] private static float bulletSpeed = 7.0f;
     [SerializeField] private static float shieldTBuffer = 6f;
-=======
-    [SerializeField] private float health = 100.0f;
-    [SerializeField] private int meleeDamage = 2;
-    [SerializeField] private int rangedDamage = 3;
-    [SerializeField] private static float reputation = 0.0f;
-    [SerializeField] private static int gold = 0;
-    [SerializeField] private float meleeTBuffer = 0.5f;
-    [SerializeField] private float bulletTBuffer = 0.5f;
-    [SerializeField] private float dashTBuffer = 3f;
-    [SerializeField] private float dashSpeed = 16f;
-    [SerializeField] private float dashLength = 0.14f;
-    [SerializeField] private float speed = 3.2f;
-    [SerializeField] private float bulletSpeed = 7.0f;
-    [SerializeField] private float shieldTBuffer = 6f;
->>>>>>> 37dbda4f4b31b75269ca66bf549d183279127fbd
 
     //booleans used across player ability scripts
     [SerializeField] private static bool canMelee = true;
@@ -107,6 +92,9 @@ public class PlayerStats : MonoBehaviour
 
             StartCoroutine(DashTimer());
         }
+        if(health<=0){
+            Die();
+        }
     }
 
     // Tracks how long the player's dash should last
@@ -121,5 +109,9 @@ public class PlayerStats : MonoBehaviour
         Shoot(true);
         Shield(true);
         isDashing = false;
+    }
+    public void Die(){
+        GameObject.Find("EnemySpawners").GetComponent<MonsterCounter>().EarlyComplete();
+        SceneManager.LoadScene (0);
     }
 }
