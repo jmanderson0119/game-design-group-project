@@ -680,11 +680,14 @@ public class EnemyBehavior : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D col)
     {
-        if (col.gameObject.name == "mainPlayer")
+        if (isBoss)
         {
-            if (col.gameObject.GetComponent<PlayerStats>().Damageable())
+            if (col.gameObject.name == "mainPlayer")
             {
-                col.gameObject.GetComponent<PlayerStats>().IncHealth(-5.0f);
+                if (col.gameObject.GetComponent<PlayerStats>().Damageable())
+                {
+                    col.gameObject.GetComponent<PlayerStats>().IncHealth(-5.0f);
+                }
             }
         }
     }
@@ -1247,14 +1250,14 @@ public class EnemyBehavior : MonoBehaviour
                                     if (playerReputation < 50f)
                                     {
                                         enemyLevel = 3;
-                                        intervalBetweenAttacks = intervalBetweenAttacks * 0.3f;
-                                        movingSpeed = movingSpeed * 1.5f;
+                                        intervalBetweenAttacks = intervalBetweenAttacks * 0.6f;
+                                        movingSpeed = movingSpeed * 1.2f;
                                     }
                                     else if (playerReputation >= 50f && playerReputation < 75f)
                                     {
                                         enemyLevel = 2;
-                                        intervalBetweenAttacks = intervalBetweenAttacks * 0.5f;
-                                        movingSpeed = movingSpeed * 1.25f;
+                                        intervalBetweenAttacks = intervalBetweenAttacks * 0.8f;
+                                        movingSpeed = movingSpeed * 1.1f;
                                     }
                                     else if (playerReputation >= 75f)
                                     {
