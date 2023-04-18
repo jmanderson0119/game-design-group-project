@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class PlayerStats : MonoBehaviour
 {
-    [SerializeField] private static float health = 100.0f;
+    [SerializeField] private static float maxHealth = 10.0f;
+    [SerializeField] private static float health = 10.0f;
     [SerializeField] private static int meleeDamage = 2;
     [SerializeField] private static int rangedDamage = 3;
     [SerializeField] private static float reputation = 0.0f;
@@ -36,6 +37,7 @@ public class PlayerStats : MonoBehaviour
     public bool CanDash() => canDash;
     public bool CanShield() => canShield;
 
+    public float MaxHealth() => maxHealth;
     public float Health() => health;
     public float ShieldTBuffer() => shieldTBuffer;
     public float DashTBuffer() => dashTBuffer;
@@ -54,6 +56,7 @@ public class PlayerStats : MonoBehaviour
 
     // change any of the following values by floating value increment
     public void IncSpeed(float increment) { speed += increment; }
+    public void IncMaxHealth(float increment) { maxHealth += increment; }
     public void IncBulletTBuffer(float increment) { bulletTBuffer += increment; }
     public void IncMeleeTBuffer(float increment) { meleeTBuffer += increment; }
     public void IncReputation(float increment) { reputation += increment; }

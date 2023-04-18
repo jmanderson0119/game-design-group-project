@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 117632012308578123}
   - component: {fileID: 3970952613432397634}
   - component: {fileID: 2303761700971813508}
+  - component: {fileID: 4838278012819909268}
   m_Layer: 3
   m_Name: mainPlayer
   m_TagString: Player
@@ -149,25 +150,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b74903ef040c24f41ba408e3fc4813ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
-  meleeDamage: 2
-  rangedDamage: 3
-  reputation: 0
-  gold: 0
-  meleeTBuffer: 0.3
-  bulletTBuffer: 0.3
-  dashTBuffer: 1
-  dashSpeed: 20
-  dashLength: 0.14
-  speed: 3.2
-  bulletSpeed: 7
-  shieldTBuffer: 6
-  canMelee: 1
-  canShoot: 1
-  canDash: 1
-  isDashing: 0
-  dashDirection: {x: 0, y: 0, z: 0}
-  canShield: 1
 --- !u!50 &4368892945952053198
 Rigidbody2D:
   serializedVersion: 4
@@ -230,3 +212,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shieldPrefab: {fileID: 4088160261582289385, guid: 402ee65ca9e57e3478dfdc493a54a527, type: 3}
+--- !u!95 &4838278012819909268
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7846148871284652756}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
