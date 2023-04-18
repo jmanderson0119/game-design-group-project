@@ -117,6 +117,7 @@ MonoBehaviour:
   levelMark: {fileID: 0}
   bone: {fileID: 0}
   pChar: {fileID: 0}
+  eChar: {fileID: 1512994737516480582, guid: 0d77000f1bf08af42b75695b53971458, type: 3}
   level1: {fileID: 0}
   level2: {fileID: 0}
   level3: {fileID: 0}
@@ -132,7 +133,7 @@ MonoBehaviour:
   pumpkinSeed: {fileID: 0}
   skullHeadBullet: {fileID: 0}
   smallPumpkin: {fileID: 0}
-  isBossActive: 1
+  isBossActive: 0
   lighting: {fileID: 3973713159996964794, guid: 75b16b8f9452a5a449b64bfcd1b0b000, type: 3}
   lightingShadow: {fileID: 7437125393757356831, guid: 944dda3ecd5641847a92798cafd391a5, type: 3}
 --- !u!50 &3065484816532189951
