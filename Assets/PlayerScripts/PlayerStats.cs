@@ -17,7 +17,7 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private static float dashSpeed = 16f;
     [SerializeField] private static float dashLength = 0.14f;
     [SerializeField] private static float speed = 3.2f;
-    [SerializeField] private static float bulletSpeed = 7.0f;
+    [SerializeField] private static float bulletSpeed = 9.0f;
     [SerializeField] private static float shieldTBuffer = 6f;
     
 
@@ -32,7 +32,6 @@ public class PlayerStats : MonoBehaviour
 
     private float dashTMarker;
     private Animator animator;
-
 
     // getters for player stats
     public bool Damageable() => damageable;
