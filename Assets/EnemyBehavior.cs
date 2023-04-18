@@ -1064,6 +1064,10 @@ public class EnemyBehavior : MonoBehaviour
                             lightingClone2 = Instantiate(lighting, lightingShadowClone2.transform.position, transform.rotation);
                             lightingClone3 = Instantiate(lighting, lightingShadowClone3.transform.position, transform.rotation);
                             lightingClone4 = Instantiate(lighting, lightingShadowClone4.transform.position, transform.rotation);
+                            Physics2D.IgnoreCollision(lightingClone1.transform.GetChild(0).GetComponent<Collider2D>(), GetComponent<Collider2D>());
+                            Physics2D.IgnoreCollision(lightingClone2.transform.GetChild(0).GetComponent<Collider2D>(), GetComponent<Collider2D>());
+                            Physics2D.IgnoreCollision(lightingClone3.transform.GetChild(0).GetComponent<Collider2D>(), GetComponent<Collider2D>());
+                            Physics2D.IgnoreCollision(lightingClone4.transform.GetChild(0).GetComponent<Collider2D>(), GetComponent<Collider2D>());
                         }
                         Destroy(lightingShadowClone1);
                         Destroy(lightingShadowClone2);
