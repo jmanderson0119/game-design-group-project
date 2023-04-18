@@ -134,7 +134,7 @@ MonoBehaviour:
   skullHeadBullet: {fileID: 0}
   smallPumpkin: {fileID: 0}
   isBossActive: 0
-  lighting: {fileID: 3391247063371890193, guid: 75b16b8f9452a5a449b64bfcd1b0b000, type: 3}
+  lighting: {fileID: 7963533819964339615, guid: 75b16b8f9452a5a449b64bfcd1b0b000, type: 3}
   lightingShadow: {fileID: 7437125393757356831, guid: 944dda3ecd5641847a92798cafd391a5, type: 3}
 --- !u!50 &3065484816532189951
 Rigidbody2D:
