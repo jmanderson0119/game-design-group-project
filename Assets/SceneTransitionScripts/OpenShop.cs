@@ -10,4 +10,5 @@ public class OpenShop : MonoBehaviour
      if (other.gameObject.tag == "Player")
          SceneManager.LoadScene (2);
  }
+
 }
