@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerStats : MonoBehaviour
 {
@@ -93,6 +94,9 @@ public class PlayerStats : MonoBehaviour
 
             StartCoroutine(DashTimer());
         }
+        if(health<=0){
+            Die();
+        }
     }
 
     // Tracks how long the player's dash should last
@@ -107,5 +111,14 @@ public class PlayerStats : MonoBehaviour
         Shoot(true);
         Shield(true);
         isDashing = false;
+    }
+    public void Die(){
+        if(GameObject.Find("EnemySpawners")==null){
+            
+        }
+        else
+        {
+            GameObject.Find("EnemySpawners").GetComponent<MonsterCounter>().EarlyComplete();
+        }
     }
 }

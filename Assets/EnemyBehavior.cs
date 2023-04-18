@@ -21,6 +21,10 @@ public class EnemyBehavior : MonoBehaviour
     public int health = 6;
     public float intervalBetweenAttacks = 1f;
     private float chargingTime = 0f;
+    private float castingTime = 0f;
+    private float lightingCastingTime = 0f;
+    public float intervalBetweenLighting = 5f;
+    public float bossDashCastingTime = 1.5f;
     [SerializeField] GameObject questionMark;
     private GameObject questionMarkClone;
     [SerializeField] GameObject smallAlert;
@@ -33,6 +37,8 @@ public class EnemyBehavior : MonoBehaviour
     [SerializeField] GameObject bone;
     [SerializeField] GameObject pChar;
     private GameObject pCharClone;
+    [SerializeField] GameObject eChar;
+    private GameObject eCharClone;
     private GameObject levelClone;
     [SerializeField] GameObject level1;
     [SerializeField] GameObject level2;
@@ -69,6 +75,20 @@ public class EnemyBehavior : MonoBehaviour
     // eye is not petable
     private bool petable = false;
 
+    public bool isBossActive = false;
+
+    [SerializeField] GameObject lighting;
+    private GameObject lightingClone1;
+    private GameObject lightingClone2;
+    private GameObject lightingClone3;
+    private GameObject lightingClone4;
+
+    [SerializeField] GameObject lightingShadow;
+    private GameObject lightingShadowClone1;
+    private GameObject lightingShadowClone2;
+    private GameObject lightingShadowClone3;
+    private GameObject lightingShadowClone4;
+
     Rigidbody2D enemy;
     Animator animator;
 
@@ -97,21 +117,43 @@ public class EnemyBehavior : MonoBehaviour
     float distanceToObstacle()
     {
         RaycastHit2D hit = Physics2D.Raycast(transform.position + Vector3.down * 1f, Vector2.down); ;
-        if (currentAction[1] == "left")
+        if (isBoss)
         {
-            hit = Physics2D.Raycast(transform.position + Vector3.left * 1f, Vector2.left);
+            if (currentAction[1] == "left")
+            {
+                hit = Physics2D.Raycast(transform.position + Vector3.left * 2f, Vector2.left);
+            }
+            else if (currentAction[1] == "right")
+            {
+                hit = Physics2D.Raycast(transform.position + Vector3.right * 2f, Vector2.right);
+            }
+            else if (currentAction[1] == "up")
+            {
+                hit = Physics2D.Raycast(transform.position + Vector3.up * 2f, Vector2.up);
+            }
+            else if (currentAction[1] == "down")
+            {
+                hit = Physics2D.Raycast(transform.position + Vector3.down * 2f, Vector2.down);
+            }
         }
-        else if (currentAction[1] == "right")
+        else
         {
-            hit = Physics2D.Raycast(transform.position + Vector3.right * 1f, Vector2.right);
-        }
-        else if (currentAction[1] == "up")
-        {
-            hit = Physics2D.Raycast(transform.position + Vector3.up * 1f, Vector2.up);
-        }
-        else if (currentAction[1] == "down")
-        {
-            hit = Physics2D.Raycast(transform.position + Vector3.down * 1f, Vector2.down);
+            if (currentAction[1] == "left")
+            {
+                hit = Physics2D.Raycast(transform.position + Vector3.left * 1f, Vector2.left);
+            }
+            else if (currentAction[1] == "right")
+            {
+                hit = Physics2D.Raycast(transform.position + Vector3.right * 1f, Vector2.right);
+            }
+            else if (currentAction[1] == "up")
+            {
+                hit = Physics2D.Raycast(transform.position + Vector3.up * 1f, Vector2.up);
+            }
+            else if (currentAction[1] == "down")
+            {
+                hit = Physics2D.Raycast(transform.position + Vector3.down * 1f, Vector2.down);
+            }
         }
 
         float distance = 0;
@@ -135,22 +177,44 @@ public class EnemyBehavior : MonoBehaviour
     // Enemy should spot player after receiving damage from player
     bool spotTarget()
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position + Vector3.down * 1f, Vector2.down); ;
-        if (currentAction[1] == "left")
+        RaycastHit2D hit = Physics2D.Raycast(transform.position + Vector3.down * 1f, Vector2.down);
+        if (isBoss)
         {
-            hit = Physics2D.Raycast(transform.position + Vector3.left * 1f, Vector2.left);
+            if (currentAction[1] == "left")
+            {
+                hit = Physics2D.Raycast(transform.position + Vector3.left * 3f, Vector2.left);
+            }
+            else if (currentAction[1] == "right")
+            {
+                hit = Physics2D.Raycast(transform.position + Vector3.right * 3f, Vector2.right);
+            }
+            else if (currentAction[1] == "up")
+            {
+                hit = Physics2D.Raycast(transform.position + Vector3.up * 3f, Vector2.up);
+            }
+            else if (currentAction[1] == "down")
+            {
+                hit = Physics2D.Raycast(transform.position + Vector3.down * 3f, Vector2.down);
+            }
         }
-        else if (currentAction[1] == "right")
+        else
         {
-            hit = Physics2D.Raycast(transform.position + Vector3.right * 1f, Vector2.right);
-        }
-        else if (currentAction[1] == "up")
-        {
-            hit = Physics2D.Raycast(transform.position + Vector3.up * 1f, Vector2.up);
-        }
-        else if (currentAction[1] == "down")
-        {
-            hit = Physics2D.Raycast(transform.position + Vector3.down * 1f, Vector2.down);
+            if (currentAction[1] == "left")
+            {
+                hit = Physics2D.Raycast(transform.position + Vector3.left * 1f, Vector2.left);
+            }
+            else if (currentAction[1] == "right")
+            {
+                hit = Physics2D.Raycast(transform.position + Vector3.right * 1f, Vector2.right);
+            }
+            else if (currentAction[1] == "up")
+            {
+                hit = Physics2D.Raycast(transform.position + Vector3.up * 1f, Vector2.up);
+            }
+            else if (currentAction[1] == "down")
+            {
+                hit = Physics2D.Raycast(transform.position + Vector3.down * 1f, Vector2.down);
+            }
         }
 
         float distance = maxVision + 5f;
@@ -556,7 +620,7 @@ public class EnemyBehavior : MonoBehaviour
 
         // Check if this enemy is petable
         player = GameObject.Find("mainPlayer");
-        if (player != null && !isEye)
+        if (player != null && !isEye && !isBoss)
         {
             // Modify this if there is another way to extract reputation
             // Here, I assume that reputation ranges from 0 to 1
@@ -614,6 +678,17 @@ public class EnemyBehavior : MonoBehaviour
         DestroySkullHeadBullet_running = false;
     }
 
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        if (col.gameObject.name == "mainPlayer")
+        {
+            if (col.gameObject.GetComponent<PlayerStats>().Damageable())
+            {
+                col.gameObject.GetComponent<PlayerStats>().IncHealth(-5.0f);
+            }
+        }
+    }
+
     /*
     public void CollisionDetected(Bullet BulletScript)
     {
@@ -641,8 +716,18 @@ public class EnemyBehavior : MonoBehaviour
         bool seeTarget = spotTarget();
         // Update the sus level
         // Make system dynamic slower
-        susUpdate(distanceToObstacle(), k_val, w_val, Time.deltaTime, seeTarget);
-        if (isSkullSoldier || (isEye && isTransformed) || isSkull)
+        if (!isBoss)
+        {
+            susUpdate(distanceToObstacle(), k_val, w_val, Time.deltaTime, seeTarget);
+        }
+        else if (isBoss && isBossActive)
+        {
+            // Boss knows 
+            susLevel = 1f;
+            playerLastPosition = player.transform.position;
+        }
+
+        if (isSkullSoldier || (isEye && isTransformed) || isSkull || isBoss)
         {
             if (!seeTarget)
             {
@@ -697,170 +782,57 @@ public class EnemyBehavior : MonoBehaviour
                 }
             }
         }
-
+        /*
+        if (isBoss && isBossActive && !animator.GetBool("bossActive"))
+        {
+            animator.SetBool("bossActive", true);
+        }
+        */
+        if (isBoss && isBossActive && !animator.GetBool("bossActive"))
+        {
+            animator.SetBool("bossActive", true);
+        }
         if (health <= 0)
         {
             Die();
         }
-        //Debug.Log(susLevel);
-        if (susLevel <= 0.155)
+        if (isBoss && !isBossActive)
         {
-            if (questionMarkClone != null)
+            if (eCharClone == null)
             {
-                Destroy(questionMarkClone);
-            }
-            if (smallAlertClone != null)
-            {
-                Destroy(smallAlertClone);
-            }
-            if (bigAlertClone != null)
-            {
-                Destroy(bigAlertClone);
-            }
-            if (seeTarget && move2Player)
-            {
-                Vector3 lastPosition = ally && !move2Player ? targetEnemyLastPosition : playerLastPosition;
-                actionTimePlaned = 0;
-                float xDiff = transform.position.x - lastPosition.x;
-                float yDiff = transform.position.y - lastPosition.y;
-                float distance2Player = Mathf.Sqrt(Mathf.Pow(xDiff, 2f) + Mathf.Pow(yDiff, 2f));
-                if (distance2Player > allyStayRadius)
-                {
-                    if (Mathf.Abs(xDiff) >= Mathf.Abs(yDiff))
-                    {
-                        if (xDiff >= 0)
-                        {
-                            transform.Translate(Vector3.left * Time.deltaTime * movingSpeed * 1.5f);
-                        }
-                        else
-                        {
-                            transform.Translate(Vector3.right * Time.deltaTime * movingSpeed * 1.5f);
-                        }
-                    }
-                    else
-                    {
-                        if (yDiff >= 0)
-                        {
-                            transform.Translate(Vector3.down * Time.deltaTime * movingSpeed * 1.5f);
-                        }
-                        else
-                        {
-                            transform.Translate(Vector3.up * Time.deltaTime * movingSpeed * 1.5f);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                if (actionTimePlaned > 0)
-                {
-                    move();
-                }
-                else
-                {
-                    randomAction(0);
-                    move();
-                }
-            }
-        }
-        else if (0.155 < susLevel && susLevel < 0.2)
-        {
-            // transform ege back
-            if (isTransformed)
-            {
-                animator.SetBool("transform", false);
-                isTransformed = false;
-                maxAttackRange = oldMaxAttackRange;
-                transform.localScale = oldScale;
-                intervalBetweenAttacks = oldIntervalBetweenAttacks;
-                movingSpeed = oldMovingSpeed;
+                eCharClone = Instantiate(eChar, transform.position + new Vector3(0f, -1f, 0f), transform.rotation, transform);
             }
 
-            if (smallAlertClone != null)
+            if (Input.GetKeyDown("e"))
             {
-                Destroy(smallAlertClone);
-            }
-            if (bigAlertClone != null)
-            {
-                Destroy(bigAlertClone);
-            }
-            // This checks if questionMark is in the scene or not
-            if (questionMarkClone == null)
-            {
-                questionMarkClone = Instantiate(questionMark, transform.position + new Vector3(0.5f, 0.5f, 0f), transform.rotation, transform);
-            }
-            // If from last frame to current frame, the actionTimePlaned becomes 0 or negative, the enemy will not perform the last action, which prevents hitting the wall.
-            if (seeTarget && move2Player)
-            {
-                Vector3 lastPosition = ally && !move2Player ? targetEnemyLastPosition : playerLastPosition;
-                actionTimePlaned = 0;
-                float xDiff = transform.position.x - lastPosition.x;
-                float yDiff = transform.position.y - lastPosition.y;
-                float distance2Player = Mathf.Sqrt(Mathf.Pow(xDiff, 2f) + Mathf.Pow(yDiff, 2f));
-                if (distance2Player > allyStayRadius)
-                {
-                    if (Mathf.Abs(xDiff) >= Mathf.Abs(yDiff))
-                    {
-                        if (xDiff >= 0)
-                        {
-                            transform.Translate(Vector3.left * Time.deltaTime * movingSpeed * 1.5f);
-                        }
-                        else
-                        {
-                            transform.Translate(Vector3.right * Time.deltaTime * movingSpeed * 1.5f);
-                        }
-                    }
-                    else
-                    {
-                        if (yDiff >= 0)
-                        {
-                            transform.Translate(Vector3.down * Time.deltaTime * movingSpeed * 1.5f);
-                        }
-                        else
-                        {
-                            transform.Translate(Vector3.up * Time.deltaTime * movingSpeed * 1.5f);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                if (actionTimePlaned > 0)
-                {
-                    move();
-                }
-                else
-                {
-                    randomAction(0);
-                    move();
-                }
+                isBossActive = true;
+                Destroy(eCharClone);
+                animator.SetBool("bossActive", true);
             }
         }
-        else if (susLevel >= 0.2 && susLevel < 0.7)
+        else
         {
-            if (questionMarkClone != null)
+            if (susLevel <= 0.155)
             {
-                Destroy(questionMarkClone);
-            }
-            if (bigAlertClone != null)
-            {
-                Destroy(bigAlertClone);
-            }
-            if (smallAlertClone == null)
-            {
-                smallAlertClone = Instantiate(smallAlert, transform.position + new Vector3(0.5f, 0.5f, 0f), transform.rotation, transform);
-            }
-            // Deterministic move
-            if (seeTarget)
-            {
-                Vector3 lastPosition = ally && !move2Player ? targetEnemyLastPosition : playerLastPosition;
-                actionTimePlaned = 0;
-                float xDiff = transform.position.x - lastPosition.x;
-                float yDiff = transform.position.y - lastPosition.y;
-
-                float distance2Player = Mathf.Sqrt(Mathf.Pow(xDiff, 2f) + Mathf.Pow(yDiff, 2f));
-                if (move2Player)
+                if (questionMarkClone != null)
                 {
+                    Destroy(questionMarkClone);
+                }
+                if (smallAlertClone != null)
+                {
+                    Destroy(smallAlertClone);
+                }
+                if (bigAlertClone != null)
+                {
+                    Destroy(bigAlertClone);
+                }
+                if (seeTarget && move2Player)
+                {
+                    Vector3 lastPosition = ally && !move2Player ? targetEnemyLastPosition : playerLastPosition;
+                    actionTimePlaned = 0;
+                    float xDiff = transform.position.x - lastPosition.x;
+                    float yDiff = transform.position.y - lastPosition.y;
+                    float distance2Player = Mathf.Sqrt(Mathf.Pow(xDiff, 2f) + Mathf.Pow(yDiff, 2f));
                     if (distance2Player > allyStayRadius)
                     {
                         if (Mathf.Abs(xDiff) >= Mathf.Abs(yDiff))
@@ -889,76 +861,51 @@ public class EnemyBehavior : MonoBehaviour
                 }
                 else
                 {
-                    if (Mathf.Abs(xDiff) >= Mathf.Abs(yDiff))
+                    if (actionTimePlaned > 0)
                     {
-                        if (Mathf.Abs(xDiff) > maxAttackRange)
-                        {
-                            if (xDiff >= 0)
-                            {
-                                transform.Translate(Vector3.left * Time.deltaTime * movingSpeed * 1.5f);
-                            }
-                            else
-                            {
-                                transform.Translate(Vector3.right * Time.deltaTime * movingSpeed * 1.5f);
-                            }
-                        }
+                        move();
                     }
                     else
                     {
-                        if (Mathf.Abs(yDiff) > maxAttackRange)
-                        {
-                            if (yDiff >= 0)
-                            {
-                                transform.Translate(Vector3.down * Time.deltaTime * movingSpeed * 1.5f);
-                            }
-                            else
-                            {
-                                transform.Translate(Vector3.up * Time.deltaTime * movingSpeed * 1.5f);
-                            }
-                        }
+                        randomAction(0);
+                        move();
                     }
                 }
             }
-            else
+            else if (0.155 < susLevel && susLevel < 0.2)
             {
-                if (actionTimePlaned > 0)
+                // transform ege back
+                if (isTransformed)
                 {
-                    move();
+                    animator.SetBool("transform", false);
+                    isTransformed = false;
+                    maxAttackRange = oldMaxAttackRange;
+                    transform.localScale = oldScale;
+                    intervalBetweenAttacks = oldIntervalBetweenAttacks;
+                    movingSpeed = oldMovingSpeed;
                 }
-                else
+
+                if (smallAlertClone != null)
                 {
-                    randomAction(1);
-                    move();
+                    Destroy(smallAlertClone);
                 }
-            }
-        }
-        else if (susLevel >= 0.7)
-        {
-            if (questionMarkClone != null)
-            {
-                Destroy(questionMarkClone);
-            }
-            if (smallAlertClone != null)
-            {
-                Destroy(smallAlertClone);
-            }
-            if (bigAlertClone == null)
-            {
-                bigAlertClone = Instantiate(bigAlert, transform.position + new Vector3(0.5f, 0.5f, 0f), transform.rotation, transform);
-            }
-            if (seeTarget)
-            {
-                Vector3 lastPosition = ally && !move2Player ? targetEnemyLastPosition : playerLastPosition;
-                actionTimePlaned = 0;
-                float xDiff = transform.position.x - lastPosition.x;
-                float yDiff = transform.position.y - lastPosition.y;
-
-                float xDiffAbs = transform.position.x - lastPosition.x;
-                float yDiffAbs = transform.position.y - lastPosition.y;
-                float distance2Player = Mathf.Sqrt(Mathf.Pow(xDiffAbs, 2f) + Mathf.Pow(yDiffAbs, 2f));
-
-                if (move2Player)
+                if (bigAlertClone != null)
                 {
+                    Destroy(bigAlertClone);
+                }
+                // This checks if questionMark is in the scene or not
+                if (questionMarkClone == null)
+                {
+                    questionMarkClone = Instantiate(questionMark, transform.position + new Vector3(0.5f, 0.5f, 0f), transform.rotation, transform);
+                }
+                // If from last frame to current frame, the actionTimePlaned becomes 0 or negative, the enemy will not perform the last action, which prevents hitting the wall.
+                if (seeTarget && move2Player)
+                {
+                    Vector3 lastPosition = ally && !move2Player ? targetEnemyLastPosition : playerLastPosition;
+                    actionTimePlaned = 0;
+                    float xDiff = transform.position.x - lastPosition.x;
+                    float yDiff = transform.position.y - lastPosition.y;
+                    float distance2Player = Mathf.Sqrt(Mathf.Pow(xDiff, 2f) + Mathf.Pow(yDiff, 2f));
                     if (distance2Player > allyStayRadius)
                     {
                         if (Mathf.Abs(xDiff) >= Mathf.Abs(yDiff))
@@ -987,124 +934,246 @@ public class EnemyBehavior : MonoBehaviour
                 }
                 else
                 {
-                    if (Mathf.Abs(xDiff) >= Mathf.Abs(yDiff))
+                    if (actionTimePlaned > 0)
                     {
-                        if (Mathf.Abs(xDiff) > maxAttackRange)
+                        move();
+                    }
+                    else
+                    {
+                        randomAction(0);
+                        move();
+                    }
+                }
+            }
+            else if (susLevel >= 0.2 && susLevel < 0.7)
+            {
+                if (questionMarkClone != null)
+                {
+                    Destroy(questionMarkClone);
+                }
+                if (bigAlertClone != null)
+                {
+                    Destroy(bigAlertClone);
+                }
+                if (smallAlertClone == null)
+                {
+                    smallAlertClone = Instantiate(smallAlert, transform.position + new Vector3(0.5f, 0.5f, 0f), transform.rotation, transform);
+                }
+                // Deterministic move
+                if (seeTarget)
+                {
+                    Vector3 lastPosition = ally && !move2Player ? targetEnemyLastPosition : playerLastPosition;
+                    actionTimePlaned = 0;
+                    float xDiff = transform.position.x - lastPosition.x;
+                    float yDiff = transform.position.y - lastPosition.y;
+
+                    float distance2Player = Mathf.Sqrt(Mathf.Pow(xDiff, 2f) + Mathf.Pow(yDiff, 2f));
+                    if (move2Player)
+                    {
+                        if (distance2Player > allyStayRadius)
                         {
-                            if (xDiff >= 0)
+                            if (Mathf.Abs(xDiff) >= Mathf.Abs(yDiff))
                             {
-                                transform.Translate(Vector3.left * Time.deltaTime * movingSpeed * 3f);
+                                if (xDiff >= 0)
+                                {
+                                    transform.Translate(Vector3.left * Time.deltaTime * movingSpeed * 1.5f);
+                                }
+                                else
+                                {
+                                    transform.Translate(Vector3.right * Time.deltaTime * movingSpeed * 1.5f);
+                                }
                             }
                             else
                             {
-                                transform.Translate(Vector3.right * Time.deltaTime * movingSpeed * 3f);
+                                if (yDiff >= 0)
+                                {
+                                    transform.Translate(Vector3.down * Time.deltaTime * movingSpeed * 1.5f);
+                                }
+                                else
+                                {
+                                    transform.Translate(Vector3.up * Time.deltaTime * movingSpeed * 1.5f);
+                                }
                             }
                         }
                     }
                     else
                     {
-                        if (Mathf.Abs(yDiff) > maxAttackRange)
+                        if (Mathf.Abs(xDiff) >= Mathf.Abs(yDiff))
                         {
-                            if (yDiff >= 0)
+                            if (Mathf.Abs(xDiff) > maxAttackRange)
                             {
-                                transform.Translate(Vector3.down * Time.deltaTime * movingSpeed * 3f);
+                                if (xDiff >= 0)
+                                {
+                                    transform.Translate(Vector3.left * Time.deltaTime * movingSpeed * 1.5f);
+                                }
+                                else
+                                {
+                                    transform.Translate(Vector3.right * Time.deltaTime * movingSpeed * 1.5f);
+                                }
                             }
-                            else
+                        }
+                        else
+                        {
+                            if (Mathf.Abs(yDiff) > maxAttackRange)
                             {
-                                transform.Translate(Vector3.up * Time.deltaTime * movingSpeed * 3f);
+                                if (yDiff >= 0)
+                                {
+                                    transform.Translate(Vector3.down * Time.deltaTime * movingSpeed * 1.5f);
+                                }
+                                else
+                                {
+                                    transform.Translate(Vector3.up * Time.deltaTime * movingSpeed * 1.5f);
+                                }
                             }
                         }
                     }
-                    
-                    if (Mathf.Max(Mathf.Abs(xDiff), Mathf.Abs(yDiff)) <= maxAttackRange && chargingTime == 0f)
+                }
+                else
+                {
+                    if (actionTimePlaned > 0)
                     {
-                        chargingTime = chargingTime + Time.deltaTime;
-                        if (isSkullSoldier)
+                        move();
+                    }
+                    else
+                    {
+                        randomAction(1);
+                        move();
+                    }
+                }
+            }
+            else if (susLevel >= 0.7)
+            {
+                if (isBoss)
+                {
+                    // May change this time to increase difficulty
+                    if (intervalBetweenLighting > lightingCastingTime && lightingCastingTime >= intervalBetweenLighting * 0.5f)
+                    {
+                        if (lightingShadowClone1 == null && lightingShadowClone2 == null && lightingShadowClone3 == null && lightingShadowClone4 == null)
                         {
-                            animator.SetBool("attack", true);
-                            //Debug.Log(LayerPlayer);
-                            Collider2D[] hitTargets = Physics2D.OverlapCircleAll(transform.position, maxAttackRange);
+                            lightingShadowClone1 = Instantiate(lightingShadow, player.transform.position + new Vector3(0f, 1f, 0f), transform.rotation);
+                            lightingShadowClone2 = Instantiate(lightingShadow, player.transform.position + new Vector3(0f, -1f, 0f), transform.rotation);
+                            lightingShadowClone3 = Instantiate(lightingShadow, player.transform.position + new Vector3(1f, 0f, 0f), transform.rotation);
+                            lightingShadowClone4 = Instantiate(lightingShadow, player.transform.position + new Vector3(-1f, 0f, 0f), transform.rotation);
+                        }
+                    }
+                    else if (lightingCastingTime >= intervalBetweenLighting && lightingCastingTime < intervalBetweenLighting + 0.5f)
+                    {
+                        if (lightingClone1 == null && lightingClone2 == null && lightingClone3 == null && lightingClone4 == null)
+                        {
+                            lightingClone1 = Instantiate(lighting, lightingShadowClone1.transform.position, transform.rotation);
+                            lightingClone2 = Instantiate(lighting, lightingShadowClone2.transform.position, transform.rotation);
+                            lightingClone3 = Instantiate(lighting, lightingShadowClone3.transform.position, transform.rotation);
+                            lightingClone4 = Instantiate(lighting, lightingShadowClone4.transform.position, transform.rotation);
+                            Physics2D.IgnoreCollision(lightingClone1.transform.GetChild(0).GetComponent<Collider2D>(), GetComponent<Collider2D>());
+                            Physics2D.IgnoreCollision(lightingClone2.transform.GetChild(0).GetComponent<Collider2D>(), GetComponent<Collider2D>());
+                            Physics2D.IgnoreCollision(lightingClone3.transform.GetChild(0).GetComponent<Collider2D>(), GetComponent<Collider2D>());
+                            Physics2D.IgnoreCollision(lightingClone4.transform.GetChild(0).GetComponent<Collider2D>(), GetComponent<Collider2D>());
+                        }
+                        Destroy(lightingShadowClone1);
+                        Destroy(lightingShadowClone2);
+                        Destroy(lightingShadowClone3);
+                        Destroy(lightingShadowClone4);
+                        //Destroy(lightingClone1);
+                        //Destroy(lightingClone2);
+                        //Destroy(lightingClone3);
+                        //Destroy(lightingClone4);
+                    }
+                    else if (lightingCastingTime >= intervalBetweenLighting + 1f)
+                    {
+                        Destroy(lightingClone1);
+                        Destroy(lightingClone2);
+                        Destroy(lightingClone3);
+                        Destroy(lightingClone4);
+                        lightingCastingTime = 0;
+                    }
+                    lightingCastingTime += Time.deltaTime;
+                }
+                if (questionMarkClone != null)
+                {
+                    Destroy(questionMarkClone);
+                }
+                if (smallAlertClone != null)
+                {
+                    Destroy(smallAlertClone);
+                }
+                if (bigAlertClone == null)
+                {
+                    bigAlertClone = Instantiate(bigAlert, transform.position + new Vector3(0.5f, 0.5f, 0f), transform.rotation, transform);
+                }
+                if (seeTarget)
+                {
+                    Vector3 lastPosition = ally && !move2Player ? targetEnemyLastPosition : playerLastPosition;
+                    actionTimePlaned = 0;
+                    float xDiff = transform.position.x - lastPosition.x;
+                    float yDiff = transform.position.y - lastPosition.y;
 
-                            foreach (Collider2D target in hitTargets)
-                            {
-                                // Change name if name is not mainPlayer
-                                // attack non ally enemy
-                                if (target.name == "mainPlayer")
-                                {
-                                    target.gameObject.GetComponent<PlayerStats>().IncHealth(-1.0f * enemyLevel);
-                                }
-                                else if (target.gameObject.GetComponent<EnemyBehavior>() != null && !target.gameObject.GetComponent<EnemyBehavior>().ally && ally)
-                                {
-                                    target.gameObject.GetComponent<EnemyBehavior>().health -= 1 * enemyLevel;
-                                }
-                                else if (target.gameObject.GetComponent<EnemyBehavior>() != null && target.gameObject.GetComponent<EnemyBehavior>().ally && !ally)
-                                {
-                                    target.gameObject.GetComponent<EnemyBehavior>().health -= 1 * enemyLevel;
-                                }
-                            }
-                        }
-                        if (isLargePumpkin || isSmallPumpkin)
+                    float xDiffAbs = transform.position.x - lastPosition.x;
+                    float yDiffAbs = transform.position.y - lastPosition.y;
+                    float distance2Player = Mathf.Sqrt(Mathf.Pow(xDiffAbs, 2f) + Mathf.Pow(yDiffAbs, 2f));
+
+                    if (move2Player)
+                    {
+                        if (distance2Player > allyStayRadius)
                         {
-                            if (currentAction[1] == "left")
+                            if (Mathf.Abs(xDiff) >= Mathf.Abs(yDiff))
                             {
-                                GameObject seed = Instantiate(pumpkinSeed, transform.position + new Vector3(-0.5f, 0f, 0f), transform.rotation, transform);
-                                pumpkinSeeds.Enqueue(seed);
-                                seed.GetComponent<Rigidbody2D>().AddForce(Vector2.left * 5f, ForceMode2D.Impulse);
-                                seed.transform.parent = transform;
-                            }
-                            else if (currentAction[1] == "right")
-                            {
-                                GameObject seed = Instantiate(pumpkinSeed, transform.position + new Vector3(0.5f, 0f, 0f), transform.rotation, transform);
-                                pumpkinSeeds.Enqueue(seed);
-                                seed.GetComponent<Rigidbody2D>().AddForce(Vector2.right * 5f, ForceMode2D.Impulse);
-                                seed.transform.parent = transform;
-                            }
-                            else if (currentAction[1] == "up")
-                            {
-                                GameObject seed = Instantiate(pumpkinSeed, transform.position + new Vector3(0f, 0.5f, 0f), transform.rotation, transform);
-                                pumpkinSeeds.Enqueue(seed);
-                                seed.GetComponent<Rigidbody2D>().AddForce(Vector2.up * 5f, ForceMode2D.Impulse);
-                                seed.transform.parent = transform;
-                            }
-                            else if (currentAction[1] == "down")
-                            {
-                                GameObject seed = Instantiate(pumpkinSeed, transform.position + new Vector3(0f, -0.5f, 0f), transform.rotation, transform);
-                                pumpkinSeeds.Enqueue(seed);
-                                seed.GetComponent<Rigidbody2D>().AddForce(Vector2.down * 5f, ForceMode2D.Impulse);
-                                seed.transform.parent = transform;
-                            }
-                            
-                        }
-                        if (isEye)
-                        {
-                            if (!isTransformed)
-                            {
-                                animator.SetBool("transform", true);
-                                isTransformed = true;
-                                oldMaxAttackRange = maxAttackRange;
-                                maxAttackRange = 1.5f;
-                                transform.localScale += new Vector3(0.8f, 0.8f, 0.8f) * 0.01f * (float)(100 - player.GetComponent<PlayerStats>().Reputation());
-                                float playerReputation = player.GetComponent<PlayerStats>().Reputation();
-                                // The eye will create more powerful enemy if the player's reputation is low
-                                // Adjust the numbers later. Might be too difficult.
-                                if (playerReputation < 50f)
+                                if (xDiff >= 0)
                                 {
-                                    enemyLevel = 3;
-                                    intervalBetweenAttacks = intervalBetweenAttacks * 0.3f;
-                                    movingSpeed = movingSpeed * 1.5f;
+                                    transform.Translate(Vector3.left * Time.deltaTime * movingSpeed * 1.5f);
                                 }
-                                else if (playerReputation >= 50f && playerReputation < 75f)
+                                else
                                 {
-                                    enemyLevel = 2;
-                                    intervalBetweenAttacks = intervalBetweenAttacks * 0.5f;
-                                    movingSpeed = movingSpeed * 1.25f;
-                                }
-                                else if (playerReputation >= 75f)
-                                {
-                                    enemyLevel = 1;
+                                    transform.Translate(Vector3.right * Time.deltaTime * movingSpeed * 1.5f);
                                 }
                             }
                             else
+                            {
+                                if (yDiff >= 0)
+                                {
+                                    transform.Translate(Vector3.down * Time.deltaTime * movingSpeed * 1.5f);
+                                }
+                                else
+                                {
+                                    transform.Translate(Vector3.up * Time.deltaTime * movingSpeed * 1.5f);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (Mathf.Abs(xDiff) >= Mathf.Abs(yDiff))
+                        {
+                            if (Mathf.Abs(xDiff) > maxAttackRange)
+                            {
+                                if (xDiff >= 0)
+                                {
+                                    transform.Translate(Vector3.left * Time.deltaTime * movingSpeed * 3f);
+                                }
+                                else
+                                {
+                                    transform.Translate(Vector3.right * Time.deltaTime * movingSpeed * 3f);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (Mathf.Abs(yDiff) > maxAttackRange)
+                            {
+                                if (yDiff >= 0)
+                                {
+                                    transform.Translate(Vector3.down * Time.deltaTime * movingSpeed * 3f);
+                                }
+                                else
+                                {
+                                    transform.Translate(Vector3.up * Time.deltaTime * movingSpeed * 3f);
+                                }
+                            }
+                        }
+
+                        if (Mathf.Max(Mathf.Abs(xDiff), Mathf.Abs(yDiff)) <= maxAttackRange && chargingTime == 0f)
+                        {
+                            chargingTime = chargingTime + Time.deltaTime;
+                            if (isSkullSoldier)
                             {
                                 animator.SetBool("attack", true);
                                 //Debug.Log(LayerPlayer);
@@ -1116,103 +1185,225 @@ public class EnemyBehavior : MonoBehaviour
                                     // attack non ally enemy
                                     if (target.name == "mainPlayer")
                                     {
-                                        target.gameObject.GetComponent<PlayerStats>().IncHealth(Mathf.Round(-1.0f * (float)enemyLevel * 0.01f * (float)(100 - player.GetComponent<PlayerStats>().Reputation())));
+                                        if (target.gameObject.GetComponent<PlayerStats>().Damageable())
+                                        {
+                                            target.gameObject.GetComponent<PlayerStats>().IncHealth(-1.0f * enemyLevel);
+                                        }
                                     }
                                     else if (target.gameObject.GetComponent<EnemyBehavior>() != null && !target.gameObject.GetComponent<EnemyBehavior>().ally && ally)
                                     {
-                                        target.gameObject.GetComponent<EnemyBehavior>().health -= (int)Mathf.Round(1f * (float)enemyLevel * 0.01f * (float)(100 - player.GetComponent<PlayerStats>().Reputation()));
+                                        target.gameObject.GetComponent<EnemyBehavior>().health -= 1 * enemyLevel;
                                     }
                                     else if (target.gameObject.GetComponent<EnemyBehavior>() != null && target.gameObject.GetComponent<EnemyBehavior>().ally && !ally)
                                     {
-                                        target.gameObject.GetComponent<EnemyBehavior>().health -= (int)Mathf.Round(1f * (float)enemyLevel * 0.01f * (float)(100 - player.GetComponent<PlayerStats>().Reputation()));
+                                        target.gameObject.GetComponent<EnemyBehavior>().health -= 1 * enemyLevel;
                                     }
                                 }
                             }
-                        }
-                        if (isSkull)
-                        {
-                            animator.SetBool("attack", true);
-                            if (currentAction[1] == "left")
+                            if (isLargePumpkin || isSmallPumpkin)
                             {
-                                GameObject bullet = Instantiate(skullHeadBullet, transform.position + new Vector3(-0.5f, 0f, 0f), transform.rotation, transform);
-                                bullet.transform.Rotate(0, 0, 180f);
-                                skullHeadBullets.Enqueue(bullet);
-                                bullet.GetComponent<Rigidbody2D>().AddForce(Vector2.left * 5f, ForceMode2D.Impulse);
-                                bullet.transform.parent = transform;
-                            }
-                            else if (currentAction[1] == "right")
-                            {
-                                GameObject bullet = Instantiate(skullHeadBullet, transform.position + new Vector3(0.5f, 0f, 0f), transform.rotation, transform);
-                                skullHeadBullets.Enqueue(bullet);
-                                bullet.GetComponent<Rigidbody2D>().AddForce(Vector2.right * 5f, ForceMode2D.Impulse);
-                                bullet.transform.parent = transform;
-                            }
-                            else if (currentAction[1] == "up")
-                            {
-                                GameObject bullet = Instantiate(skullHeadBullet, transform.position + new Vector3(0f, 0.5f, 0f), transform.rotation, transform);
-                                bullet.transform.Rotate(0, 0, 90f);
-                                skullHeadBullets.Enqueue(bullet);
-                                bullet.GetComponent<Rigidbody2D>().AddForce(Vector2.up * 5f, ForceMode2D.Impulse);
-                                bullet.transform.parent = transform;
-                            }
-                            else if (currentAction[1] == "down")
-                            {
-                                GameObject bullet = Instantiate(skullHeadBullet, transform.position + new Vector3(0f, -0.5f, 0f), transform.rotation, transform);
-                                bullet.transform.Rotate(0, 0, -90f);
-                                skullHeadBullets.Enqueue(bullet);
-                                bullet.GetComponent<Rigidbody2D>().AddForce(Vector2.down * 5f, ForceMode2D.Impulse);
-                                bullet.transform.parent = transform;
-                            }
-                        }
-                    }
-                    else if (chargingTime > 0 && chargingTime <= intervalBetweenAttacks * 0.5f)
-                    {
-                        if (isSkullSoldier || (isEye && isTransformed) || isSkull)
-                        {
-                            animator.SetBool("attack", false);
-                        }
-                        chargingTime = chargingTime + Time.deltaTime;
-                    }
-                    else if (chargingTime > intervalBetweenAttacks * 0.5f && chargingTime < intervalBetweenAttacks)
-                    {
-                        if (isSkullSoldier || (isEye && isTransformed) || isSkull)
-                        {
-                            animator.SetBool("attack", false);
-                        }
-                        chargingTime = chargingTime + Time.deltaTime;
-                    }
-                    else if (chargingTime > intervalBetweenAttacks)
-                    {
-                        if (isSkullSoldier || (isEye && isTransformed) || isSkull)
-                        {
-                            animator.SetBool("attack", false);
-                        }
-                        chargingTime = 0f;
-                    }
-                    else
-                    {
-                        if (isSkullSoldier || (isEye && isTransformed) || isSkull)
-                        {
-                            animator.SetBool("attack", false);
-                        }
-                    }
-                }
+                                if (currentAction[1] == "left")
+                                {
+                                    GameObject seed = Instantiate(pumpkinSeed, transform.position + new Vector3(-0.5f, 0f, 0f), transform.rotation, transform);
+                                    pumpkinSeeds.Enqueue(seed);
+                                    seed.GetComponent<Rigidbody2D>().AddForce(Vector2.left * 5f, ForceMode2D.Impulse);
+                                    seed.transform.parent = transform;
+                                }
+                                else if (currentAction[1] == "right")
+                                {
+                                    GameObject seed = Instantiate(pumpkinSeed, transform.position + new Vector3(0.5f, 0f, 0f), transform.rotation, transform);
+                                    pumpkinSeeds.Enqueue(seed);
+                                    seed.GetComponent<Rigidbody2D>().AddForce(Vector2.right * 5f, ForceMode2D.Impulse);
+                                    seed.transform.parent = transform;
+                                }
+                                else if (currentAction[1] == "up")
+                                {
+                                    GameObject seed = Instantiate(pumpkinSeed, transform.position + new Vector3(0f, 0.5f, 0f), transform.rotation, transform);
+                                    pumpkinSeeds.Enqueue(seed);
+                                    seed.GetComponent<Rigidbody2D>().AddForce(Vector2.up * 5f, ForceMode2D.Impulse);
+                                    seed.transform.parent = transform;
+                                }
+                                else if (currentAction[1] == "down")
+                                {
+                                    GameObject seed = Instantiate(pumpkinSeed, transform.position + new Vector3(0f, -0.5f, 0f), transform.rotation, transform);
+                                    pumpkinSeeds.Enqueue(seed);
+                                    seed.GetComponent<Rigidbody2D>().AddForce(Vector2.down * 5f, ForceMode2D.Impulse);
+                                    seed.transform.parent = transform;
+                                }
 
-            }
-            else
-            {
-                if (actionTimePlaned > 0)
-                {
-                    move();
+                            }
+                            if (isEye)
+                            {
+                                if (!isTransformed)
+                                {
+                                    animator.SetBool("transform", true);
+                                    isTransformed = true;
+                                    oldMaxAttackRange = maxAttackRange;
+                                    maxAttackRange = 1.5f;
+                                    transform.localScale += new Vector3(0.8f, 0.8f, 0.8f) * 0.01f * (float)(100 - player.GetComponent<PlayerStats>().Reputation());
+                                    float playerReputation = player.GetComponent<PlayerStats>().Reputation();
+                                    // The eye will create more powerful enemy if the player's reputation is low
+                                    // Adjust the numbers later. Might be too difficult.
+                                    if (playerReputation < 50f)
+                                    {
+                                        enemyLevel = 3;
+                                        intervalBetweenAttacks = intervalBetweenAttacks * 0.3f;
+                                        movingSpeed = movingSpeed * 1.5f;
+                                    }
+                                    else if (playerReputation >= 50f && playerReputation < 75f)
+                                    {
+                                        enemyLevel = 2;
+                                        intervalBetweenAttacks = intervalBetweenAttacks * 0.5f;
+                                        movingSpeed = movingSpeed * 1.25f;
+                                    }
+                                    else if (playerReputation >= 75f)
+                                    {
+                                        enemyLevel = 1;
+                                    }
+                                }
+                                else
+                                {
+                                    animator.SetBool("attack", true);
+                                    //Debug.Log(LayerPlayer);
+                                    Collider2D[] hitTargets = Physics2D.OverlapCircleAll(transform.position, maxAttackRange);
+
+                                    foreach (Collider2D target in hitTargets)
+                                    {
+                                        // Change name if name is not mainPlayer
+                                        // attack non ally enemy
+                                        if (target.name == "mainPlayer")
+                                        {
+                                            if (target.gameObject.GetComponent<PlayerStats>().Damageable())
+                                            {
+                                                target.gameObject.GetComponent<PlayerStats>().IncHealth(Mathf.Round(-1.0f * (float)enemyLevel * 0.01f * (float)(100 - player.GetComponent<PlayerStats>().Reputation())));
+                                            }
+                                        }
+                                        else if (target.gameObject.GetComponent<EnemyBehavior>() != null && !target.gameObject.GetComponent<EnemyBehavior>().ally && ally)
+                                        {
+                                            target.gameObject.GetComponent<EnemyBehavior>().health -= (int)Mathf.Round(1f * (float)enemyLevel * 0.01f * (float)(100 - player.GetComponent<PlayerStats>().Reputation()));
+                                        }
+                                        else if (target.gameObject.GetComponent<EnemyBehavior>() != null && target.gameObject.GetComponent<EnemyBehavior>().ally && !ally)
+                                        {
+                                            target.gameObject.GetComponent<EnemyBehavior>().health -= (int)Mathf.Round(1f * (float)enemyLevel * 0.01f * (float)(100 - player.GetComponent<PlayerStats>().Reputation()));
+                                        }
+                                    }
+                                }
+                            }
+                            if (isSkull)
+                            {
+                                animator.SetBool("attack", true);
+                                if (currentAction[1] == "left")
+                                {
+                                    GameObject bullet = Instantiate(skullHeadBullet, transform.position + new Vector3(-0.5f, 0f, 0f), transform.rotation, transform);
+                                    bullet.transform.Rotate(0, 0, 180f);
+                                    skullHeadBullets.Enqueue(bullet);
+                                    bullet.GetComponent<Rigidbody2D>().AddForce(Vector2.left * 5f, ForceMode2D.Impulse);
+                                    bullet.transform.parent = transform;
+                                }
+                                else if (currentAction[1] == "right")
+                                {
+                                    GameObject bullet = Instantiate(skullHeadBullet, transform.position + new Vector3(0.5f, 0f, 0f), transform.rotation, transform);
+                                    skullHeadBullets.Enqueue(bullet);
+                                    bullet.GetComponent<Rigidbody2D>().AddForce(Vector2.right * 5f, ForceMode2D.Impulse);
+                                    bullet.transform.parent = transform;
+                                }
+                                else if (currentAction[1] == "up")
+                                {
+                                    GameObject bullet = Instantiate(skullHeadBullet, transform.position + new Vector3(0f, 0.5f, 0f), transform.rotation, transform);
+                                    bullet.transform.Rotate(0, 0, 90f);
+                                    skullHeadBullets.Enqueue(bullet);
+                                    bullet.GetComponent<Rigidbody2D>().AddForce(Vector2.up * 5f, ForceMode2D.Impulse);
+                                    bullet.transform.parent = transform;
+                                }
+                                else if (currentAction[1] == "down")
+                                {
+                                    GameObject bullet = Instantiate(skullHeadBullet, transform.position + new Vector3(0f, -0.5f, 0f), transform.rotation, transform);
+                                    bullet.transform.Rotate(0, 0, -90f);
+                                    skullHeadBullets.Enqueue(bullet);
+                                    bullet.GetComponent<Rigidbody2D>().AddForce(Vector2.down * 5f, ForceMode2D.Impulse);
+                                    bullet.transform.parent = transform;
+                                }
+                            }
+                            if (isBoss)
+                            {
+                                Debug.Log("see player");
+                                animator.SetBool("attack", true);
+                                if (castingTime >= bossDashCastingTime)
+                                { 
+                                    transform.position = player.transform.position;
+                                    castingTime = 0;
+                                }
+                                castingTime = castingTime + Time.deltaTime;
+
+                            }
+                        }
+                        else if (chargingTime > 0 && chargingTime <= intervalBetweenAttacks * 0.5f)
+                        {
+                            if (isSkullSoldier || (isEye && isTransformed) || isSkull)
+                            {
+                                animator.SetBool("attack", false);
+                            }
+                            chargingTime = chargingTime + Time.deltaTime;
+                            if (isBoss)
+                            {
+                                castingTime = castingTime + Time.deltaTime;
+                            }
+                        }
+                        else if (chargingTime > intervalBetweenAttacks * 0.5f && chargingTime < intervalBetweenAttacks)
+                        {
+                            if (isSkullSoldier || (isEye && isTransformed) || isSkull)
+                            {
+                                animator.SetBool("attack", false);
+                            }
+                            chargingTime = chargingTime + Time.deltaTime;
+                            if (isBoss)
+                            {
+                                castingTime = castingTime + Time.deltaTime;
+                            }
+                        }
+                        else if (chargingTime > intervalBetweenAttacks)
+                        {
+                            if (isSkullSoldier || (isEye && isTransformed) || isSkull)
+                            {
+                                animator.SetBool("attack", false);
+                            }
+                            chargingTime = 0f;
+                            if (isBoss)
+                            {
+                                castingTime = castingTime + Time.deltaTime;
+                            }
+                        }
+                        else
+                        {
+                            if (isSkullSoldier || (isEye && isTransformed) || isSkull)
+                            {
+                                animator.SetBool("attack", false);
+                            }
+                            if (isBoss)
+                            {
+                                castingTime = castingTime + Time.deltaTime;
+                            }
+                        }
+                    }
+
                 }
                 else
                 {
-                    randomAction(2);
-                    move();
+                    if (actionTimePlaned > 0)
+                    {
+                        move();
+                    }
+                    else
+                    {
+                        randomAction(2);
+                        move();
+                    }
                 }
             }
         }
     }
+        //Debug.Log(susLevel);
+        
     void Die(){
             if (isLargePumpkin)
             {

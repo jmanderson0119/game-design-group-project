@@ -11,11 +11,17 @@ public class Bullet : MonoBehaviour
         {
             if (col.gameObject.name == "mainPlayer" && !transform.parent.GetComponent<EnemyBehavior>().ally)
             {
-                col.gameObject.GetComponent<PlayerStats>().IncHealth(-1.0f * transform.parent.GetComponent<EnemyBehavior>().enemyLevel);
+                if (col.gameObject.GetComponent<PlayerStats>().Damageable())
+                {
+                    col.gameObject.GetComponent<PlayerStats>().IncHealth(-1.0f * transform.parent.GetComponent<EnemyBehavior>().enemyLevel);
+                }
             }
-            else if ((transform.parent.GetComponent<EnemyBehavior>().ally && !col.gameObject.GetComponent<EnemyBehavior>().ally) || (!transform.parent.GetComponent<EnemyBehavior>().ally && col.gameObject.GetComponent<EnemyBehavior>().ally))
+            else if (col.gameObject.layer == LayerMask.NameToLayer("Enemy"))
             {
-                col.gameObject.GetComponent<EnemyBehavior>().health -= 1 * transform.parent.GetComponent<EnemyBehavior>().enemyLevel;
+                if ((transform.parent.GetComponent<EnemyBehavior>().ally && !col.gameObject.GetComponent<EnemyBehavior>().ally) || (!transform.parent.GetComponent<EnemyBehavior>().ally && col.gameObject.GetComponent<EnemyBehavior>().ally))
+                {
+                    col.gameObject.GetComponent<EnemyBehavior>().health -= 1 * transform.parent.GetComponent<EnemyBehavior>().enemyLevel;
+                }
             }
         }
     }

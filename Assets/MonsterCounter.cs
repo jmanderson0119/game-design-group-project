@@ -5,17 +5,18 @@ using UnityEngine.SceneManagement;
 
 public class MonsterCounter : MonoBehaviour
 {
-    public int totalMonsters = 0;
-    public int skeletons;
-    public GameObject skelSpawner;
-    public int skullheads;
-    public GameObject skulSpawner;
-    public int pumpkins;
-    public GameObject pumpSpawner;
-    public int eyes;
-    public GameObject eyeSpawner;
-    public int goldreward;
-    public int repreward;
+    int totalMonsters = 0;
+    int skeletons;
+    GameObject skelSpawner;
+    int skullheads;
+    GameObject skulSpawner;
+    int pumpkins;
+    GameObject pumpSpawner;
+    int eyes;
+    GameObject eyeSpawner;
+    int goldreward;
+    int repreward;
+    public DisplayReward rewardtext;
 
     private void Start() {
         skelSpawner = this.gameObject.transform.GetChild(0).gameObject;
@@ -54,7 +55,7 @@ public class MonsterCounter : MonoBehaviour
         GameObject oldPlayer = GameObject.FindGameObjectsWithTag("Player")[0];
         oldPlayer.GetComponent<PlayerStats>().IncGold(goldreward);
         oldPlayer.GetComponent<PlayerStats>().IncReputation(repreward);
-        SceneManager.LoadScene(0);
+        rewardtext.startExit(goldreward,repreward);
     }
 
     public void EarlyComplete(){
@@ -62,5 +63,16 @@ public class MonsterCounter : MonoBehaviour
         GameObject oldPlayer = GameObject.FindGameObjectsWithTag("Player")[0];
         oldPlayer.GetComponent<PlayerStats>().IncGold((int)(goldreward*percent));
         oldPlayer.GetComponent<PlayerStats>().IncReputation(-(int)(repreward*(1-percent)));
+        cripple();
+        rewardtext.startExit((int)(goldreward*percent),-(int)(repreward*(1-percent)));
+    }
+
+    private void cripple(){
+        GameObject oldPlayer = GameObject.FindGameObjectsWithTag("Player")[0];
+        Destroy(oldPlayer.GetComponent<PlayerMovement>());
+        GameObject[] monsters = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach(GameObject mon in monsters){
+            Destroy(mon.GetComponent<EnemyBehavior>());
+        }
     }
 }
