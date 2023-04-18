@@ -24,7 +24,7 @@ public class MonsterCounter : MonoBehaviour
         skulSpawner = this.gameObject.transform.GetChild(1).gameObject;
         pumpSpawner = this.gameObject.transform.GetChild(2).gameObject;
         eyeSpawner = this.gameObject.transform.GetChild(3).gameObject;
-        startStage(1,1,1,1,1000,1000);
+        
     }
 
 
