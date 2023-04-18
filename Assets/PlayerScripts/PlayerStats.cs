@@ -117,7 +117,5 @@ public class PlayerStats : MonoBehaviour
         {
             GameObject.Find("EnemySpawners").GetComponent<MonsterCounter>().EarlyComplete();
         }
-        
-        SceneManager.LoadScene (0);
     }
 }
