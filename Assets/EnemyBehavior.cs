@@ -37,6 +37,8 @@ public class EnemyBehavior : MonoBehaviour
     [SerializeField] GameObject bone;
     [SerializeField] GameObject pChar;
     private GameObject pCharClone;
+    [SerializeField] GameObject eChar;
+    private GameObject eCharClone;
     private GameObject levelClone;
     [SerializeField] GameObject level1;
     [SerializeField] GameObject level2;
@@ -780,18 +782,33 @@ public class EnemyBehavior : MonoBehaviour
                 }
             }
         }
+        /*
         if (isBoss && isBossActive && !animator.GetBool("bossActive"))
         {
             animator.SetBool("bossActive", true);
         }
-
+        */
+        if (isBoss && isBossActive && !animator.GetBool("bossActive"))
+        {
+            animator.SetBool("bossActive", true);
+        }
         if (health <= 0)
         {
             Die();
         }
         if (isBoss && !isBossActive)
         {
+            if (eCharClone == null)
+            {
+                eCharClone = Instantiate(eChar, transform.position + new Vector3(0f, -1f, 0f), transform.rotation, transform);
+            }
 
+            if (Input.GetKeyDown("e"))
+            {
+                isBossActive = true;
+                Destroy(eCharClone);
+                animator.SetBool("bossActive", true);
+            }
         }
         else
         {
