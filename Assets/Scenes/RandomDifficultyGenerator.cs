@@ -8,11 +8,11 @@ using TMPro;
 public class RandomDifficultyGenerator : MonoBehaviour
 {
     public GameObject EnemySpawnwers;
-    public MonsterCounter MonsterCounter;
+    public static MonsterCounter MonsterCounter;
     
     [SerializeField] private TMP_Text request;
     public void Start() {
-        MonsterCounter = EnemySpawnwers.GetComponent<MonsterCounter>();
+        
     }
 
     public void EasyDifficulty() {
@@ -98,12 +98,15 @@ public class RandomDifficultyGenerator : MonoBehaviour
             request.text = "Defeat 2 Mimics and 1 Pumpkin";
             MonsterCounter.startStage(0, 0, 1, 2, 500, 500);
         }
+        
         SceneManager.LoadScene(3);
-
     }
 
     public void MediumDifficulty()
     {
+        
+        SceneManager.LoadScene(3);
+        MonsterCounter = EnemySpawnwers.GetComponent<MonsterCounter>();
         int r = Random.Range(0, 21);
         Debug.Log("Generating Encounter : " + r);
         if (r == 0)
@@ -195,7 +198,6 @@ public class RandomDifficultyGenerator : MonoBehaviour
             request.text = "Defeat 1 Skeletons, 2 Skeleton Heads, and 2 Mimics";
             MonsterCounter.startStage(1, 2, 0, 2, 550, 550);
         }
-        SceneManager.LoadScene(4);
     }
 
     public void HardDifficulty()
