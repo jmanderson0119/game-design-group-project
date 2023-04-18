@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerStats : MonoBehaviour
 {
@@ -109,7 +110,6 @@ public class PlayerStats : MonoBehaviour
         isDashing = false;
     }
     public void Die(){
-        if (other.gameObject.tag == "Player")
         if(GameObject.Find("EnemySpawners")==null){
             
         }
