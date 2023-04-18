@@ -9,14 +9,13 @@ public class ExitMission : MonoBehaviour
  {
      if (other.gameObject.tag == "Player")
         if(GameObject.Find("EnemySpawners")==null){
-            
+            SceneManager.LoadScene (0);
         }
         else
         {
             GameObject.Find("EnemySpawners").GetComponent<MonsterCounter>().EarlyComplete();
         }
         
-        SceneManager.LoadScene (0);
 
  }
 }
