@@ -34,7 +34,7 @@ public class RangedAttack : MonoBehaviour
             bulletTMarker = Time.time; // last ranged attack time marker is updated
 
             GameObject bullet = Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation) as GameObject; // bullet instantiation
-            Destroy(bullet, 2f); // destroy so that there are no invalid position input errors
+            Destroy(bullet, 0.75f); // destroy so that there are no invalid position input errors
         }
     }
 }
