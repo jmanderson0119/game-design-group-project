@@ -33758,8 +33758,8 @@ Transform:
   - {fileID: 2096289150}
   - {fileID: 910882355}
   - {fileID: 252686767}
-  - {fileID: 837839832}
   - {fileID: 1624360802}
+  - {fileID: 837839832}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -52423,7 +52423,7 @@ Transform:
   - {fileID: 1601357495}
   - {fileID: 1697556319}
   m_Father: {fileID: 1019830086}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1625246128
 GameObject:
@@ -52976,6 +52976,10 @@ PrefabInstance:
       propertyPath: m_Constraints
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 4838278012819909268, guid: 70e4d36bc52364f489f33dfecfc212b1, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 6f9cb24455f437841b01a93fbce07c6e, type: 2}
     - target: {fileID: 7846148871284652756, guid: 70e4d36bc52364f489f33dfecfc212b1, type: 3}
       propertyPath: m_Name
       value: mainPlayer

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerShield : MonoBehaviour
 {
-    [SerializeField] private GameObject shieldPrefab;
+    //[SerializeField] private GameObject shieldPrefab; outdated shield indicator
     private GameObject shield;
 
     private float shieldTBuffer;
@@ -12,6 +12,7 @@ public class PlayerShield : MonoBehaviour
 
     private bool shieldUp;
     bool firstShield = true;
+    private Animator animator;
 
 
 
@@ -19,6 +20,7 @@ public class PlayerShield : MonoBehaviour
     void Start()
     {
         shieldTBuffer = gameObject.GetComponent<PlayerStats>().ShieldTBuffer();
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -26,16 +28,17 @@ public class PlayerShield : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.I) && ((Time.time >= shieldTMarker + shieldTBuffer) || (firstShield)) && gameObject.GetComponent<PlayerStats>().CanShield())
         {
+            animator.SetInteger("shielding", 1);
             if (firstShield) { firstShield = false; }
             shieldTMarker = Time.time;
             StartCoroutine(ShieldTimer());
-            shield = Instantiate(shieldPrefab) as GameObject;
-            shield.transform.position = transform.position;
+            //shield = Instantiate(shieldPrefab) as GameObject;
+            //shield.transform.position = transform.position;
         }
 
         if (shieldUp)
         {
-            shield.transform.position = transform.position;
+            //shield.transform.position = transform.position;
         }
     }
 
@@ -47,6 +50,7 @@ public class PlayerShield : MonoBehaviour
         gameObject.GetComponent<PlayerStats>().Melee(false);
         gameObject.GetComponent<PlayerStats>().DamageState(false);
         yield return new WaitForSeconds(3);
+        animator.SetInteger("shielding", 0);
         gameObject.GetComponent<PlayerStats>().DamageState(true);
         gameObject.GetComponent<PlayerStats>().Dash(true);
         gameObject.GetComponent<PlayerStats>().Shoot(true);

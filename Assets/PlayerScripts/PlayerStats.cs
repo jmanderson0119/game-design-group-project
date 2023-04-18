@@ -19,6 +19,7 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private static float speed = 3.2f;
     [SerializeField] private static float bulletSpeed = 7.0f;
     [SerializeField] private static float shieldTBuffer = 6f;
+    
 
     //booleans used across player ability scripts
     [SerializeField] private static bool canMelee = true;
@@ -30,6 +31,8 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private static Vector3 dashDirection;
 
     private float dashTMarker;
+    private Animator animator;
+
 
     // getters for player stats
     public bool Damageable() => damageable;
@@ -77,6 +80,7 @@ public class PlayerStats : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        animator = GetComponent<Animator>(); 
     }
 
     // Update is called once per frame
@@ -85,7 +89,7 @@ public class PlayerStats : MonoBehaviour
         // start dashing if J is pressed
         if (CanDash() && Input.GetKeyDown(KeyCode.J) && ((Time.time >= dashTMarker + dashTBuffer) || (Time.time < 3)))
         {
-
+            animator.SetInteger("dashing", 1);
             dashTMarker = Time.time;
 
             float horizontalDash = Input.GetAxis("Horizontal") * Time.deltaTime;
@@ -107,6 +111,7 @@ public class PlayerStats : MonoBehaviour
         Shoot(false);
         Shield(false);
         yield return new WaitForSeconds(dashLength);
+        animator.SetInteger("dashing", 0);
         Melee(true);
         Shoot(true);
         Shield(true);

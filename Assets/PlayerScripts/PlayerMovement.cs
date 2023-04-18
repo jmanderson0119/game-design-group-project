@@ -11,7 +11,7 @@ public class PlayerMovement : MonoBehaviour
     //private CharacterController characterController; // player's Character Controller
     private GameObject player; // used to obtain player
     private PlayerStats playerStats; // used to obtain player statistics
-    public Animator animator; // player animator
+    private Animator animator; // player animator
     private Rigidbody2D _Rigidbody; // player rigid body
 
     // returns player's direction (see RangedAttack.cs)
@@ -26,6 +26,7 @@ public class PlayerMovement : MonoBehaviour
         //player = GameObject.Find("mainPlayer"); // obtain player
         playerStats = GetComponent<PlayerStats>(); // obtain player statistics
         speed = playerStats.Speed(); // obtain player's speed and store in speed
+        animator = GetComponent<Animator>();
 
     }
 
@@ -38,15 +39,42 @@ public class PlayerMovement : MonoBehaviour
             float horizontalMovement = Input.GetAxis("Horizontal") * Time.deltaTime; // figure for horizontal player direction
             float verticalMovement = Input.GetAxis("Vertical") * Time.deltaTime; // figure for vertical player direction
 
+            float playerMag = new Vector3(horizontalMovement, verticalMovement).magnitude;
+            //float playerXMag = playerMag.x;
             Vector3 playerMovement = (new Vector3(horizontalMovement, verticalMovement, 0)).normalized; // vector for direction player is moving in
 
-            if (playerMovement.magnitude > 0) // gives the direction the player is facing in and stores in direction (for use in BulletTravel)
+            if (!Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.D) && playerMag == 0)
             {
-                direction = playerMovement; // direction is now a vector of magnitude 1
+                animator.SetInteger("walkingMode", 0);
+                animator.SetInteger("MeleeDirection", 4);
+            }
+            else if ((!Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.S) && Input.GetKey(KeyCode.D)) || (Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.S) && Input.GetKey(KeyCode.D)) || (!Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.S) && Input.GetKey(KeyCode.D)))
+            {
+                animator.SetInteger("walkingMode", 1);
+                animator.SetInteger("MeleeDirection", 4);
+            }
+            else if ((!Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.D)) || (Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.D)) || (!Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.D)))
+            {
+                animator.SetInteger("walkingMode", 2);
+                animator.SetInteger("MeleeDirection", 3);
+            }
+            else if (Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.D)){
+                animator.SetInteger("walkingMode", 3);
+                animator.SetInteger("MeleeDirection", 1);
+            }
+            else if (!Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.D))
+            {
+                animator.SetInteger("walkingMode", 4);
+                animator.SetInteger("MeleeDirection", 2);
             }
 
-            _Rigidbody.velocity = playerMovement * speed;
-        }
+                if (playerMovement.magnitude > 0) // gives the direction the player is facing in and stores in direction (for use in BulletTravel)
+                {
+                    direction = playerMovement; // direction is now a vector of magnitude 1
+                }
+
+                _Rigidbody.velocity = playerMovement * speed;
+            }
     }
 }
 
