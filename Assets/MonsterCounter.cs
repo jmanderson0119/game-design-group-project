@@ -5,17 +5,17 @@ using UnityEngine.SceneManagement;
 
 public class MonsterCounter : MonoBehaviour
 {
-    int totalMonsters = 0;
-    int skeletons;
+    static int totalMonsters = 0;
+    static int skeletons;
     GameObject skelSpawner;
-    int skullheads;
+    static int skullheads;
     GameObject skulSpawner;
-    int pumpkins;
+    static int pumpkins;
     GameObject pumpSpawner;
-    int eyes;
+    static int eyes;
     GameObject eyeSpawner;
-    int goldreward;
-    int repreward;
+    static int goldreward;
+    static int repreward;
     public DisplayReward rewardtext;
     private bool incremented = false;
 
@@ -24,22 +24,23 @@ public class MonsterCounter : MonoBehaviour
         skulSpawner = this.gameObject.transform.GetChild(1).gameObject;
         pumpSpawner = this.gameObject.transform.GetChild(2).gameObject;
         eyeSpawner = this.gameObject.transform.GetChild(3).gameObject;
-        startStage(1,1,1,1,1000,1000);
+        Spawn(skeletons, skullheads, pumpkins, eyes);
+        
     }
 
 
-    public void startStage(int skeNum, int skuNum, int pumNum, int eyeNum, int goldr, int repr){
-        Spawn(skeNum, skuNum, pumNum, eyeNum);
-        goldreward = goldr;
-        repreward = repr;
-    }
-
-    private void Spawn(int skeNum, int skuNum, int pumNum, int eyeNum){
+    public static void startStage(int skeNum, int skuNum, int pumNum, int eyeNum, int goldr, int repr){
         skeletons = skeNum;
         skullheads = skuNum;
         pumpkins = pumNum;
         eyes = eyeNum;
         totalMonsters = totalMonsters + skeletons + skullheads + pumpkins + eyes;
+        goldreward = goldr;
+        repreward = repr;
+    }
+
+    private void Spawn(int skeNum, int skuNum, int pumNum, int eyeNum){
+        
         skelSpawner.GetComponent<MonsterSpawnerV1>().Spawn(skeletons);
         skulSpawner.GetComponent<MonsterSpawnerV1>().Spawn(skullheads);
         pumpSpawner.GetComponent<MonsterSpawnerV1>().Spawn(pumpkins);
