@@ -51,9 +51,16 @@ public class MonsterCounter : MonoBehaviour
         }
     }
     public void CompleteStage(){
-        ;GameObject oldPlayer = GameObject.FindGameObjectsWithTag("Player")[0];
-        ;oldPlayer.GetComponent<PlayerStats>().IncGold(goldreward);
-        ;oldPlayer.GetComponent<PlayerStats>().IncReputation(repreward);
+        GameObject oldPlayer = GameObject.FindGameObjectsWithTag("Player")[0];
+        oldPlayer.GetComponent<PlayerStats>().IncGold(goldreward);
+        oldPlayer.GetComponent<PlayerStats>().IncReputation(repreward);
         SceneManager.LoadScene(0);
+    }
+
+    public void EarlyComplete(){
+        float percent = GameObject.FindGameObjectsWithTag("Enemy").Length/totalMonsters;
+        GameObject oldPlayer = GameObject.FindGameObjectsWithTag("Player")[0];
+        oldPlayer.GetComponent<PlayerStats>().IncGold((int)(goldreward*percent));
+        oldPlayer.GetComponent<PlayerStats>().IncReputation(-(int)(repreward*(1-percent)));
     }
 }
