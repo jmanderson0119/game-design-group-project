@@ -33,7 +33,7 @@ public class MeleeAttack : MonoBehaviour
         {
             meleeTMarker = Time.time; // update time of last melee attack
 
-            Collider2D[] meleeTargets = Physics2D.OverlapCircleAll(transform.position, 0.75f); // list of all things hit by the melee
+            Collider2D[] meleeTargets = Physics2D.OverlapCircleAll(transform.position, 1.25f); // list of all things hit by the melee
 
             GameObject meleeAoe = Instantiate(meleeVisual) as GameObject; // visual indicator becomes visual
             meleeAoe.transform.position = transform.position; // visual indicator laid over player
