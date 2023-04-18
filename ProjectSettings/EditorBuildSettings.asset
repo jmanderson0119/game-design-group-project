@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Board.unity
     guid: 0f08b4c93c37dde4c95fff6b917970e6
   - enabled: 1
+    path: Assets/Scenes/Shop.unity
+    guid: 224d74637c404425bae9535549e706ea
+  - enabled: 1
     path: Assets/Scenes/ForestStage.unity
     guid: 19f59e17daefa3d4395722cee8d9e74b
   - enabled: 1
