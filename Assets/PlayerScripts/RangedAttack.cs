@@ -29,7 +29,7 @@ public class RangedAttack : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(1) && Time.time > bulletTMarker + bulletTBuffer) // ranged attack instantiation once left click is pressed after the delay 
+        if (playerStats.CanShoot() && Input.GetKeyDown(KeyCode.O) && Time.time > bulletTMarker + bulletTBuffer) // ranged attack instantiation once left click is pressed after the delay 
         {
             bulletTMarker = Time.time; // last ranged attack time marker is updated
 

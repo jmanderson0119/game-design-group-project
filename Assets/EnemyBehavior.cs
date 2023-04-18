@@ -787,24 +787,7 @@ public class EnemyBehavior : MonoBehaviour
 
         if (health <= 0)
         {
-            if (isLargePumpkin)
-            {
-                for (int i = 0; i < enemyLevel * 2; i++)
-                {
-                    GameObject smallPumpkinClone = Instantiate(smallPumpkin, transform.position, transform.rotation);
-                    // Small pumpkins are weaker, but their attack speed is faster
-                    smallPumpkinClone.GetComponent<EnemyBehavior>().ally = ally;
-                    smallPumpkinClone.GetComponent<EnemyBehavior>().enemyLevel = enemyLevel;
-                    smallPumpkinClone.GetComponent<EnemyBehavior>().maxAttackRange = maxAttackRange * 0.75f;
-                    smallPumpkinClone.GetComponent<EnemyBehavior>().health = (int)Mathf.Round(oldHealth / 2f);
-                    smallPumpkinClone.GetComponent<EnemyBehavior>().intervalBetweenAttacks = intervalBetweenAttacks / 1.5f;
-                }
-                Destroy(this.gameObject);
-            }
-            else
-            {
-                Destroy(this.gameObject);
-            }
+            Die();
         }
         if (isBoss && !isBossActive)
         {
@@ -1400,4 +1383,25 @@ public class EnemyBehavior : MonoBehaviour
     }
         //Debug.Log(susLevel);
         
+    void Die(){
+            if (isLargePumpkin)
+            {
+                for (int i = 0; i < enemyLevel * 2; i++)
+                {
+                    GameObject smallPumpkinClone = Instantiate(smallPumpkin, transform.position, transform.rotation);
+                    // Small pumpkins are weaker, but their attack speed is faster
+                    smallPumpkinClone.GetComponent<EnemyBehavior>().ally = ally;
+                    smallPumpkinClone.GetComponent<EnemyBehavior>().enemyLevel = enemyLevel;
+                    smallPumpkinClone.GetComponent<EnemyBehavior>().maxAttackRange = maxAttackRange * 0.75f;
+                    smallPumpkinClone.GetComponent<EnemyBehavior>().health = (int)Mathf.Round(oldHealth / 2f);
+                    smallPumpkinClone.GetComponent<EnemyBehavior>().intervalBetweenAttacks = intervalBetweenAttacks / 1.5f;
+                }
+                
+                Destroy(this.gameObject);
+            }
+            else
+            {
+                Destroy(this.gameObject);
+            }
+    }
 }

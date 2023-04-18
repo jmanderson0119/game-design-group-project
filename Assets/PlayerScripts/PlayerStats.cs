@@ -4,24 +4,47 @@ using UnityEngine;
 
 public class PlayerStats : MonoBehaviour
 {
-    // stats used across the four player scripts
-    [SerializeField] private float health = 100.0f;
-    [SerializeField] private float meleeDamage = 10.0f;
-    [SerializeField] private float rangedDamage = 8.0f;
-    [SerializeField] private float meleeRange = 0.75f;
-    [SerializeField] private float reputation = 0.0f;
-    [SerializeField] private int gold = 0;
-    [SerializeField] private float meleeTBuffer = 0.5f;
-    [SerializeField] private float bulletTBuffer = 0.5f;
-    [SerializeField] private float speed = 2.0f;
-    [SerializeField] private float bulletSpeed = 7.0f;
+    [SerializeField] private static float health = 100.0f;
+    [SerializeField] private static int meleeDamage = 2;
+    [SerializeField] private static int rangedDamage = 3;
+    [SerializeField] private static float reputation = 0.0f;
+    [SerializeField] private static int gold = 0;
+    [SerializeField] private static float meleeTBuffer = 0.5f;
+    [SerializeField] private static float bulletTBuffer = 0.5f;
+    [SerializeField] private static float dashTBuffer = 3f;
+    [SerializeField] private static float dashSpeed = 16f;
+    [SerializeField] private static float dashLength = 0.14f;
+    [SerializeField] private static float speed = 3.2f;
+    [SerializeField] private static float bulletSpeed = 7.0f;
+    [SerializeField] private static float shieldTBuffer = 6f;
 
+    //booleans used across player ability scripts
+    [SerializeField] private static bool canMelee = true;
+    [SerializeField] private static bool canShoot = true;
+    [SerializeField] private static bool canDash = true;
+    [SerializeField] private static bool canShield = true;
+    [SerializeField] private static bool damageable = true;
+    [SerializeField] private static bool isDashing = false;
+    [SerializeField] private static Vector3 dashDirection;
+
+    private float dashTMarker;
 
     // getters for player stats
+    public bool Damageable() => damageable;
+    public bool CanMelee() => canMelee;
+    public bool CanShoot() => canShoot;
+    public bool CanDash() => canDash;
+    public bool CanShield() => canShield;
+
     public float Health() => health;
-    public float MeleeDamage() => meleeDamage;
-    public float RangedDamage() => rangedDamage;
-    public float MeleeRange() => meleeRange;
+    public float ShieldTBuffer() => shieldTBuffer;
+    public float DashTBuffer() => dashTBuffer;
+    public Vector3 DashDirection() => dashDirection;
+    public bool Dashing() => isDashing;
+    public float DashLength() => dashLength;
+    public float DashSpeed() => dashSpeed;
+    public int MeleeDamage() => meleeDamage;
+    public int RangedDamage() => rangedDamage;
     public float Reputation() => reputation;
     public float Gold() => gold;
     public float Speed() => speed;
@@ -34,27 +57,52 @@ public class PlayerStats : MonoBehaviour
     public void IncBulletTBuffer(float increment) { bulletTBuffer += increment; }
     public void IncMeleeTBuffer(float increment) { meleeTBuffer += increment; }
     public void IncReputation(float increment) { reputation += increment; }
-    public void IncRangedDamage(float increment) { rangedDamage += increment; }
-    public void IncMeleeDamage(float increment) { meleeDamage += increment; }
+    public void IncRangedDamage(int increment) { rangedDamage += increment; }
+    public void IncMeleeDamage(int increment) { meleeDamage += increment; }
     public void IncHealth(float increment) { health += increment; }
-    public void IncMeleeRange(float increment) { meleeRange += increment; }
     public void IncBulletSpeed(float increment) { bulletSpeed += increment; }
     public void IncGold(int increment) { gold += increment; }
+    public void Melee(bool melee) { canMelee = melee; }
+    public void Shoot(bool shoot) { canShoot = shoot; }
+    public void Dash(bool dash) { canDash = dash; }
+    public void Shield(bool shield) { canShield = shield; }
+    public void DamageState(bool damageState) { damageable = damageState; }
+
 
 
     // Start is called before the first frame update
     void Start()
     {
- 
     }
 
     // Update is called once per frame
     void Update()
     {
-        // quit the game when the player dies
-        if (health <= 0.0f)
+        // start dashing if J is pressed
+        if (CanDash() && Input.GetKeyDown(KeyCode.J) && ((Time.time >= dashTMarker + dashTBuffer) || (Time.time < 3)))
         {
-            //Application.Quit();
+
+            dashTMarker = Time.time;
+
+            float horizontalDash = Input.GetAxis("Horizontal") * Time.deltaTime;
+            float verticalDash = Input.GetAxis("Vertical") * Time.deltaTime;
+            dashDirection = new Vector3(horizontalDash, verticalDash, 0).normalized;
+
+            StartCoroutine(DashTimer());
         }
+    }
+
+    // Tracks how long the player's dash should last
+    IEnumerator DashTimer()
+    {
+        isDashing = true;
+        Melee(false);
+        Shoot(false);
+        Shield(false);
+        yield return new WaitForSeconds(dashLength);
+        Melee(true);
+        Shoot(true);
+        Shield(true);
+        isDashing = false;
     }
 }
