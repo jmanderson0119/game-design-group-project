@@ -17,6 +17,7 @@ public class MonsterCounter : MonoBehaviour
     int goldreward;
     int repreward;
     public DisplayReward rewardtext;
+    private bool incremented = false;
 
     private void Start() {
         skelSpawner = this.gameObject.transform.GetChild(0).gameObject;
@@ -52,9 +53,13 @@ public class MonsterCounter : MonoBehaviour
         }
     }
     public void CompleteStage(){
-        GameObject oldPlayer = GameObject.FindGameObjectsWithTag("Player")[0];
-        oldPlayer.GetComponent<PlayerStats>().IncGold(goldreward);
-        oldPlayer.GetComponent<PlayerStats>().IncReputation(repreward);
+        if (!incremented)
+        {
+            GameObject oldPlayer = GameObject.FindGameObjectsWithTag("Player")[0];
+            oldPlayer.GetComponent<PlayerStats>().IncGold(goldreward);
+            oldPlayer.GetComponent<PlayerStats>().IncReputation(repreward);
+            incremented = true;
+        }
         rewardtext.startExit(goldreward,repreward);
     }
 
