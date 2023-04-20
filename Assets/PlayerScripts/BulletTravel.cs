@@ -40,7 +40,7 @@ public class BulletTravel : MonoBehaviour
         bulletDmg = playerStats.RangedDamage(); // get player's ranged attack damage and store in bulletDmg
         bulletSpeed = playerStats.BulletSpeed(); // get the player's ranged attack speed and store in bulletSpeed
 
-        this.transform.position = player.transform.position + travelDirection * 0.8f; // update the location of the bullet to be just in front of the player where they are facing
+        this.transform.position = player.transform.position + travelDirection * 1.2f; // update the location of the bullet to be just in front of the player where they are facing
         bulletMovement = travelDirection * bulletSpeed; // stores movement increment relative to framerate, bulletSpeed, and the travelDirection
     }
 

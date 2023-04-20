@@ -17,6 +17,10 @@ public class RangedAttack : MonoBehaviour
     private GameObject player; // used to obtain player
     private PlayerStats playerStats; // used to obtain player statistics
 
+    private AudioSource bulletSource;
+    [SerializeField] private AudioClip bulletNoise;
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -24,6 +28,7 @@ public class RangedAttack : MonoBehaviour
         player = GameObject.Find("mainPlayer"); // obtain player
         playerStats = player.GetComponent<PlayerStats>(); // obtain the player's stats
         bulletTBuffer = playerStats.BulletTBuffer(); // obtain the bullet time buffer and store in bulletTBuffer
+        bulletSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -34,6 +39,7 @@ public class RangedAttack : MonoBehaviour
             bulletTMarker = Time.time; // last ranged attack time marker is updated
 
             GameObject bullet = Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation) as GameObject; // bullet instantiation
+            bulletSource.PlayOneShot(bulletNoise, 0.5f);
             Destroy(bullet, 0.75f); // destroy so that there are no invalid position input errors
         }
     }

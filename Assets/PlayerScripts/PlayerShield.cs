@@ -10,9 +10,11 @@ public class PlayerShield : MonoBehaviour
     private float shieldTBuffer;
     private float shieldTMarker;
 
-    private bool shieldUp;
     bool firstShield = true;
     private Animator animator;
+
+    private AudioSource shieldSource;
+    [SerializeField] private AudioClip shieldNoise;
 
 
 
@@ -21,6 +23,7 @@ public class PlayerShield : MonoBehaviour
     {
         shieldTBuffer = gameObject.GetComponent<PlayerStats>().ShieldTBuffer();
         animator = GetComponent<Animator>();
+        shieldSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -28,23 +31,16 @@ public class PlayerShield : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.I) && ((Time.time >= shieldTMarker + shieldTBuffer) || (firstShield)) && gameObject.GetComponent<PlayerStats>().CanShield())
         {
+            shieldSource.PlayOneShot(shieldNoise, 1f);
             animator.SetInteger("shielding", 1);
             if (firstShield) { firstShield = false; }
             shieldTMarker = Time.time;
             StartCoroutine(ShieldTimer());
-            //shield = Instantiate(shieldPrefab) as GameObject;
-            //shield.transform.position = transform.position;
-        }
-
-        if (shieldUp)
-        {
-            //shield.transform.position = transform.position;
         }
     }
 
     IEnumerator ShieldTimer()
     {
-        shieldUp = true;
         gameObject.GetComponent<PlayerStats>().Dash(false);
         gameObject.GetComponent<PlayerStats>().Shoot(false);
         gameObject.GetComponent<PlayerStats>().Melee(false);
@@ -56,6 +52,5 @@ public class PlayerShield : MonoBehaviour
         gameObject.GetComponent<PlayerStats>().Shoot(true);
         gameObject.GetComponent<PlayerStats>().Melee(true);
         Destroy(shield);
-        shieldUp = false;
     }
 }

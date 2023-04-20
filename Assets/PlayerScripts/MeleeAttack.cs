@@ -9,6 +9,8 @@ public class MeleeAttack : MonoBehaviour
     [SerializeField] private float meleeTBuffer; // delay between player's melee attacks
     [SerializeField] private int meleeDmg; // player's melee attack damage
     [SerializeField] GameObject meleeVisual; // visual indicator of what the melee attack actually affects
+    private AudioSource meleeSource;
+    [SerializeField] private AudioClip meleeNoise;
 
 
     private float meleeTMarker; // time that the most recent melee attack occurred
@@ -27,6 +29,7 @@ public class MeleeAttack : MonoBehaviour
         meleeDmg = playerStats.MeleeDamage(); // get the player melee attack damage and save in meleeDmg
         meleeTBuffer = playerStats.MeleeTBuffer(); // get the player melee attack delay and save in meleeTBuffer
         animator = GetComponent<Animator>();
+        meleeSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame; used to track and handle anything within range of a melee attack
@@ -40,11 +43,17 @@ public class MeleeAttack : MonoBehaviour
             meleeTMarker = Time.time; // update time of last melee attack
 
             Collider2D[] meleeTargets = Physics2D.OverlapCircleAll(transform.position, 1.28f); // list of all things hit by the melee
+            meleeSource.PlayOneShot(meleeNoise, 0.75f);
+            /*
+            if (meleeTargets.Length > 0)
+            {
 
-            //GameObject meleeAoe = Instantiate(meleeVisual) as GameObject; // visual indicator becomes visual
-            //eleeAoe.transform.position = transform.position; // visual indicator laid over player
-            //meleeAoe.transform.parent = this.transform; // visual indicator will follow the player
-            //Destroy(meleeAoe, 0.22f); // destroy visual indicator
+            }
+            else
+            {
+
+            }
+            */
 
             // event handler for damageable/interactable targets
             foreach (Collider2D target in meleeTargets)

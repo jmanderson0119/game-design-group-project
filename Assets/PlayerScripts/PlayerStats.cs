@@ -32,6 +32,8 @@ public class PlayerStats : MonoBehaviour
 
     private float dashTMarker;
     private Animator animator;
+    private AudioSource dashSource;
+    [SerializeField] private AudioClip dashNoise;
 
     // getters for player stats
     public bool Damageable() => damageable;
@@ -79,7 +81,8 @@ public class PlayerStats : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        animator = GetComponent<Animator>(); 
+        animator = GetComponent<Animator>();
+        dashSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -88,6 +91,7 @@ public class PlayerStats : MonoBehaviour
         // start dashing if J is pressed
         if (CanDash() && Input.GetKeyDown(KeyCode.J) && ((Time.time >= dashTMarker + dashTBuffer) || (Time.time < 3)))
         {
+            dashSource.PlayOneShot(dashNoise, 0.75f);
             animator.SetInteger("dashing", 1);
             dashTMarker = Time.time;
 
