@@ -6,8 +6,6 @@ public class HealthUI : MonoBehaviour
 {
     private PlayerStats player;
     private float playerHealth;
-    private Vector3 healthBar;
-    private Vector3 emptyBar;
 
     [SerializeField] private GameObject fullheartPrefab;
     [SerializeField] private GameObject emptyheartPrefab;
@@ -19,8 +17,6 @@ public class HealthUI : MonoBehaviour
     {
         player = GameObject.Find("mainPlayer").GetComponent<PlayerStats>();
         playerHealth = player.Health();
-        healthBar = new Vector3(101, 255, 0);
-        emptyBar = new Vector3(101, 255, 10);
 
         for (int i = 0; i < playerHealth; i++)
         {
@@ -29,11 +25,8 @@ public class HealthUI : MonoBehaviour
             fullHeart.name = "FullHeart" + (i + 1);
             emptyHeart.transform.SetParent(gameObject.transform, false);
             fullHeart.transform.SetParent(gameObject.transform, false);
-            emptyHeart.transform.position = emptyBar;
-            fullHeart.transform.position = healthBar;
-            emptyBar.x += 27;
-            healthBar.x += 27;
-
+            emptyHeart.transform.position = new Vector3(emptyHeart.transform.position.x + 27 * (i + 1), emptyHeart.transform.position.y, emptyHeart.transform.position.z);
+            fullHeart.transform.position = new Vector3(fullHeart.transform.position.x + 27 * (i + 1), fullHeart.transform.position.y, fullHeart.transform.position.z);
         }
     }
 
