@@ -91,6 +91,8 @@ public class EnemyBehavior : MonoBehaviour
 
     Rigidbody2D enemy;
     Animator animator;
+    private Color oldColor;
+
 
 
     // This function is a logistic model that calculates the susLevel for the next frame. The function is bounded by 0 and 1
@@ -598,6 +600,7 @@ public class EnemyBehavior : MonoBehaviour
         oldIntervalBetweenAttacks = intervalBetweenAttacks;
         oldMovingSpeed = movingSpeed;
         oldHealth = health;
+        oldColor = GetComponent<SpriteRenderer>().material.color;
 
         if (enemyLevel == 1)
         {
@@ -666,7 +669,18 @@ public class EnemyBehavior : MonoBehaviour
         }
         DestroySeed_running = false;
     }
+    
+    IEnumerator TakeDamage()
+    {
+        GetComponent<SpriteRenderer>().material.color = Color.red;
+        yield return new WaitForSeconds(0.2f);
+        GetComponent<SpriteRenderer>().material.color = oldColor;
+    }
 
+    public void damage() {
+        StartCoroutine(TakeDamage());
+    }
+    
     IEnumerator DestroySkullHeadBullet()
     {
         DestroySkullHeadBullet_running = true;
