@@ -62,6 +62,7 @@ public class MeleeAttack : MonoBehaviour
                 {
                     EnemyBehavior behavior = target.gameObject.GetComponent<EnemyBehavior>();
                     behavior.health -= meleeDmg;
+                    behavior.damage();
                     target.gameObject.transform.localScale += new Vector3(-0.05f, -0.05f, -0.05f);
                     Debug.Log("Enemy Health: " + behavior.health);
                 }
