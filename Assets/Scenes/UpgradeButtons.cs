@@ -4,20 +4,20 @@ using UnityEngine;
 
 public class UpgradeButtons : MonoBehaviour
 {
-    PlayerStats PlayerStats;
+    public PlayerStats player;
     public void UpgradeHealth() {
-        PlayerStats.IncHealth(5);
+        player.IncHealth(5);
 
     }
 
     public void UpgradeMelee()
     {
-        PlayerStats.IncMeleeDamage(2);
+        player.IncMeleeDamage(2);
         
     }
 
     public void UpgradeRange() {
-        PlayerStats.IncRangedDamage(1);
-        PlayerStats.IncBulletSpeed(2);
+        player.IncRangedDamage(1);
+        player.IncBulletSpeed(2);
     }
 }
