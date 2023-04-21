@@ -59,6 +59,7 @@ public class MonsterCounter : MonoBehaviour
             GameObject oldPlayer = GameObject.FindGameObjectsWithTag("Player")[0];
             oldPlayer.GetComponent<PlayerStats>().IncGold(goldreward);
             oldPlayer.GetComponent<PlayerStats>().IncReputation(repreward);
+            oldPlayer.GetComponent<PlayerStats>().completeBounty();
             incremented = true;
         }
         rewardtext.startExit(goldreward,repreward);

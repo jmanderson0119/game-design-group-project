@@ -1879,7 +1879,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
@@ -2106,7 +2106,6 @@ GameObject:
   - component: {fileID: 820267715}
   - component: {fileID: 820267714}
   - component: {fileID: 820267713}
-  - component: {fileID: 820267716}
   m_Layer: 5
   m_Name: AcceptButton
   m_TagString: Untagged
@@ -2179,9 +2178,21 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 820267716}
+      - m_Target: {fileID: 11500000, guid: 36d3d18523e174812bef44147978038a, type: 3}
+        m_TargetAssemblyTypeName: UnityEngine.Object, UnityEngine
+        m_MethodName: set_name
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: startStage
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1343918437}
         m_TargetAssemblyTypeName: RandomDifficultyGenerator, Assembly-CSharp
-        m_MethodName: EasyDifficulty
+        m_MethodName: startEasy
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2190,7 +2201,7 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 2
+        m_CallState: 1
 --- !u!114 &820267714
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2229,20 +2240,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 820267711}
   m_CullTransparentMesh: 1
---- !u!114 &820267716
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 820267711}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36d3d18523e174812bef44147978038a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EnemySpawnwers: {fileID: 0}
-  request: {fileID: 1310853070}
 --- !u!1 &840800852
 GameObject:
   m_ObjectHideFlags: 0
@@ -2255,7 +2252,6 @@ GameObject:
   - component: {fileID: 840800856}
   - component: {fileID: 840800855}
   - component: {fileID: 840800854}
-  - component: {fileID: 840800857}
   m_Layer: 5
   m_Name: ReactToClick
   m_TagString: Untagged
@@ -2390,20 +2386,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 840800852}
   m_CullTransparentMesh: 1
---- !u!114 &840800857
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 840800852}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36d3d18523e174812bef44147978038a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EnemySpawnwers: {fileID: 0}
-  request: {fileID: 855171320}
 --- !u!1 &843189151
 GameObject:
   m_ObjectHideFlags: 0
@@ -2500,7 +2482,6 @@ GameObject:
   - component: {fileID: 845390166}
   - component: {fileID: 845390165}
   - component: {fileID: 845390164}
-  - component: {fileID: 845390167}
   m_Layer: 5
   m_Name: AcceptButton
   m_TagString: Untagged
@@ -2573,9 +2554,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 845390167}
+      - m_Target: {fileID: 1343918437}
         m_TargetAssemblyTypeName: RandomDifficultyGenerator, Assembly-CSharp
-        m_MethodName: HardDifficulty
+        m_MethodName: startHard
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2623,20 +2604,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 845390162}
   m_CullTransparentMesh: 1
---- !u!114 &845390167
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 845390162}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36d3d18523e174812bef44147978038a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EnemySpawnwers: {fileID: 0}
-  request: {fileID: 1112002709}
 --- !u!1 &855171318
 GameObject:
   m_ObjectHideFlags: 0
@@ -3965,7 +3932,6 @@ GameObject:
   - component: {fileID: 1250508711}
   - component: {fileID: 1250508710}
   - component: {fileID: 1250508709}
-  - component: {fileID: 1250508712}
   m_Layer: 5
   m_Name: ReactToClick
   m_TagString: Untagged
@@ -4062,6 +4028,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1250508710
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4100,20 +4078,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1250508707}
   m_CullTransparentMesh: 1
---- !u!114 &1250508712
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1250508707}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36d3d18523e174812bef44147978038a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EnemySpawnwers: {fileID: 0}
-  request: {fileID: 1788451134}
 --- !u!1 &1265261667
 GameObject:
   m_ObjectHideFlags: 0
@@ -4347,6 +4311,7 @@ GameObject:
   - component: {fileID: 1343918435}
   - component: {fileID: 1343918434}
   - component: {fileID: 1343918436}
+  - component: {fileID: 1343918437}
   m_Layer: 5
   m_Name: BoardPanel
   m_TagString: Untagged
@@ -4427,6 +4392,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f16d5ef6ae94427bb5d72f160d80dc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1343918437
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1343918432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36d3d18523e174812bef44147978038a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Erequest: {fileID: 1788451134}
+  Mrequest: {fileID: 855171320}
+  Hrequest: {fileID: 48568615}
 --- !u!1 &1369093813
 GameObject:
   m_ObjectHideFlags: 0
@@ -4439,7 +4419,6 @@ GameObject:
   - component: {fileID: 1369093817}
   - component: {fileID: 1369093816}
   - component: {fileID: 1369093815}
-  - component: {fileID: 1369093818}
   m_Layer: 5
   m_Name: ReactToClick
   m_TagString: Untagged
@@ -4574,20 +4553,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1369093813}
   m_CullTransparentMesh: 1
---- !u!114 &1369093818
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1369093813}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36d3d18523e174812bef44147978038a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EnemySpawnwers: {fileID: 0}
-  request: {fileID: 48568615}
 --- !u!1 &1396238998
 GameObject:
   m_ObjectHideFlags: 0
@@ -6967,7 +6932,6 @@ GameObject:
   - component: {fileID: 1967940507}
   - component: {fileID: 1967940506}
   - component: {fileID: 1967940505}
-  - component: {fileID: 1967940508}
   m_Layer: 5
   m_Name: AcceptButton
   m_TagString: Untagged
@@ -7040,9 +7004,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1967940508}
+      - m_Target: {fileID: 1343918437}
         m_TargetAssemblyTypeName: RandomDifficultyGenerator, Assembly-CSharp
-        m_MethodName: MediumDifficulty
+        m_MethodName: startMedium
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7090,20 +7054,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1967940503}
   m_CullTransparentMesh: 1
---- !u!114 &1967940508
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1967940503}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36d3d18523e174812bef44147978038a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EnemySpawnwers: {fileID: 0}
-  request: {fileID: 1953194780}
 --- !u!1 &2002128268
 GameObject:
   m_ObjectHideFlags: 0

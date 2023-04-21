@@ -134,4 +134,9 @@ public class PlayerStats : MonoBehaviour
     public void healToFull(){
         health = maxHealth;
     }
+
+    public void completeBounty(){
+        BountiesCompleted++;
+        RandomDifficultyGenerator.finishMission();
+    }
 }
