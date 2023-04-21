@@ -4,20 +4,33 @@ using UnityEngine;
 
 public class UpgradeButtons : MonoBehaviour
 {
-    PlayerStats PlayerStats;
-    public void UpgradeHealth() {
-        PlayerStats.IncHealth(5);
+    public GameObject player;
+    public PlayerStats playerStats;
 
+    void Start()
+    {
+        player = GameObject.Find("mainPlayer");
+        playerStats = player.GetComponent<PlayerStats>();
+        Debug.Log("The player's Health: " + playerStats.MaxHealth());
+        Debug.Log("The player's Melee DMG: " + playerStats.MeleeDamage());
+        Debug.Log("The player's Ranged DMG: " + playerStats.RangedDamage());
+        Debug.Log("The player's Ranged Speed: " + playerStats.BulletSpeed());
+    }
+    public void UpgradeHealth() {
+        playerStats.IncMaxHealth(5);
+        Debug.Log("The player's Health: " + playerStats.MaxHealth());
     }
 
     public void UpgradeMelee()
     {
-        PlayerStats.IncMeleeDamage(2);
-        
+        playerStats.IncMeleeDamage(2);
+        Debug.Log("The player's Melee DMG: " + playerStats.MeleeDamage());
     }
 
     public void UpgradeRange() {
-        PlayerStats.IncRangedDamage(1);
-        PlayerStats.IncBulletSpeed(2);
+        playerStats.IncRangedDamage(1);
+        playerStats.IncBulletSpeed(2);
+        Debug.Log("The player's Ranged DMG: " + playerStats.RangedDamage());
+        Debug.Log("The player's Ranged Speed: " + playerStats.BulletSpeed());
     }
 }
