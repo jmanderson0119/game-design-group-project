@@ -38,6 +38,7 @@ public class EnemyBehavior : MonoBehaviour
     [SerializeField] GameObject eChar;
     private GameObject eCharClone;
     private GameObject levelClone;
+    public Color damageColor;
     [SerializeField] GameObject level1;
     [SerializeField] GameObject level2;
     [SerializeField] GameObject level3;
@@ -684,8 +685,12 @@ public class EnemyBehavior : MonoBehaviour
     
     IEnumerator TakeDamage()
     {
-        GetComponent<SpriteRenderer>().material.color = Color.red;
-        yield return new WaitForSeconds(0.2f);
+        GetComponent<SpriteRenderer>().material.color = damageColor;
+        yield return new WaitForSeconds(0.1f);
+        GetComponent<SpriteRenderer>().material.color = oldColor;
+        yield return new WaitForSeconds(0.1f);
+        GetComponent<SpriteRenderer>().material.color = damageColor;
+        yield return new WaitForSeconds(0.1f);
         GetComponent<SpriteRenderer>().material.color = oldColor;
     }
 

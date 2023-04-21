@@ -118,6 +118,7 @@ MonoBehaviour:
   bone: {fileID: 0}
   pChar: {fileID: 0}
   eChar: {fileID: 1512994737516480582, guid: 0d77000f1bf08af42b75695b53971458, type: 3}
+  damageColor: {r: 0.78431374, g: 0.38039216, b: 0.38039216, a: 1}
   level1: {fileID: 0}
   level2: {fileID: 0}
   level3: {fileID: 0}
