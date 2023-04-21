@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Spawn
   - Enemy
+  - Minions
   layers:
   - Default
   - TransparentFX

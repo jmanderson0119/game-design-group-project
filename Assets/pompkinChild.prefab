@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 4534078502836541305}
   m_Layer: 6
   m_Name: pompkinChild
-  m_TagString: Untagged
+  m_TagString: Minions
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -134,9 +134,6 @@ MonoBehaviour:
   pumpkinSeed: {fileID: 4440157248531973749, guid: 8a00e8b24e00fe844b81e32337493826, type: 3}
   skullHeadBullet: {fileID: 0}
   smallPumpkin: {fileID: 0}
-  isBossActive: 0
-  lighting: {fileID: 0}
-  lightingShadow: {fileID: 0}
   isBossActive: 0
   lighting: {fileID: 0}
   lightingShadow: {fileID: 0}

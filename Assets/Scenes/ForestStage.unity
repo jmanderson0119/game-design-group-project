@@ -14228,6 +14228,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: HealthCanvas
       objectReference: {fileID: 0}
+    - target: {fileID: 767611931552964773, guid: 888fb2029198a614d89f972300718eb1, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6407046822510430380, guid: 888fb2029198a614d89f972300718eb1, type: 3}
       propertyPath: m_Pivot.x
       value: 0

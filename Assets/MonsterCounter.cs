@@ -60,6 +60,11 @@ public class MonsterCounter : MonoBehaviour
             oldPlayer.GetComponent<PlayerStats>().IncGold(goldreward);
             oldPlayer.GetComponent<PlayerStats>().IncReputation(repreward);
             oldPlayer.GetComponent<PlayerStats>().completeBounty();
+            Destroy(GameObject.Find("HealthCanvas"));
+            GameObject[] monsters = GameObject.FindGameObjectsWithTag("Minions");
+                foreach(GameObject mon in monsters){
+            Destroy(mon.GetComponent<EnemyBehavior>());
+        }
             incremented = true;
         }
         rewardtext.startExit(goldreward,repreward);
@@ -72,6 +77,8 @@ public class MonsterCounter : MonoBehaviour
         oldPlayer.GetComponent<PlayerStats>().IncReputation(-(int)(repreward*(1-percent)));
         oldPlayer.GetComponent<PlayerStats>().healToFull();
         cripple();
+        Destroy(GameObject.Find("HealthCanvas"));
+        
         rewardtext.startExit((int)(goldreward*percent),-(int)(repreward*(1-percent)));
     }
 
