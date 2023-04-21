@@ -24,9 +24,9 @@ public class PlayerStats : MonoBehaviour
 
     //booleans used across player ability scripts
     [SerializeField] private static bool canMelee = true;
-    [SerializeField] private static bool canShoot = true;
-    [SerializeField] private static bool canDash = true;
-    [SerializeField] private static bool canShield = true;
+    [SerializeField] private static bool canShoot = false;
+    [SerializeField] private static bool canDash = false;
+    [SerializeField] private static bool canShield = false;
     [SerializeField] private static bool damageable = true;
     [SerializeField] private static bool isDashing = false;
     [SerializeField] private static Vector3 dashDirection;

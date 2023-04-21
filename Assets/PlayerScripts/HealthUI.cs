@@ -12,11 +12,21 @@ public class HealthUI : MonoBehaviour
     private GameObject fullHeart;
     private GameObject emptyHeart;
 
+    private AudioSource damageSource;
+    [SerializeField] private AudioClip damageNoise;
+
+    private SpriteRenderer playerSprite;
+    [SerializeField] private Color damageColor;
+    private Color playerDefaultColor;
+
     // Start is called before the first frame update
     void Start()
     {
         player = GameObject.Find("mainPlayer").GetComponent<PlayerStats>();
         playerHealth = player.Health();
+        damageSource = GameObject.Find("mainPlayer").GetComponent<AudioSource>();
+        playerSprite = GameObject.Find("mainPlayer").GetComponent<SpriteRenderer>();
+        playerDefaultColor = playerSprite.material.color;
 
         for (int i = 0; i < playerHealth; i++)
         {
@@ -36,6 +46,9 @@ public class HealthUI : MonoBehaviour
         
         if (playerHealth > player.Health())
         {
+            StartCoroutine(SpriteColor());
+            damageSource.PlayOneShot(damageNoise, 1f);
+
             float healthDifference = playerHealth - player.Health(); 
             
             for (int j = 0; j < healthDifference; j++)
@@ -44,5 +57,17 @@ public class HealthUI : MonoBehaviour
             }
             playerHealth = player.Health();
         }
+    }
+
+    IEnumerator SpriteColor()
+    {
+        playerSprite.material.color = damageColor;
+        yield return new WaitForSeconds(0.1f);
+        playerSprite.material.color = playerDefaultColor;
+        yield return new WaitForSeconds(0.1f);
+        playerSprite.material.color = damageColor;
+        yield return new WaitForSeconds(0.1f);
+        playerSprite.material.color = playerDefaultColor;
+
     }
 }

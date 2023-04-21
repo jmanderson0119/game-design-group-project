@@ -116,6 +116,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fullheartPrefab: {fileID: 1313992365628377845, guid: 8a3e755ac7317ce4d8c9133d338ac6b2, type: 3}
   emptyheartPrefab: {fileID: 5476694631017910499, guid: a42f6c37d51e9b5459160c0bd0d748b5, type: 3}
+  damageNoise: {fileID: 8300000, guid: c18f2e02b5df27240b3fb93e40eeee69, type: 3}
+  damageColor: {r: 0.7830189, g: 0.380429, b: 0.380429, a: 1}
 --- !u!1 &8125498570215793818
 GameObject:
   m_ObjectHideFlags: 0
