@@ -44,7 +44,7 @@ public class BoughtSkill : MonoBehaviour
             }
             
         }
-        else if (skillviewed.Equals("Gain the ability to attack from a safe distance with the 'O' key. Costs : 75 Money, 150 Reputation ")) 
+        else if (skillviewed.Equals("Gain the ability to attack from a safe distance with the 'O' key. Costs : 75 Money, 150 Reputation")) 
         {
             playerStats.IncGold(-75);
             playerStats.IncReputation(-150);
@@ -53,7 +53,7 @@ public class BoughtSkill : MonoBehaviour
                 Debug.Log("The player has lost 75 Cash");
                 Debug.Log("The player has lost 150 Reputation");
                 playerStats.Shoot(true);
-                Debug.Log("The player can Dash : " + playerStats.CanDash());
+                Debug.Log("The player can Shoot : " + playerStats.CanShoot());
             }
             else
             {
@@ -72,7 +72,7 @@ public class BoughtSkill : MonoBehaviour
                 Debug.Log("The player has lost 250 Cash");
                 Debug.Log("The player has lost 600 Reputation");
                 playerStats.Shield(true);
-                Debug.Log("The player can Dash : " + playerStats.CanDash());
+                Debug.Log("The player can Shield : " + playerStats.CanShield());
             }
             else
             {
