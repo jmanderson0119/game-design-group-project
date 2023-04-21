@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 9116041858811243200}
   - component: {fileID: 9116041858811243201}
   - component: {fileID: 9116041858811243198}
+  - component: {fileID: 5357987944773595217}
   m_Layer: 6
   m_Name: largePumpkin
   m_TagString: Enemy
@@ -103,18 +104,20 @@ MonoBehaviour:
   maxVision: 8
   playerLastPosition: {x: 0, y: 0, z: 0}
   targetEnemyLastPosition: {x: 0, y: 0, z: 0}
-  maxAttackRange: 3
+  maxAttackRange: 6
   oldMaxAttackRange: 1.5
   k_val: 5
   w_val: 0.25
   health: 6
-  intervalBetweenAttacks: 1
+  intervalBetweenAttacks: 0.6
+  intervalBetweenLighting: 5
+  bossDashCastingTime: 1.5
   questionMark: {fileID: 1605708980996933940, guid: b1304e6877ba2f3428e6eae7be265aaf, type: 3}
   smallAlert: {fileID: 6028945541380220502, guid: e53e1eabff4a3c649b6b430b4369c770, type: 3}
   bigAlert: {fileID: 3168041598092535264, guid: bda039d515419cd49b7698b0d4d034c3, type: 3}
-  levelMark: {fileID: 3168041598092535264, guid: bda039d515419cd49b7698b0d4d034c3, type: 3}
   bone: {fileID: 8368988349675041870, guid: 3b2dce0c79d0cdf41a6195676e7216a2, type: 3}
   pChar: {fileID: 5855480552603275026, guid: 233d3d3fb8673274fa96116517bb4771, type: 3}
+  eChar: {fileID: 0}
   level1: {fileID: 649339608469597843, guid: b77f4779a28231144896e0de686365dd, type: 3}
   level2: {fileID: 6473442211797523633, guid: 3f826edf96d768749a83fa279f5230e2, type: 3}
   level3: {fileID: 1094350810001254095, guid: 8c9d12d95e06fb0468d56de7c7d90b2f, type: 3}
@@ -130,6 +133,9 @@ MonoBehaviour:
   pumpkinSeed: {fileID: 4440157248531973749, guid: 8a00e8b24e00fe844b81e32337493826, type: 3}
   skullHeadBullet: {fileID: 0}
   smallPumpkin: {fileID: 1072700842059100609, guid: a8d6068b721748642bc7652c94ee277f, type: 3}
+  isBossActive: 0
+  lighting: {fileID: 0}
+  lightingShadow: {fileID: 0}
 --- !u!50 &9116041858811243200
 Rigidbody2D:
   serializedVersion: 4
@@ -197,3 +203,99 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+--- !u!82 &5357987944773595217
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9116041858811243204}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 563ce43d93be0d14aaeec15959c70994, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 2
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

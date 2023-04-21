@@ -21,6 +21,7 @@ public class Bullet : MonoBehaviour
                 if ((transform.parent.GetComponent<EnemyBehavior>().ally && !col.gameObject.GetComponent<EnemyBehavior>().ally) || (!transform.parent.GetComponent<EnemyBehavior>().ally && col.gameObject.GetComponent<EnemyBehavior>().ally))
                 {
                     col.gameObject.GetComponent<EnemyBehavior>().health -= 1 * transform.parent.GetComponent<EnemyBehavior>().enemyLevel;
+                    col.gameObject.GetComponent<EnemyBehavior>().damage();
                 }
             }
         }

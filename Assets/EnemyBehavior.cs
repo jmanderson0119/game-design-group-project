@@ -31,8 +31,6 @@ public class EnemyBehavior : MonoBehaviour
     private GameObject smallAlertClone;
     [SerializeField] GameObject bigAlert;
     private GameObject bigAlertClone;
-    private GameObject levelMarkClone;
-    [SerializeField] GameObject levelMark;
     private GameObject boneClone;
     [SerializeField] GameObject bone;
     [SerializeField] GameObject pChar;
@@ -43,6 +41,7 @@ public class EnemyBehavior : MonoBehaviour
     [SerializeField] GameObject level1;
     [SerializeField] GameObject level2;
     [SerializeField] GameObject level3;
+    private GameObject currentLevel;
     private GameObject player;
     public bool ally = false;
     private bool move2Player = false;
@@ -89,9 +88,12 @@ public class EnemyBehavior : MonoBehaviour
     private GameObject lightingShadowClone3;
     private GameObject lightingShadowClone4;
 
+    private int oldLevel;
+
     Rigidbody2D enemy;
     Animator animator;
     private Color oldColor;
+    AudioSource aud;
 
 
 
@@ -601,24 +603,34 @@ public class EnemyBehavior : MonoBehaviour
         oldMovingSpeed = movingSpeed;
         oldHealth = health;
         oldColor = GetComponent<SpriteRenderer>().material.color;
+        oldLevel = enemyLevel;
+        if (GetComponent<AudioSource>() != null)
+        {
+            aud = GetComponent<AudioSource>();
+        }
 
         if (enemyLevel == 1)
         {
-            Instantiate(level1, transform.position + new Vector3(-1f, -1f, 0f), transform.rotation, transform);
+            currentLevel = Instantiate(level1, transform.position + new Vector3(-1f, -1f, 0f), transform.rotation, transform);
         }
         else if (enemyLevel == 2)
         {
-            Instantiate(level2, transform.position + new Vector3(-1f, -1f, 0f), transform.rotation, transform);
+            currentLevel = Instantiate(level2, transform.position + new Vector3(-1f, -1f, 0f), transform.rotation, transform);
         }
         else if (enemyLevel == 3)
         {
-            Instantiate(level3, transform.position + new Vector3(-1f, -1f, 0f), transform.rotation, transform);
+            currentLevel = Instantiate(level3, transform.position + new Vector3(-1f, -1f, 0f), transform.rotation, transform);
         }
 
         // Higher level skull attacks faster
         if (isSkull)
         {
             intervalBetweenAttacks = intervalBetweenAttacks / enemyLevel;
+        }
+
+        if (isBoss && !isBossActive)
+        {
+            GetComponent<Collider2D>().enabled = false;
         }
 
         // Check if this enemy is petable
@@ -704,6 +716,11 @@ public class EnemyBehavior : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void play_attack_sound()
+    {
+        aud.Play();
     }
 
     /*
@@ -817,11 +834,12 @@ public class EnemyBehavior : MonoBehaviour
         {
             if (eCharClone == null)
             {
-                eCharClone = Instantiate(eChar, transform.position + new Vector3(0f, -1f, 0f), transform.rotation, transform);
+                eCharClone = Instantiate(eChar, transform.position + new Vector3(0f, -1f, -1f), transform.rotation, transform);
             }
 
             if (Input.GetKeyDown("e"))
             {
+                GetComponent<Collider2D>().enabled = true;
                 isBossActive = true;
                 Destroy(eCharClone);
                 animator.SetBool("bossActive", true);
@@ -900,6 +918,20 @@ public class EnemyBehavior : MonoBehaviour
                     transform.localScale = oldScale;
                     intervalBetweenAttacks = oldIntervalBetweenAttacks;
                     movingSpeed = oldMovingSpeed;
+                    enemyLevel = oldLevel;
+                    Destroy(currentLevel);
+                    if (enemyLevel == 1)
+                    {
+                        currentLevel = Instantiate(level1, transform.position + new Vector3(-1f, -1f, 0f), transform.rotation, transform);
+                    }
+                    else if (enemyLevel == 2)
+                    {
+                        currentLevel = Instantiate(level2, transform.position + new Vector3(-1f, -1f, 0f), transform.rotation, transform);
+                    }
+                    else if (enemyLevel == 3)
+                    {
+                        currentLevel = Instantiate(level3, transform.position + new Vector3(-1f, -1f, 0f), transform.rotation, transform);
+                    }
                 }
 
                 if (smallAlertClone != null)
@@ -1193,6 +1225,7 @@ public class EnemyBehavior : MonoBehaviour
                             if (isSkullSoldier)
                             {
                                 animator.SetBool("attack", true);
+                                play_attack_sound();
                                 //Debug.Log(LayerPlayer);
                                 Collider2D[] hitTargets = Physics2D.OverlapCircleAll(transform.position, maxAttackRange);
 
@@ -1247,7 +1280,7 @@ public class EnemyBehavior : MonoBehaviour
                                     seed.GetComponent<Rigidbody2D>().AddForce(Vector2.down * 5f, ForceMode2D.Impulse);
                                     seed.transform.parent = transform;
                                 }
-
+                                play_attack_sound();
                             }
                             if (isEye)
                             {
@@ -1259,23 +1292,89 @@ public class EnemyBehavior : MonoBehaviour
                                     maxAttackRange = 1.5f;
                                     transform.localScale += new Vector3(0.8f, 0.8f, 0.8f) * 0.01f * (float)(100 - player.GetComponent<PlayerStats>().Reputation());
                                     float playerReputation = player.GetComponent<PlayerStats>().Reputation();
+                                    Debug.Log(playerReputation);
                                     // The eye will create more powerful enemy if the player's reputation is low
                                     // Adjust the numbers later. Might be too difficult.
                                     if (playerReputation < 50f)
                                     {
                                         enemyLevel = 3;
-                                        intervalBetweenAttacks = intervalBetweenAttacks * 0.6f;
-                                        movingSpeed = movingSpeed * 1.2f;
+                                        Destroy(currentLevel);
+                                        if (enemyLevel == 1)
+                                        {
+                                            currentLevel = Instantiate(level1, transform.position + new Vector3(-1f, -1f, 0f), transform.rotation, transform);
+                                        }
+                                        else if (enemyLevel == 2)
+                                        {
+                                            currentLevel = Instantiate(level2, transform.position + new Vector3(-1f, -1f, 0f), transform.rotation, transform);
+                                        }
+                                        else if (enemyLevel == 3)
+                                        {
+                                            currentLevel = Instantiate(level3, transform.position + new Vector3(-1f, -1f, 0f), transform.rotation, transform);
+                                        }
+                                        if (oldLevel == 3)
+                                        {
+                                            intervalBetweenAttacks = intervalBetweenAttacks * 0.4f;
+                                            movingSpeed = movingSpeed * 1.4f;
+                                        }
+                                        else if (oldLevel == 2)
+                                        {
+                                            intervalBetweenAttacks = intervalBetweenAttacks * 0.6f;
+                                            movingSpeed = movingSpeed * 1.3f;
+                                        }
+                                        else if (oldLevel == 1)
+                                        {
+                                            intervalBetweenAttacks = intervalBetweenAttacks * 0.8f;
+                                            movingSpeed = movingSpeed * 1.2f;
+                                        }
                                     }
                                     else if (playerReputation >= 50f && playerReputation < 75f)
                                     {
                                         enemyLevel = 2;
-                                        intervalBetweenAttacks = intervalBetweenAttacks * 0.8f;
-                                        movingSpeed = movingSpeed * 1.1f;
+                                        Destroy(currentLevel);
+                                        if (enemyLevel == 1)
+                                        {
+                                            currentLevel = Instantiate(level1, transform.position + new Vector3(-1f, -1f, 0f), transform.rotation, transform);
+                                        }
+                                        else if (enemyLevel == 2)
+                                        {
+                                            currentLevel = Instantiate(level2, transform.position + new Vector3(-1f, -1f, 0f), transform.rotation, transform);
+                                        }
+                                        else if (enemyLevel == 3)
+                                        {
+                                            currentLevel = Instantiate(level3, transform.position + new Vector3(-1f, -1f, 0f), transform.rotation, transform);
+                                        }
+                                        if (oldLevel == 3)
+                                        {
+                                            intervalBetweenAttacks = intervalBetweenAttacks * 0.6f;
+                                            movingSpeed = movingSpeed * 1.2f;
+                                        }
+                                        else if (oldLevel == 2)
+                                        {
+                                            intervalBetweenAttacks = intervalBetweenAttacks * 0.8f;
+                                            movingSpeed = movingSpeed * 1.1f;
+                                        }
+                                        else if (oldLevel == 1)
+                                        {
+                                            intervalBetweenAttacks = intervalBetweenAttacks * 1f;
+                                            movingSpeed = movingSpeed * 1f;
+                                        }
                                     }
                                     else if (playerReputation >= 75f)
                                     {
                                         enemyLevel = 1;
+                                        Destroy(currentLevel);
+                                        if (enemyLevel == 1)
+                                        {
+                                            currentLevel = Instantiate(level1, transform.position + new Vector3(-1f, -1f, 0f), transform.rotation, transform);
+                                        }
+                                        else if (enemyLevel == 2)
+                                        {
+                                            currentLevel = Instantiate(level2, transform.position + new Vector3(-1f, -1f, 0f), transform.rotation, transform);
+                                        }
+                                        else if (enemyLevel == 3)
+                                        {
+                                            currentLevel = Instantiate(level3, transform.position + new Vector3(-1f, -1f, 0f), transform.rotation, transform);
+                                        }
                                     }
                                 }
                                 else
@@ -1343,12 +1442,13 @@ public class EnemyBehavior : MonoBehaviour
                             }
                             if (isBoss)
                             {
-                                Debug.Log("see player");
+                                //Debug.Log("see player");
                                 animator.SetBool("attack", true);
                                 if (castingTime >= bossDashCastingTime)
                                 { 
                                     transform.position = player.transform.position;
                                     castingTime = 0;
+                                    play_attack_sound();
                                 }
                                 castingTime = castingTime + Time.deltaTime;
 

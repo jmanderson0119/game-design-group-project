@@ -19,6 +19,7 @@ public class Lighting : MonoBehaviour
             else if (col.gameObject.layer == LayerMask.NameToLayer("Enemy"))
             {
                 col.gameObject.GetComponent<EnemyBehavior>().health -= 4;
+                col.gameObject.GetComponent<EnemyBehavior>().damage();
             }
         }
     }
