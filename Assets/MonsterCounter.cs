@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class MonsterCounter : MonoBehaviour
 {
-    static int totalMonsters = 0;
+    static int totalMonsters = 1;
     static int skeletons;
     GameObject skelSpawner;
     static int skullheads;

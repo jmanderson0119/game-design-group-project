@@ -26,6 +26,9 @@ public class RandomDifficultyGenerator : MonoBehaviour
             hard = Random.Range(0, 9);
             generated = true;
         }
+        if (PlayerStats.BountiesCompleted>3){
+            hard=9;
+        }
         EasyDifficulty();
         MediumDifficulty();
         HardDifficulty();
@@ -250,6 +253,10 @@ public class RandomDifficultyGenerator : MonoBehaviour
             Hrequest.text = "Defeat 8 Mimics\n 1200 gold\n 1200 reputation";
             MonsterCounter.startStage(0, 0, 0, 8, 1200, 1200);
         }
+        else if (hard== 9){
+            Hrequest.text = "ROYAL BOUNTY: Defeat the BAT KING\n 2000 gold\n 2000 reputation";
+            MonsterCounter.startStage(0, 0, 0, 0, 2000, 2000);
+        }
     }
 
     private void startStage(){
@@ -264,7 +271,12 @@ public class RandomDifficultyGenerator : MonoBehaviour
         }
         else if(selectHard){
             HardDifficulty();
-            SceneManager.LoadScene(stage);
+            if (PlayerStats.BountiesCompleted>3){
+                SceneManager.LoadScene(6);
+            }
+            else{
+                SceneManager.LoadScene(stage);
+            }
         }
     }
 
