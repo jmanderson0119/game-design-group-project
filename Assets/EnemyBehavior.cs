@@ -643,21 +643,21 @@ public class EnemyBehavior : MonoBehaviour
             float playerReputation = player.GetComponent<PlayerStats>().Reputation();
             // May consider add petting as a skill
             // Allow player to pet only if he acquires the skill
-            if (playerReputation < 50f)
+            if (playerReputation < 600f && playerReputation >= 300f)
             {
                 if (enemyLevel == 1)
                 { 
                     petable = true;
                 }
             }
-            else if (playerReputation >= 50f && playerReputation < 75f)
+            else if (playerReputation >= 600f && playerReputation < 2000f)
             {
                 if (enemyLevel <= 2)
                 {
                     petable = true;
                 }
             }
-            else if (playerReputation >= 75f)
+            else if (playerReputation >= 2000f)
             {
                 if (enemyLevel <= 3)
                 {
@@ -1295,12 +1295,13 @@ public class EnemyBehavior : MonoBehaviour
                                     isTransformed = true;
                                     oldMaxAttackRange = maxAttackRange;
                                     maxAttackRange = 1.5f;
-                                    transform.localScale += new Vector3(0.8f, 0.8f, 0.8f) * 0.01f * (float)(100 - player.GetComponent<PlayerStats>().Reputation());
+                                    
                                     float playerReputation = player.GetComponent<PlayerStats>().Reputation();
-                                    Debug.Log(playerReputation);
+                                    float adjustedPlayerReputation = playerReputation < 0f ? 0f : playerReputation;
+                                    transform.localScale += new Vector3(0.8f, 0.8f, 0.8f) * (float)(1f - adjustedPlayerReputation / (1000f + adjustedPlayerReputation));
                                     // The eye will create more powerful enemy if the player's reputation is low
                                     // Adjust the numbers later. Might be too difficult.
-                                    if (playerReputation < 50f)
+                                    if (playerReputation < 600f)
                                     {
                                         enemyLevel = 3;
                                         Destroy(currentLevel);
@@ -1332,7 +1333,7 @@ public class EnemyBehavior : MonoBehaviour
                                             movingSpeed = movingSpeed * 1.2f;
                                         }
                                     }
-                                    else if (playerReputation >= 50f && playerReputation < 75f)
+                                    else if (playerReputation >= 600f && playerReputation < 2000f)
                                     {
                                         enemyLevel = 2;
                                         Destroy(currentLevel);
@@ -1364,7 +1365,7 @@ public class EnemyBehavior : MonoBehaviour
                                             movingSpeed = movingSpeed * 1f;
                                         }
                                     }
-                                    else if (playerReputation >= 75f)
+                                    else if (playerReputation >= 2000f)
                                     {
                                         enemyLevel = 1;
                                         Destroy(currentLevel);
