@@ -24,20 +24,63 @@ public class BoughtSkill : MonoBehaviour
         skillviewed = skilldescription.text;
         Debug.Log(skillviewed);
         
-        if (skillviewed.Equals("Gain the ability to quickly manuever in the direction you're facing with the 'J' key. Costs : X Money, Y Reputation"))
+        if (skillviewed.Equals("Gain the ability to quickly manuever in the direction you're facing with the 'J' key. Costs : 500 Money, 999 Reputation"))
         {
-            playerStats.Dash(true);
-            Debug.Log("The player can Dash : " + playerStats.CanDash());
+            playerStats.IncGold(-500);
+            playerStats.IncReputation(-999);
+            if (playerStats.Gold() >= 0 && playerStats.Reputation() >= 0)
+            {
+                Debug.Log("The player has lost 500 Cash");
+                Debug.Log("The player has lost 999 Reputation");
+                playerStats.Dash(true);
+                Debug.Log("The player can Dash : " + playerStats.CanDash());
+            }
+            else
+            {
+                playerStats.IncGold(500);
+                playerStats.IncReputation(999);
+                Debug.Log("The player did not have enough Cash or Reputation to buy this skill");
+                playerStats.Dash(false);
+            }
+            
         }
-        else if (skillviewed.Equals("Gain the ability to attack from a safe distance with the 'O' key. Costs : X Money, Y Reputation ")) 
+        else if (skillviewed.Equals("Gain the ability to attack from a safe distance with the 'O' key. Costs : 75 Money, 150 Reputation ")) 
         {
-            playerStats.Shoot(true);
-            Debug.Log("The player can Shoot : " + playerStats.CanShoot());
+            playerStats.IncGold(-75);
+            playerStats.IncReputation(-150);
+            if (playerStats.Gold() >= 0 && playerStats.Reputation() >= 0)
+            {
+                Debug.Log("The player has lost 75 Cash");
+                Debug.Log("The player has lost 150 Reputation");
+                playerStats.Shoot(true);
+                Debug.Log("The player can Dash : " + playerStats.CanDash());
+            }
+            else
+            {
+                playerStats.IncGold(75);
+                playerStats.IncReputation(150);
+                Debug.Log("The player did not have enough Cash or Reputation to buy this skill");
+                playerStats.Shoot(false);
+            }
         }
-        else if (skillviewed.Equals("Gain the ability to defend againts enemy attacks with the 'I' key. Costs: X Money, Y Reputation"))
+        else if (skillviewed.Equals("Gain the ability to defend againts enemy attacks with the 'I' key. Costs 250 Money, 600 Reputation"))
         {
-            playerStats.Shield(true);
-            Debug.Log("The player can Shield : " + playerStats.CanShield());
+            playerStats.IncGold(-250);
+            playerStats.IncReputation(-600);
+            if (playerStats.Gold() >= 0 && playerStats.Reputation() >= 0)
+            {
+                Debug.Log("The player has lost 250 Cash");
+                Debug.Log("The player has lost 600 Reputation");
+                playerStats.Shield(true);
+                Debug.Log("The player can Dash : " + playerStats.CanDash());
+            }
+            else
+            {
+                playerStats.IncGold(250);
+                playerStats.IncReputation(600);
+                Debug.Log("The player did not have enough Cash or Reputation to buy this skill");
+                playerStats.Shield(false);
+            }
         }
     }
 }
