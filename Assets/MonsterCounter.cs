@@ -69,6 +69,7 @@ public class MonsterCounter : MonoBehaviour
         GameObject oldPlayer = GameObject.FindGameObjectsWithTag("Player")[0];
         oldPlayer.GetComponent<PlayerStats>().IncGold((int)(goldreward*percent));
         oldPlayer.GetComponent<PlayerStats>().IncReputation(-(int)(repreward*(1-percent)));
+        oldPlayer.GetComponent<PlayerStats>().healToFull();
         cripple();
         rewardtext.startExit((int)(goldreward*percent),-(int)(repreward*(1-percent)));
     }

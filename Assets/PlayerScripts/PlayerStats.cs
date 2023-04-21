@@ -19,6 +19,7 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private static float speed = 3.2f;
     [SerializeField] private static float bulletSpeed = 9.0f;
     [SerializeField] private static float shieldTBuffer = 6f;
+    public static int BountiesCompleted = 0;
     
 
     //booleans used across player ability scripts
@@ -128,5 +129,9 @@ public class PlayerStats : MonoBehaviour
         {
             GameObject.Find("EnemySpawners").GetComponent<MonsterCounter>().EarlyComplete();
         }
+    }
+
+    public void healToFull(){
+        health = maxHealth;
     }
 }
