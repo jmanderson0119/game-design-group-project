@@ -11,7 +11,7 @@ public class EnemyBehavior : MonoBehaviour
     private float actionTimePlaned;
     private string[] currentAction;
     private float idleMaxTime = 0.3f;
-    private float movingSpeed = 3.5f;
+    public float movingSpeed = 3.5f;
     public float maxAttackRange = 1.5f;
     public float oldMaxAttackRange = 1.5f;
     public float k_val = 5f;

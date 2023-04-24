@@ -104,14 +104,15 @@ MonoBehaviour:
   maxVision: 5
   playerLastPosition: {x: 0, y: 0, z: 0}
   targetEnemyLastPosition: {x: 0, y: 0, z: 0}
+  movingSpeed: 3
   maxAttackRange: 6
   oldMaxAttackRange: 1.5
   k_val: 5
   w_val: 0.2
   health: 20
   intervalBetweenAttacks: 0.5
-  intervalBetweenLighting: 1.5
-  bossDashCastingTime: 1
+  intervalBetweenLighting: 2
+  bossDashCastingTime: 1.5
   questionMark: {fileID: 1605708980996933940, guid: b1304e6877ba2f3428e6eae7be265aaf, type: 3}
   smallAlert: {fileID: 6028945541380220502, guid: e53e1eabff4a3c649b6b430b4369c770, type: 3}
   bigAlert: {fileID: 3168041598092535264, guid: bda039d515419cd49b7698b0d4d034c3, type: 3}
