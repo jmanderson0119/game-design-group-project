@@ -10,8 +10,8 @@ public class EnemyBehavior : MonoBehaviour
     public Vector3 targetEnemyLastPosition;
     private float actionTimePlaned;
     private string[] currentAction;
-    private float idleMaxTime = 1f;
-    private float movingSpeed = 1.5f;
+    private float idleMaxTime = 0.3f;
+    private float movingSpeed = 3.5f;
     public float maxAttackRange = 1.5f;
     public float oldMaxAttackRange = 1.5f;
     public float k_val = 5f;
@@ -244,7 +244,7 @@ public class EnemyBehavior : MonoBehaviour
                         move2Player = true;
                     }
                     else
-                    { 
+                    {
                         move2Player = false;
                     }
                     return true;
@@ -286,6 +286,12 @@ public class EnemyBehavior : MonoBehaviour
                 move2Player = true;
                 return true;
             }
+        }
+        else if (susLevel > 0.7)
+        {
+            playerLastPosition = player.transform.position;
+            move2Player = true;
+            return true;
         }
         return false;
     }
@@ -367,7 +373,7 @@ public class EnemyBehavior : MonoBehaviour
             }
             else if (state == 1)
             {
-                probIdle = 0.2f;
+                probIdle = 0.1f;
                 if (lastPosition != null)
                 {
                     float xDiff = transform.position.x - lastPosition.x;
@@ -419,7 +425,7 @@ public class EnemyBehavior : MonoBehaviour
             }
             else if (state == 2)
             {
-                probIdle = 0.1f;
+                probIdle = 0f;
                 if (lastPosition != null)
                 {
                     float xDiff = transform.position.x - lastPosition.x;
@@ -685,6 +691,7 @@ public class EnemyBehavior : MonoBehaviour
     
     IEnumerator TakeDamage()
     {
+        susLevel = 0.9f;
         GetComponent<SpriteRenderer>().material.color = damageColor;
         yield return new WaitForSeconds(0.1f);
         GetComponent<SpriteRenderer>().material.color = oldColor;

@@ -124,14 +124,12 @@ MonoBehaviour:
   maxVision: 10
   playerLastPosition: {x: 0, y: 0, z: 0}
   targetEnemyLastPosition: {x: 0, y: 0, z: 0}
-  maxAttackRange: 10
+  maxAttackRange: 15
   oldMaxAttackRange: 1.5
-  k_val: 5
-  w_val: 0.25
+  k_val: 10
+  w_val: 0.2
   health: 5
-  intervalBetweenAttacks: 1
-  intervalBetweenLighting: 5
-  bossDashCastingTime: 1.5
+  intervalBetweenAttacks: 0.5
   intervalBetweenLighting: 5
   bossDashCastingTime: 1.5
   questionMark: {fileID: 1605708980996933940, guid: b1304e6877ba2f3428e6eae7be265aaf, type: 3}
@@ -156,9 +154,6 @@ MonoBehaviour:
   pumpkinSeed: {fileID: 0}
   skullHeadBullet: {fileID: 1703228086391281295, guid: 72de036fc1690e74d97622bb6a8a3879, type: 3}
   smallPumpkin: {fileID: 0}
-  isBossActive: 0
-  lighting: {fileID: 0}
-  lightingShadow: {fileID: 0}
   isBossActive: 0
   lighting: {fileID: 0}
   lightingShadow: {fileID: 0}

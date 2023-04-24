@@ -106,10 +106,10 @@ MonoBehaviour:
   targetEnemyLastPosition: {x: 0, y: 0, z: 0}
   maxAttackRange: 6
   oldMaxAttackRange: 1.5
-  k_val: 5
-  w_val: 0.25
+  k_val: 10
+  w_val: 0.2
   health: 6
-  intervalBetweenAttacks: 0.7
+  intervalBetweenAttacks: 0.5
   intervalBetweenLighting: 5
   bossDashCastingTime: 1.5
   questionMark: {fileID: 1605708980996933940, guid: b1304e6877ba2f3428e6eae7be265aaf, type: 3}
