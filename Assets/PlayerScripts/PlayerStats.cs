@@ -82,6 +82,7 @@ public class PlayerStats : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        healToFull();
         animator = GetComponent<Animator>();
         dashSource = GetComponent<AudioSource>();
     }
