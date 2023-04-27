@@ -12,8 +12,8 @@ EditorBuildSettings:
     path: Assets/Scenes/Board.unity
     guid: 0f08b4c93c37dde4c95fff6b917970e6
   - enabled: 1
-    path: Assets/Scenes/Shop.unity
-    guid: 224d74637c404425bae9535549e706ea
+    path: Assets/Scenes/ShopV2.unity
+    guid: f2bff1cafe3924764b7678ccb50a82d1
   - enabled: 1
     path: Assets/Scenes/ForestStage.unity
     guid: 19f59e17daefa3d4395722cee8d9e74b
@@ -26,4 +26,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/BossStage.unity
     guid: 8aba711f8f8f1664b9c816445f66944d
+  - enabled: 0
+    path: Assets/Scenes/Shop.unity
+    guid: 224d74637c404425bae9535549e706ea
   m_configObjects: {}

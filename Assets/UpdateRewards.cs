@@ -21,7 +21,7 @@ public class UpdateRewards : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        SignPost.text = "Player :\nCash : " + playerStats.Gold() +"\nReputation : " + playerStats.Reputation();
+        SignPost.text = "Player :\nCash : " + playerStats.Gold() +"\nRep. : " + playerStats.Reputation();
         
     }
 }
