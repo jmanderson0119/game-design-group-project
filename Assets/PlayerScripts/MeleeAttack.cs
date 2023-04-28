@@ -19,6 +19,7 @@ public class MeleeAttack : MonoBehaviour
     private PlayerStats playerStats; // used to obtain player statistic script
     private Animator animator;
     private PlayerMovement playerMovement;
+    RaycastHit2D hit;
 
     // Start is called before the first frame update
     void Start()
@@ -41,31 +42,54 @@ public class MeleeAttack : MonoBehaviour
             animator.SetInteger("stabbing", 1);
             StartCoroutine(MeleeStabbingReset());
             meleeTMarker = Time.time; // update time of last melee attack
-
-            Collider2D[] meleeTargets = Physics2D.OverlapCircleAll(transform.position, 1.28f); // list of all things hit by the melee
             meleeSource.PlayOneShot(meleeNoise, 0.75f);
-            /*
-            if (meleeTargets.Length > 0)
+            
+            switch (animator.GetInteger("MeleeDirection"))
             {
-
-            }
-            else
-            {
-
-            }
-            */
-
-            // event handler for damageable/interactable targets
-            foreach (Collider2D target in meleeTargets)
-            {
-                if (target.transform.parent == null)
-                {
-                    EnemyBehavior behavior = target.gameObject.GetComponent<EnemyBehavior>();
-                    behavior.health -= meleeDmg;
-                    behavior.damage();
-                    target.gameObject.transform.localScale += new Vector3(-0.05f, -0.05f, -0.05f);
-                    Debug.Log("Enemy Health: " + behavior.health);
-                }
+                case 1:
+                    hit = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 0.54f), Vector2.up, 0.82f);
+                    if (hit.collider != null && hit.collider.transform.parent == null)
+                    {
+                        Debug.Log("Enemy was hit");
+                        EnemyBehavior behavior = hit.collider.GetComponent<EnemyBehavior>();
+                        behavior.health -= meleeDmg;
+                        behavior.damage();
+                        behavior.gameObject.transform.localScale += new Vector3(-0.05f, -0.05f, -0.05f);
+                    }
+                    break;
+                case 2:
+                    hit = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y - 0.54f), Vector2.down, 0.82f);
+                    if (hit.collider != null && hit.collider.transform.parent == null)
+                    {
+                        Debug.Log("Enemy was hit");
+                        EnemyBehavior behavior = hit.collider.GetComponent<EnemyBehavior>();
+                        behavior.health -= meleeDmg;
+                        behavior.damage();
+                        behavior.gameObject.transform.localScale += new Vector3(-0.05f, -0.05f, -0.05f);
+                    }
+                    break;
+                case 3:
+                    hit = Physics2D.Raycast(new Vector2(transform.position.x - 0.42f, transform.position.y), Vector2.left, 0.82f);
+                    if (hit.collider != null && hit.collider.transform.parent == null)
+                    {
+                        Debug.Log("Enemy was hit");
+                        EnemyBehavior behavior = hit.collider.GetComponent<EnemyBehavior>();
+                        behavior.health -= meleeDmg;
+                        behavior.damage();
+                        behavior.gameObject.transform.localScale += new Vector3(-0.05f, -0.05f, -0.05f);
+                    }
+                    break;
+                case 4:
+                    hit = Physics2D.Raycast(new Vector2(transform.position.x + 0.42f, transform.position.y), Vector2.right, 0.82f);
+                    if (hit.collider != null && hit.collider.transform.parent == null)
+                    {
+                        Debug.Log("Enemy was hit");
+                        EnemyBehavior behavior = hit.collider.GetComponent<EnemyBehavior>();
+                        behavior.health -= meleeDmg;
+                        behavior.damage();
+                        behavior.gameObject.transform.localScale += new Vector3(-0.05f, -0.05f, -0.05f);
+                    }
+                    break;
             }
         }
     }

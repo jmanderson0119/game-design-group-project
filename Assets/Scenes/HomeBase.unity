@@ -10381,6 +10381,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 1926041125}
     m_Modifications:
     - target: {fileID: 117632012308578123, guid: 70e4d36bc52364f489f33dfecfc212b1, type: 3}
+      propertyPath: m_Size.x
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 117632012308578123, guid: 70e4d36bc52364f489f33dfecfc212b1, type: 3}
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
@@ -13144,7 +13148,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.018868, y: 1.018868}
+  m_Size: {x: 0.75, y: 1}
   m_EdgeRadius: 0
 --- !u!1 &1994088882
 GameObject:

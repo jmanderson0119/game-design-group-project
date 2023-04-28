@@ -123,7 +123,7 @@ MonoBehaviour:
   meleeTBuffer: 0
   meleeDmg: 0
   meleeVisual: {fileID: 4088160261582289385, guid: 402ee65ca9e57e3478dfdc493a54a527, type: 3}
-  meleeNoise: {fileID: 8300000, guid: bfaa617056184864088d49469fbeda50, type: 3}
+  meleeNoise: {fileID: 8300000, guid: 93f2263d3ceab094f870daf357e7a900, type: 3}
 --- !u!114 &2307510424977184438
 MonoBehaviour:
   m_ObjectHideFlags: 0

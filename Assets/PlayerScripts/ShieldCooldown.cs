@@ -34,7 +34,7 @@ public class ShieldCooldown : MonoBehaviour
         if (shieldCooldownActive)
         {
             currentTime -= 1 * Time.deltaTime;
-            if (currentTime >= 0)
+            if (currentTime > 0)
             {
                 shieldCooldown.text = "shield: " + currentTime.ToString("0") + "s";
             }

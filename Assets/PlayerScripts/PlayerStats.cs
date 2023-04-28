@@ -12,12 +12,12 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private static float reputation = 0.0f;
     [SerializeField] private static int gold = 0;
     [SerializeField] private static float meleeTBuffer = 0.5f;
-    [SerializeField] private static float bulletTBuffer = 0.5f;
+    [SerializeField] private static float bulletTBuffer = 0.3f;
     [SerializeField] private static float dashTBuffer = 3f;
-    [SerializeField] private static float dashSpeed = 16f;
-    [SerializeField] private static float dashLength = 0.14f;
+    [SerializeField] private static float dashSpeed = 20f;
+    [SerializeField] private static float dashLength = 0.25f;
     [SerializeField] private static float speed = 3.2f;
-    [SerializeField] private static float bulletSpeed = 9.0f;
+    [SerializeField] private static float bulletSpeed = 6.8f;
     [SerializeField] private static float shieldTBuffer = 6f;
     public static int BountiesCompleted = 0;
     
@@ -85,6 +85,7 @@ public class PlayerStats : MonoBehaviour
         healToFull();
         animator = GetComponent<Animator>();
         dashSource = GetComponent<AudioSource>();
+        isDashing = false;
     }
 
     // Update is called once per frame
@@ -112,11 +113,13 @@ public class PlayerStats : MonoBehaviour
     IEnumerator DashTimer()
     {
         isDashing = true;
+        DamageState(false);
         Melee(false);
         Shoot(false);
         Shield(false);
         yield return new WaitForSeconds(dashLength);
         animator.SetInteger("dashing", 0);
+        DamageState(true);
         Melee(true);
         Shoot(true);
         Shield(true);

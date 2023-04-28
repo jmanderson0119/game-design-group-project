@@ -11,6 +11,7 @@ public class DashCooldown : MonoBehaviour
     [SerializeField] bool dashCooldownActive = false;
     private float dashTMarker;
     private float dashTBuffer;
+    private bool firstDash;
 
     // Start is called before the first frame update
     void Start()
@@ -25,8 +26,9 @@ public class DashCooldown : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GameObject.Find("mainPlayer").GetComponent<PlayerStats>().CanDash() && Input.GetKeyDown(KeyCode.J) && ((Time.time >= dashTMarker + dashTBuffer) || (Time.time < 3)))
+        if (GameObject.Find("mainPlayer").GetComponent<PlayerStats>().CanDash() && Input.GetKeyDown(KeyCode.J) && ((Time.time >= dashTMarker + dashTBuffer) || (firstDash)))
         {
+            if (firstDash) { firstDash = false; }
             dashTMarker = Time.time;
             StartCoroutine(DashCooldownTimer());
         }
