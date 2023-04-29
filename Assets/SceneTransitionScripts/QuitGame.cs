@@ -14,6 +14,7 @@ public class QuitGame : MonoBehaviour
     void Credit()
     {
         creditPage.GetComponent<SpriteRenderer>().sortingLayerName = "Intro";
+        Wait5();
     }
 
     IEnumerator Wait5(){

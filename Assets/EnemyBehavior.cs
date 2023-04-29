@@ -46,7 +46,7 @@ public class EnemyBehavior : MonoBehaviour
     private GameObject player;
     public bool ally = false;
     private bool move2Player = false;
-    public int enemyLevel = 1;
+    public static int enemyLevel = 1;
     public float allyStayRadius = 2f;
 
     public bool isLargePumpkin = false;
@@ -598,6 +598,9 @@ public class EnemyBehavior : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if(isBoss){
+            enemyLevel = 0;
+        }
         currentAction = new string[] { "idle", "down" };
         actionTimePlaned = Random.Range(0f, idleMaxTime);
         LayerPlayer = LayerMask.NameToLayer("Player");
@@ -1542,7 +1545,6 @@ public class EnemyBehavior : MonoBehaviour
                     GameObject smallPumpkinClone = Instantiate(smallPumpkin, transform.position, transform.rotation);
                     // Small pumpkins are weaker, but their attack speed is faster
                     smallPumpkinClone.GetComponent<EnemyBehavior>().ally = ally;
-                    smallPumpkinClone.GetComponent<EnemyBehavior>().enemyLevel = enemyLevel;
                     smallPumpkinClone.GetComponent<EnemyBehavior>().maxAttackRange = maxAttackRange * 0.75f;
                     smallPumpkinClone.GetComponent<EnemyBehavior>().health = (int)Mathf.Round(oldHealth / 2f);
                     smallPumpkinClone.GetComponent<EnemyBehavior>().intervalBetweenAttacks = intervalBetweenAttacks / 1.5f;

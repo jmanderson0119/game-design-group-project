@@ -53131,7 +53131,7 @@ PrefabInstance:
     - target: {fileID: 4336680637147148124, guid: 70e4d36bc52364f489f33dfecfc212b1, type: 3}
       propertyPath: meleeNoise
       value: 
-      objectReference: {fileID: 8300000, guid: bfaa617056184864088d49469fbeda50, type: 3}
+      objectReference: {fileID: 8300000, guid: 93f2263d3ceab094f870daf357e7a900, type: 3}
     - target: {fileID: 4368892945952053198, guid: 70e4d36bc52364f489f33dfecfc212b1, type: 3}
       propertyPath: m_Constraints
       value: 4

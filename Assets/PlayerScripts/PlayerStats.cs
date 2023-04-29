@@ -131,6 +131,10 @@ public class PlayerStats : MonoBehaviour
         }
         else
         {
+            maxHealth--;
+            if(maxHealth<=5){
+                maxHealth = 5;
+            }
             GameObject.Find("EnemySpawners").GetComponent<MonsterCounter>().EarlyComplete();
         }
     }

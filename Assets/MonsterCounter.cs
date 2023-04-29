@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class MonsterCounter : MonoBehaviour
 {
     static int totalMonsters = 0;
+    static int monsterLevel;
     static int skeletons;
     GameObject skelSpawner;
     static int skullheads;
@@ -25,7 +26,6 @@ public class MonsterCounter : MonoBehaviour
         pumpSpawner = this.gameObject.transform.GetChild(2).gameObject;
         eyeSpawner = this.gameObject.transform.GetChild(3).gameObject;
         Spawn(skeletons, skullheads, pumpkins, eyes);
-        
     }
 
 
@@ -34,7 +34,7 @@ public class MonsterCounter : MonoBehaviour
         skullheads = skuNum;
         pumpkins = pumNum;
         eyes = eyeNum;
-        totalMonsters = skeletons + skullheads + pumpkins + eyes;
+        totalMonsters = 1 + skeletons + skullheads + pumpkins + eyes;
         goldreward = goldr;
         repreward = repr;
     }
@@ -71,16 +71,16 @@ public class MonsterCounter : MonoBehaviour
     }
 
     public void EarlyComplete(){
-        float percent = (float)GameObject.FindGameObjectsWithTag("Enemy").Length/(float)totalMonsters;
+        float percentLeft = (float)GameObject.FindGameObjectsWithTag("Enemy").Length/(float)totalMonsters;
         GameObject oldPlayer = GameObject.FindGameObjectsWithTag("Player")[0];
-        oldPlayer.GetComponent<PlayerStats>().IncGold((int)(goldreward*percent));
-        Debug.Log((int)(goldreward*percent));
-        oldPlayer.GetComponent<PlayerStats>().IncReputation(-(int)(repreward*(1-percent)));
+        oldPlayer.GetComponent<PlayerStats>().IncGold((int)(goldreward*(1-percentLeft)));
+        Debug.Log(percentLeft);
+        oldPlayer.GetComponent<PlayerStats>().IncReputation(-(int)(repreward*(1-percentLeft)));
         oldPlayer.GetComponent<PlayerStats>().healToFull();
         cripple();
         Destroy(GameObject.Find("HealthCanvas"));
         
-        rewardtext.startExit((int)(goldreward*percent),-(int)(repreward*(1-percent)));
+        rewardtext.startExit((int)(goldreward*(1-percentLeft)),-(int)(repreward*(1-percentLeft)));
     }
 
     private void cripple(){

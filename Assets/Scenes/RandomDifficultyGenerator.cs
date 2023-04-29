@@ -284,18 +284,21 @@ public class RandomDifficultyGenerator : MonoBehaviour
         selectEasy=true;
         selectMedium=false;
         selectHard=false;
+        EnemyBehavior.enemyLevel= 1;
         startStage();
     }
     public void startMedium(){
         selectEasy=false;
         selectMedium=true;
         selectHard=false;
+        EnemyBehavior.enemyLevel= 2;
         startStage();
     }
     public void startHard(){
         selectEasy=false;
         selectMedium=false;
         selectHard=true;
+        EnemyBehavior.enemyLevel= 3;
         startStage();
     }
     public static void finishMission(){
