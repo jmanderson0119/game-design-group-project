@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class MonsterCounter : MonoBehaviour
 {
-    static int totalMonsters = 1;
+    static int totalMonsters = 0;
     static int skeletons;
     GameObject skelSpawner;
     static int skullheads;
@@ -34,7 +34,7 @@ public class MonsterCounter : MonoBehaviour
         skullheads = skuNum;
         pumpkins = pumNum;
         eyes = eyeNum;
-        totalMonsters = totalMonsters + skeletons + skullheads + pumpkins + eyes;
+        totalMonsters = skeletons + skullheads + pumpkins + eyes;
         goldreward = goldr;
         repreward = repr;
     }
@@ -71,9 +71,10 @@ public class MonsterCounter : MonoBehaviour
     }
 
     public void EarlyComplete(){
-        float percent = GameObject.FindGameObjectsWithTag("Enemy").Length/totalMonsters;
+        float percent = (float)GameObject.FindGameObjectsWithTag("Enemy").Length/(float)totalMonsters;
         GameObject oldPlayer = GameObject.FindGameObjectsWithTag("Player")[0];
         oldPlayer.GetComponent<PlayerStats>().IncGold((int)(goldreward*percent));
+        Debug.Log((int)(goldreward*percent));
         oldPlayer.GetComponent<PlayerStats>().IncReputation(-(int)(repreward*(1-percent)));
         oldPlayer.GetComponent<PlayerStats>().healToFull();
         cripple();
