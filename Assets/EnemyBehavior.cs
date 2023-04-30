@@ -11,7 +11,7 @@ public class EnemyBehavior : MonoBehaviour
     private float actionTimePlaned;
     private string[] currentAction;
     private float idleMaxTime = 0.3f;
-    public float movingSpeed = 3.5f;
+    public float movingSpeed = 2.5f;
     public float maxAttackRange = 1.5f;
     public float oldMaxAttackRange = 1.5f;
     public float k_val = 5f;
@@ -48,6 +48,7 @@ public class EnemyBehavior : MonoBehaviour
     private bool move2Player = false;
     public static int enemyLevel = 1;
     public float allyStayRadius = 2f;
+    private bool bossDashed = false;
 
     public bool isLargePumpkin = false;
     public bool isSmallPumpkin = false;
@@ -635,7 +636,7 @@ public class EnemyBehavior : MonoBehaviour
         // Higher level skull attacks faster
         if (isSkull)
         {
-            intervalBetweenAttacks = intervalBetweenAttacks / enemyLevel;
+           intervalBetweenAttacks = intervalBetweenAttacks / Mathf.Sqrt(enemyLevel);
         }
 
         if (isBoss && !isBossActive)
@@ -725,9 +726,29 @@ public class EnemyBehavior : MonoBehaviour
         {
             if (col.gameObject.name == "mainPlayer")
             {
-                if (col.gameObject.GetComponent<PlayerStats>().Damageable())
+                if (col.gameObject.GetComponent<PlayerStats>().Damageable() && bossDashed)
                 {
                     col.gameObject.GetComponent<PlayerStats>().IncHealth(-5.0f);
+                    bossDashed = false;
+                    float q = Random.Range(0f, 1f);
+
+                    // Determine direction first to shoot raycast
+                    if (q < 0.25f)
+                    {
+                        transform.Translate(Vector3.left * 3f);
+                    }
+                    else if (q < 0.5 && q >= 0.25)
+                    {
+                        transform.Translate(Vector3.right * 3f);
+                    }
+                    else if (q < 0.75 && q >= 0.5)
+                    {
+                        transform.Translate(Vector3.up * 3f);
+                    }
+                    else if (q <= 1 && q >= 0.75)
+                    {
+                        transform.Translate(Vector3.down * 3f);
+                    }
                 }
             }
         }
@@ -1461,8 +1482,9 @@ public class EnemyBehavior : MonoBehaviour
                                 //Debug.Log("see player");
                                 animator.SetBool("attack", true);
                                 if (castingTime >= bossDashCastingTime)
-                                { 
+                                {
                                     transform.position = player.transform.position;
+                                    bossDashed = true;
                                     castingTime = 0;
                                     play_attack_sound();
                                 }
@@ -1524,12 +1546,50 @@ public class EnemyBehavior : MonoBehaviour
                 {
                     if (actionTimePlaned > 0)
                     {
-                        move();
+                        if (isBoss)
+                        {
+                            Vector3 lastPosition = playerLastPosition;
+                            float xDiffAbs = transform.position.x - lastPosition.x;
+                            float yDiffAbs = transform.position.y - lastPosition.y;
+                            float distance2Player = Mathf.Sqrt(Mathf.Pow(xDiffAbs, 2f) + Mathf.Pow(yDiffAbs, 2f));
+                            if (distance2Player >= 3f)
+                            {
+                                move();
+                            }
+                            else
+                            {
+                                randomAction(1);
+                                move();
+                            }
+                        }
+                        else
+                        {
+                            move();
+                        }
                     }
                     else
                     {
                         randomAction(2);
-                        move();
+                        if (isBoss)
+                        {
+                            Vector3 lastPosition = playerLastPosition;
+                            float xDiffAbs = transform.position.x - lastPosition.x;
+                            float yDiffAbs = transform.position.y - lastPosition.y;
+                            float distance2Player = Mathf.Sqrt(Mathf.Pow(xDiffAbs, 2f) + Mathf.Pow(yDiffAbs, 2f));
+                            if(distance2Player >= 3f)
+                            {
+                                move();
+                            }
+                            else
+                            {
+                                randomAction(1);
+                                move();
+                            }
+                        }
+                        else
+                        {
+                            move();
+                        }
                     }
                 }
             }

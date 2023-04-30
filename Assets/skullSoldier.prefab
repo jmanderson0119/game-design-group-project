@@ -124,12 +124,13 @@ MonoBehaviour:
   maxVision: 5
   playerLastPosition: {x: 0, y: 0, z: 0}
   targetEnemyLastPosition: {x: 0, y: 0, z: 0}
+  movingSpeed: 2.5
   maxAttackRange: 1.5
   oldMaxAttackRange: 1.5
   k_val: 10
   w_val: 0.2
   health: 8
-  intervalBetweenAttacks: 0.6
+  intervalBetweenAttacks: 1
   intervalBetweenLighting: 5
   bossDashCastingTime: 1.5
   questionMark: {fileID: 1605708980996933940, guid: b1304e6877ba2f3428e6eae7be265aaf, type: 3}
@@ -143,7 +144,6 @@ MonoBehaviour:
   level2: {fileID: 6473442211797523633, guid: 3f826edf96d768749a83fa279f5230e2, type: 3}
   level3: {fileID: 1094350810001254095, guid: 8c9d12d95e06fb0468d56de7c7d90b2f, type: 3}
   ally: 0
-  enemyLevel: 2
   allyStayRadius: 2
   isLargePumpkin: 0
   isSmallPumpkin: 0
