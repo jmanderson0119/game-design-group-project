@@ -750,6 +750,29 @@ public class EnemyBehavior : MonoBehaviour
                         transform.Translate(Vector3.down * 3f);
                     }
                 }
+                else if (!col.gameObject.GetComponent<PlayerStats>().Damageable() && bossDashed)
+                {
+                    bossDashed = false;
+                    float q = Random.Range(0f, 1f);
+
+                    // Determine direction first to shoot raycast
+                    if (q < 0.25f)
+                    {
+                        transform.Translate(Vector3.left * 3f);
+                    }
+                    else if (q < 0.5 && q >= 0.25)
+                    {
+                        transform.Translate(Vector3.right * 3f);
+                    }
+                    else if (q < 0.75 && q >= 0.5)
+                    {
+                        transform.Translate(Vector3.up * 3f);
+                    }
+                    else if (q <= 1 && q >= 0.75)
+                    {
+                        transform.Translate(Vector3.down * 3f);
+                    }
+                }
             }
         }
     }
