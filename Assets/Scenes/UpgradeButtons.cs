@@ -48,7 +48,7 @@ public class UpgradeButtons : MonoBehaviour
         {
             if (meleecap <= 10)
             {
-                playerStats.IncMeleeDamage(3);
+                playerStats.IncMeleeDamage(1);
                 Debug.Log("The player's Melee DMG: " + playerStats.MeleeDamage());
                 meleecap = meleecap + 1;
             }
@@ -69,8 +69,8 @@ public class UpgradeButtons : MonoBehaviour
         if (playerStats.Gold() >= 0) {
             if(rangecap <= 10)
             {
-                playerStats.IncRangedDamage(5);
-                playerStats.IncBulletSpeed(0.2f);
+                playerStats.IncRangedDamage(1);
+                playerStats.IncBulletSpeed(0.5f);
                 Debug.Log("The player's Ranged DMG: " + playerStats.RangedDamage());
                 Debug.Log("The player's Ranged Speed: " + playerStats.BulletSpeed());
                 rangecap = rangecap + 1;
