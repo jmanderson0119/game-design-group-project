@@ -14,10 +14,6 @@ public class PlayerMovement : MonoBehaviour
     private Animator animator; // player animator
     private Rigidbody2D _Rigidbody; // player rigid body
 
-    // returns player's direction (see RangedAttack.cs)
-    public Vector3 getDirection() => direction;
-    public void IncSpeed(float increment) { speed += increment; }
-
     // Start is called before the first frame update; obtain character controller for player movement
     void Start()
     {
