@@ -3,8 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/* 
+this script is dedicated to bookkeeping of the player's in-game stats to be referenced by other scripts.
+It also handles a portion of the event handling when the player deploys the dash ability.
+*/
 public class PlayerStats : MonoBehaviour
 {
+    // player lifetime stats
     [SerializeField] private static float maxHealth = 10.0f;
     [SerializeField] private static float health = 10.0f;
     [SerializeField] private static int meleeDamage = 2;
@@ -31,6 +36,7 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private static bool isDashing = false;
     [SerializeField] private static Vector3 dashDirection;
 
+    // dash data: time markers + effects cues
     private float dashTMarker;
     private Animator animator;
     private AudioSource dashSource;
@@ -79,7 +85,9 @@ public class PlayerStats : MonoBehaviour
 
 
 
-    // Start is called before the first frame update
+    /* Start is called before the first frame update: player should be at full health + 
+       player data initialized + state of dash ability set
+    */
     void Start()
     {
         healToFull();
@@ -91,21 +99,25 @@ public class PlayerStats : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // start dashing if J is pressed
+        // start dashing if J is pressed and cooldown is satisfied
         if (CanDash() && Input.GetKeyDown(KeyCode.J) && ((Time.time >= dashTMarker + dashTBuffer) || (Time.time < 3)))
         {
-            dashSource.PlayOneShot(dashNoise, 0.75f);
-            animator.SetInteger("dashing", 1);
-            dashTMarker = Time.time;
+            dashSource.PlayOneShot(dashNoise, 0.75f); // audio cue!
+            animator.SetInteger("dashing", 1); // visual cue!
+            dashTMarker = Time.time; // mark the time!
 
+            // we need to know the movement values
             float horizontalDash = Input.GetAxis("Horizontal") * Time.deltaTime;
             float verticalDash = Input.GetAxis("Vertical") * Time.deltaTime;
-            dashDirection = new Vector3(horizontalDash, verticalDash, 0).normalized;
+            dashDirection = new Vector3(horizontalDash, verticalDash, 0).normalized; // direction player wishes to dash
 
-            StartCoroutine(DashTimer());
+            StartCoroutine(DashTimer()); // start the timer!
         }
+        
+        // I am the author of this directory, however I do not remember anyone adding to my script...
+        // This looks like Bob, I'll leave it alone, lest it break
         if(health<=0){
-            Die();
+            Die(); 
         }
     }
 
