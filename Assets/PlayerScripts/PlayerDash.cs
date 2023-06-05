@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// this script works in tandem with PlayerStats.cs to handle the dashing ability behavior. see PlayerStats.cs for more context
 public class PlayerDash : MonoBehaviour
 {
     private GameObject player; // used to obtain player
