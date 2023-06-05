@@ -36,16 +36,21 @@ public class MeleeAttack : MonoBehaviour
     // Update is called once per frame; used to track and handle anything within range of a melee attack
     void Update()
     {
-
-        if (playerStats.CanMelee() && Input.GetKeyDown(KeyCode.K) && Time.time >= meleeTMarker + meleeTBuffer) // melee logic runs if spacebar is pressed after the attack delay
+        // melee logic runs if spacebar is pressed after the attack delay
+        if (playerStats.CanMelee() && Input.GetKeyDown(KeyCode.K) && Time.time >= meleeTMarker + meleeTBuffer)
         {
-            animator.SetInteger("stabbing", 1);
-            StartCoroutine(MeleeStabbingReset());
+            animator.SetInteger("stabbing", 1); // provides updates for the animation state machine
+            StartCoroutine(MeleeStabbingReset()); // reset the state machine info once stab is completed
             meleeTMarker = Time.time; // update time of last melee attack
-            meleeSource.PlayOneShot(meleeNoise, 0.75f);
+            meleeSource.PlayOneShot(meleeNoise, 0.75f); // audio cue for player melee
             
+            /* 
+            melee behavior must be handled differently based on which direction the player is facing:
+            the general guideline is determine which way the hitbox should be oriented based on which direction
+            the player is facing, then determine if an enemy was hit and handle the sfx and enemy stats accordingly.
+            */
             switch (animator.GetInteger("MeleeDirection"))
-            {
+            {               
                 case 1:
                     hit = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 0.54f), Vector2.up, 0.82f);
                     if (hit.collider != null && hit.collider.transform.parent == null)
@@ -94,6 +99,7 @@ public class MeleeAttack : MonoBehaviour
         }
     }
     
+    // resets the stabbing animation after enough time has passed
     IEnumerator MeleeStabbingReset()
     {
         yield return new WaitForSeconds(0.2f);
