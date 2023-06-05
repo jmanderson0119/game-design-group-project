@@ -15,12 +15,14 @@ public class BulletTravel : MonoBehaviour
     private Vector3 travelDirection; // the directional vector3 for the bullet to travel in
     private Vector3 bulletMovement; // increment of the bullet position on update
 
+    // deals with bullet-enemy collision
     void OnTriggerEnter2D(Collider2D collision)
     {
         Destroy(gameObject);
 
         EnemyBehavior behavior = collision.gameObject.GetComponent<EnemyBehavior>();
-
+        
+        // deals damage to enemy
         if (collision.gameObject.transform.parent == null)
         {
             behavior.health -= (int) bulletDmg;
