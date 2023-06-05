@@ -34,7 +34,7 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame; used for player WASD movement
     void Update()
     {
-
+        // this statement handles movement animations in the case where the player is not dashing
         if (!playerStats.Dashing())
         {
             float horizontalMovement = Input.GetAxis("Horizontal") * Time.deltaTime; // figure for horizontal player direction
@@ -44,37 +44,37 @@ public class PlayerMovement : MonoBehaviour
             //float playerXMag = playerMag.x;
             Vector3 playerMovement = (new Vector3(horizontalMovement, verticalMovement, 0)).normalized; // vector for direction player is moving in
 
+            // case where player is staying still
             if (!Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.UpArrow) && !Input.GetKey(KeyCode.DownArrow) && !Input.GetKey(KeyCode.LeftArrow) && !Input.GetKey(KeyCode.RightArrow) && playerMag == 0)
             {
                 animator.SetInteger("walkingMode", 0);
                 animator.SetInteger("MeleeDirection", 4);
             }
+            // player is moving right using 'D' or the right arrow on the keypad
             else if ((!Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.S) && Input.GetKey(KeyCode.D)) || (!Input.GetKey(KeyCode.UpArrow) && !Input.GetKey(KeyCode.LeftArrow) && !Input.GetKey(KeyCode.DownArrow) && Input.GetKey(KeyCode.RightArrow)) || (Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.S) && Input.GetKey(KeyCode.D)) || (Input.GetKey(KeyCode.UpArrow) && !Input.GetKey(KeyCode.LeftArrow) && !Input.GetKey(KeyCode.DownArrow) && Input.GetKey(KeyCode.RightArrow)) || (!Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.S) && Input.GetKey(KeyCode.D)) || (!Input.GetKey(KeyCode.UpArrow) && !Input.GetKey(KeyCode.LeftArrow) && Input.GetKey(KeyCode.DownArrow) && Input.GetKey(KeyCode.RightArrow)))
             {
                 animator.SetInteger("walkingMode", 1);
                 animator.SetInteger("MeleeDirection", 4);
             }
+            // player is moving left using 'A' or the left arrow on the keypad
             else if ((!Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.D)) || (!Input.GetKey(KeyCode.UpArrow) && Input.GetKey(KeyCode.LeftArrow) && !Input.GetKey(KeyCode.DownArrow) && !Input.GetKey(KeyCode.RightArrow)) || (Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.D)) || (Input.GetKey(KeyCode.UpArrow) && Input.GetKey(KeyCode.LeftArrow) && !Input.GetKey(KeyCode.DownArrow) && !Input.GetKey(KeyCode.RightArrow)) || (!Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.D)) || (!Input.GetKey(KeyCode.UpArrow) && Input.GetKey(KeyCode.LeftArrow) && Input.GetKey(KeyCode.DownArrow) && !Input.GetKey(KeyCode.RightArrow)))
             {
                 animator.SetInteger("walkingMode", 2);
                 animator.SetInteger("MeleeDirection", 3);
             }
+            // player is moving up using 'W' or the up arrow key on the keypad
             else if ((Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.D)) || (Input.GetKey(KeyCode.UpArrow) && !Input.GetKey(KeyCode.LeftArrow) && !Input.GetKey(KeyCode.DownArrow) && !Input.GetKey(KeyCode.RightArrow)))
             {
                 animator.SetInteger("walkingMode", 3);
                 animator.SetInteger("MeleeDirection", 1);
             }
+            // player is moving down using 'S' or the down arrow key on the keypad
             else if ((!Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.D)) || (!Input.GetKey(KeyCode.UpArrow) && !Input.GetKey(KeyCode.LeftArrow) && Input.GetKey(KeyCode.DownArrow) && !Input.GetKey(KeyCode.RightArrow)))
             {
                 animator.SetInteger("walkingMode", 4);
                 animator.SetInteger("MeleeDirection", 2);
             }
-
-                if (playerMovement.magnitude > 0) // gives the direction the player is facing in and stores in direction (for use in BulletTravel)
-                {
-                    direction = playerMovement; // direction is now a vector of magnitude 1
-                }
-
+                
                 _Rigidbody.velocity = playerMovement * speed;
             }
     }
